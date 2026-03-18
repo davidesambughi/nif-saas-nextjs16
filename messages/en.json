@@ -1,0 +1,142 @@
+{
+  "nav": {
+    "home": "Home",
+    "howItWorks": "How It Works",
+    "pricing": "Pricing",
+    "login": "Sign In",
+    "dashboard": "Dashboard",
+    "getStarted": "Get Started",
+    "signOut": "Sign Out"
+  },
+  "hero": {
+    "badge": "✅ Trusted by 2,000+ expats",
+    "headline": "Your Portuguese NIF,",
+    "headlineAccent": "100% Remote.",
+    "subheadline": "Get your Portuguese tax number from anywhere in the world — without flying to Portugal. We handle the paperwork.",
+    "ctaPrimary": "Get My NIF Now",
+    "ctaSecondary": "See How It Works",
+    "statsNifs": "NIFs Issued",
+    "statsCountries": "Countries Served",
+    "statsDays": "Avg. Processing Days",
+    "statsRating": "Customer Rating"
+  },
+  "howItWorks": {
+    "title": "Three Steps to Your NIF",
+    "subtitle": "A fully remote process, completed in days — not weeks.",
+    "step1Title": "Fill in Your Details",
+    "step1Desc": "Complete our secure online form with your personal information and passport details. Takes 5 minutes.",
+    "step2Title": "Upload Documents",
+    "step2Desc": "Securely upload a copy of your passport and proof of address. We accept PDF, JPG, and PNG.",
+    "step3Title": "Receive Your NIF",
+    "step3Desc": "We submit your application to the Portuguese tax authority (AT). Your NIF arrives by email."
+  },
+  "pricing": {
+    "title": "Simple, Transparent Pricing",
+    "subtitle": "One-time fee. No subscriptions. No hidden charges.",
+    "standard": "Standard",
+    "express": "Express",
+    "standardPrice": "€49",
+    "expressPrice": "€99",
+    "standardDuration": "5–7 business days",
+    "expressDuration": "48–72 hours",
+    "feature1": "Full NIF application",
+    "feature2": "Document review",
+    "feature3": "Email delivery",
+    "feature4": "Priority processing",
+    "feature5": "Express handling fee",
+    "cta": "Get Started",
+    "popular": "Most Popular"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "q1": "Who needs a Portuguese NIF?",
+    "a1": "Anyone who wants to open a Portuguese bank account, buy or rent property, start a business, or work in Portugal needs a NIF. It is also required for many contracts and purchases.",
+    "q2": "Do I need to travel to Portugal?",
+    "a2": "No. Our service is 100% remote. We act as your fiscal representative and handle the entire process on your behalf.",
+    "q3": "What documents do I need?",
+    "a3": "A valid passport (or national ID for EU citizens) and proof of address (utility bill, bank statement, or equivalent) issued within the last 3 months.",
+    "q4": "How long does it take?",
+    "a4": "Standard service takes 5–7 business days. Express service takes 48–72 hours. Processing times depend on the Portuguese tax authority.",
+    "q5": "Is the NIF valid forever?",
+    "a5": "Yes. Your NIF is a permanent tax identification number that does not expire."
+  },
+  "trust": {
+    "title": "Trusted by Expats Worldwide",
+    "subtitle": "Join thousands of non-residents who have obtained their NIF with us.",
+    "review1": "Super fast and professional. Had my NIF in 3 days!",
+    "review1Author": "Sarah K. — United Kingdom",
+    "review2": "The entire process was seamless. Highly recommended.",
+    "review2Author": "Marco R. — Italy",
+    "review3": "Best €49 I ever spent. No flights, no queues.",
+    "review3Author": "Aiko T. — Japan"
+  },
+  "cta": {
+    "title": "Ready to get your NIF?",
+    "subtitle": "Start your application today. Takes less than 5 minutes.",
+    "button": "Apply Now — From €49"
+  },
+  "footer": {
+    "tagline": "The fastest way to get your Portuguese NIF remotely.",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "company": "Company",
+    "about": "About Us",
+    "contact": "Contact",
+    "copyright": "© 2026 GetNIFPortugal. All rights reserved."
+  },
+  "auth": {
+    "loginTitle": "Welcome back",
+    "loginSubtitle": "Sign in to your account",
+    "signupTitle": "Create your account",
+    "signupSubtitle": "Start your NIF application today",
+    "email": "Email address",
+    "password": "Password",
+    "fullName": "Full name",
+    "loginButton": "Sign In",
+    "signupButton": "Create Account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signupLink": "Sign up →",
+    "loginLink": "Sign in →",
+    "checkEmail": "Check your email",
+    "checkEmailDesc": "We've sent you a confirmation link. Click it to activate your account."
+  },
+  "order": {
+    "title": "Start Your NIF Application",
+    "step1": "Personal Info",
+    "step2": "Documents",
+    "step3": "Review & Pay",
+    "fullName": "Full name",
+    "nationality": "Nationality",
+    "passportNumber": "Passport number",
+    "dateOfBirth": "Date of birth",
+    "address": "Current address",
+    "next": "Next →",
+    "back": "← Back",
+    "payNow": "Pay Now & Submit",
+    "successTitle": "Application Submitted!",
+    "successDesc": "Your payment was received. We'll email you updates as we process your NIF.",
+    "cancelTitle": "Payment Cancelled",
+    "cancelDesc": "Your payment was not completed. Your order has been saved — you can try again.",
+    "retryPayment": "Retry Payment"
+  },
+  "dashboard": {
+    "title": "My Dashboard",
+    "subtitle": "Track the status of your NIF application",
+    "noOrders": "No applications yet",
+    "noOrdersDesc": "Start your first NIF application to see it here.",
+    "startApplication": "Start Application",
+    "orderId": "Application #",
+    "submitted": "Submitted",
+    "status": {
+      "pending_payment": "Awaiting Payment",
+      "payment_received": "Payment Received",
+      "documents_required": "Documents Required",
+      "documents_under_review": "Documents Under Review",
+      "nif_processing": "Processing Your NIF",
+      "nif_issued": "NIF Issued ✓",
+      "cancelled": "Cancelled"
+    }
+  }
+}

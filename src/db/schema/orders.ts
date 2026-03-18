@@ -1,0 +1,53 @@
+import {
+  pgTable,
+  uuid,
+  text,
+  integer,
+  timestamp,
+} from "drizzle-orm/pg-core";
+import { orderStatusEnum, serviceTierEnum } from "./enums";
+import { users } from "./users";
+
+/**
+ * Core orders table.
+ * Each row represents one NIF application.
+ * Status transitions are tracked in status_updates — orders only stores current state.
+ */
+export const orders = pgTable("orders", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+
+  // Customer personal information (captured from order form)
+  fullName: text("full_name").notNull(),
+  nationality: text("nationality").notNull(),
+  passportNumber: text("passport_number").notNull(),
+  dateOfBirth: text("date_of_birth").notNull(), // ISO-8601 string
+  address: text("address").notNull(),
+
+  // Service & payment
+  serviceTier: serviceTierEnum("service_tier").notNull().default("standard"),
+  status: orderStatusEnum("status").notNull().default("pending_payment"),
+  amountPaid: integer("amount_paid"), // in cents
+  currency: text("currency").default("eur"),
+
+  // Stripe references — populated by webhook
+  stripeSessionId: text("stripe_session_id"),
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+
+  // NIF result — populated by admin when issued
+  nifNumber: text("nif_number"),
+
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export type Order = typeof orders.$inferSelect;
+export type NewOrder = typeof orders.$inferInsert;
+export type OrderStatus = (typeof orderStatusEnum.enumValues)[number];
+export type ServiceTier = (typeof serviceTierEnum.enumValues)[number];

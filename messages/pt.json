@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "home": "Início",
+    "howItWorks": "Como Funciona",
+    "pricing": "Preços",
+    "login": "Entrar",
+    "dashboard": "Painel",
+    "getStarted": "Começar",
+    "signOut": "Sair"
+  },
+  "hero": {
+    "badge": "✅ Confiado por mais de 2.000 expatriados",
+    "headline": "O seu NIF Português,",
+    "headlineAccent": "100% Remoto.",
+    "subheadline": "Obtenha o seu número de identificação fiscal português de qualquer parte do mundo — sem precisar de vir a Portugal.",
+    "ctaPrimary": "Obter o Meu NIF",
+    "ctaSecondary": "Ver Como Funciona",
+    "statsNifs": "NIFs Emitidos",
+    "statsCountries": "Países Servidos",
+    "statsDays": "Dias Médios de Processamento",
+    "statsRating": "Avaliação dos Clientes"
+  },
+  "howItWorks": {
+    "title": "Três Passos para o Seu NIF",
+    "subtitle": "Um processo totalmente remoto, concluído em dias.",
+    "step1Title": "Preencha os Seus Dados",
+    "step1Desc": "Complete o nosso formulário seguro com os seus dados pessoais e informações do passaporte.",
+    "step2Title": "Carregue os Documentos",
+    "step2Desc": "Carregue de forma segura uma cópia do seu passaporte e comprovativo de morada.",
+    "step3Title": "Receba o Seu NIF",
+    "step3Desc": "Submetemos o seu pedido à Autoridade Tributária portuguesa. O seu NIF chega por email."
+  },
+  "pricing": {
+    "title": "Preços Simples e Transparentes",
+    "subtitle": "Taxa única. Sem subscrições. Sem custos ocultos.",
+    "standard": "Standard",
+    "express": "Expresso",
+    "standardPrice": "€49",
+    "expressPrice": "€99",
+    "standardDuration": "5–7 dias úteis",
+    "expressDuration": "48–72 horas",
+    "feature1": "Pedido completo de NIF",
+    "feature2": "Revisão de documentos",
+    "feature3": "Entrega por email",
+    "feature4": "Processamento prioritário",
+    "feature5": "Taxa de tratamento expresso",
+    "cta": "Começar",
+    "popular": "Mais Popular"
+  },
+  "faq": {
+    "title": "Perguntas Frequentes",
+    "q1": "Quem precisa de um NIF português?",
+    "a1": "Qualquer pessoa que queira abrir uma conta bancária portuguesa, comprar ou arrendar imóveis, iniciar um negócio ou trabalhar em Portugal precisa de um NIF.",
+    "q2": "Preciso de viajar para Portugal?",
+    "a2": "Não. O nosso serviço é 100% remoto. Atuamos como seu representante fiscal.",
+    "q3": "Que documentos preciso?",
+    "a3": "Um passaporte válido e um comprovativo de morada emitido nos últimos 3 meses.",
+    "q4": "Quanto tempo demora?",
+    "a4": "O serviço standard demora 5–7 dias úteis. O serviço expresso demora 48–72 horas.",
+    "q5": "O NIF é permanente?",
+    "a5": "Sim. O seu NIF é um número de identificação fiscal permanente que não expira."
+  },
+  "trust": { "title": "Confiado por Expatriados em Todo o Mundo", "subtitle": "Junte-se a milhares de não residentes.", "review1": "Super rápido e profissional. Tive o meu NIF em 3 dias!", "review1Author": "Sarah K. — Reino Unido", "review2": "O processo foi perfeito. Muito recomendado.", "review2Author": "Marco R. — Itália", "review3": "O melhor €49 que alguma vez gastei.", "review3Author": "Aiko T. — Japão" },
+  "cta": { "title": "Pronto para obter o seu NIF?", "subtitle": "Comece hoje. Demora menos de 5 minutos.", "button": "Candidatar Agora — A partir de €49" },
+  "footer": { "tagline": "A forma mais rápida de obter o seu NIF português remotamente.", "legal": "Legal", "privacy": "Política de Privacidade", "terms": "Termos de Serviço", "company": "Empresa", "about": "Sobre Nós", "contact": "Contacto", "copyright": "© 2026 GetNIFPortugal. Todos os direitos reservados." },
+  "auth": { "loginTitle": "Bem-vindo de volta", "loginSubtitle": "Aceda à sua conta", "signupTitle": "Crie a sua conta", "signupSubtitle": "Comece o seu pedido de NIF hoje", "email": "Endereço de email", "password": "Palavra-passe", "fullName": "Nome completo", "loginButton": "Entrar", "signupButton": "Criar Conta", "noAccount": "Não tem conta?", "hasAccount": "Já tem conta?", "signupLink": "Registar →", "loginLink": "Entrar →", "checkEmail": "Verifique o seu email", "checkEmailDesc": "Enviámos um link de confirmação. Clique nele para ativar a sua conta." },
+  "order": { "title": "Iniciar o seu Pedido de NIF", "step1": "Dados Pessoais", "step2": "Documentos", "step3": "Revisão e Pagamento", "fullName": "Nome completo", "nationality": "Nacionalidade", "passportNumber": "Número de passaporte", "dateOfBirth": "Data de nascimento", "address": "Morada atual", "next": "Seguinte →", "back": "← Voltar", "payNow": "Pagar e Submeter", "successTitle": "Pedido Submetido!", "successDesc": "O seu pagamento foi recebido. Enviaremos atualizações por email.", "cancelTitle": "Pagamento Cancelado", "cancelDesc": "O pagamento não foi concluído. O seu pedido foi guardado.", "retryPayment": "Tentar Novamente" },
+  "dashboard": { "title": "O Meu Painel", "subtitle": "Acompanhe o estado do seu pedido de NIF", "noOrders": "Ainda não tem pedidos", "noOrdersDesc": "Inicie o seu primeiro pedido de NIF.", "startApplication": "Iniciar Pedido", "orderId": "Pedido #", "submitted": "Submetido", "status": { "pending_payment": "Aguarda Pagamento", "payment_received": "Pagamento Recebido", "documents_required": "Documentos Necessários", "documents_under_review": "Documentos em Revisão", "nif_processing": "A Processar NIF", "nif_issued": "NIF Emitido ✓", "cancelled": "Cancelado" } }
+}
