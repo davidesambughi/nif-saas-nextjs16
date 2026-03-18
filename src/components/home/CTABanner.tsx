@@ -1,14 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { m, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 
 export default function CTABanner() {
   const t = useTranslations("cta");
-  const locale = useLocale();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-40px" });
 
@@ -47,7 +46,7 @@ export default function CTABanner() {
             {t("subtitle")}
           </p>
           <Link
-            href={`/${locale}/order`}
+            href="/order"
             id="cta-banner-button"
             className="btn btn-lg relative z-10 inline-flex"
             style={{ background: "#ffffff", color: "var(--color-brand-green)", fontWeight: 700 }}

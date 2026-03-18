@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { Globe, ChevronDown } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 const LOCALES = [
   { code: "en", label: "English", flag: "🇬🇧" },
@@ -56,7 +56,7 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
 
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 4, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.96 }}
@@ -90,7 +90,7 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
                 <span>{l.label}</span>
               </button>
             ))}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

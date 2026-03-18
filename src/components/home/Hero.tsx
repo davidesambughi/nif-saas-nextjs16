@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { m } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
@@ -10,7 +10,6 @@ const AZULEJO_SVG =
 
 export default function Hero() {
   const t = useTranslations("hero");
-  const locale = useLocale();
 
   return (
     <section
@@ -89,7 +88,7 @@ export default function Hero() {
               className="flex flex-col sm:flex-row items-start gap-4 mb-12"
             >
               <Link
-                href={`/${locale}/order`}
+                href="/order"
                 id="hero-cta-primary"
                 className="btn btn-primary btn-lg"
               >

@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { m, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 import { Check, Star, Minus } from "lucide-react";
@@ -53,7 +53,6 @@ type PlanKey = "essential" | "standard" | "premium";
 
 export default function Pricing() {
   const t = useTranslations("pricing");
-  const locale = useLocale();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
   const [selected, setSelected] = useState<PlanKey>("standard");
@@ -289,7 +288,7 @@ export default function Pricing() {
                   {/* CTA */}
                   {featured ? (
                     <Link
-                      href={`/${locale}/order?tier=${tier}`}
+                      href={`/order?tier=${tier}`}
                       id={`pricing-${tier}-cta`}
                       className="btn btn-ivory w-full mt-2 text-center"
                       onClick={(e) => e.stopPropagation()}
@@ -298,7 +297,7 @@ export default function Pricing() {
                     </Link>
                   ) : isSelected ? (
                     <Link
-                      href={`/${locale}/order?tier=${tier}`}
+                      href={`/order?tier=${tier}`}
                       id={`pricing-${tier}-cta`}
                       className="btn btn-primary w-full mt-2 text-center"
                       onClick={(e) => e.stopPropagation()}
@@ -307,7 +306,7 @@ export default function Pricing() {
                     </Link>
                   ) : (
                     <Link
-                      href={`/${locale}/order?tier=${tier}`}
+                      href={`/order?tier=${tier}`}
                       id={`pricing-${tier}-cta`}
                       className="btn btn-secondary w-full mt-2 text-center"
                       onClick={(e) => e.stopPropagation()}

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { m, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import LocaleSwitcher from "@/components/shared/LocaleSwitcher";
@@ -12,7 +12,6 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const locale = useLocale();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,8 +26,8 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { href: `/${locale}/#how-it-works`, label: t("howItWorks") },
-    { href: `/${locale}/#pricing`, label: t("pricing") },
+    { href: "/#how-it-works", label: t("howItWorks") },
+    { href: "/#pricing", label: t("pricing") },
   ];
 
   return (
@@ -56,7 +55,7 @@ export default function Navbar() {
       <nav className="container-site flex h-16 items-center justify-between">
         {/* Logo */}
         <Link
-          href={`/${locale}`}
+          href="/"
           className="flex items-center gap-2 font-bold text-xl tracking-tight"
           style={{ color: "var(--color-green)", fontFamily: "var(--font-display)" }}
         >
@@ -101,10 +100,10 @@ export default function Navbar() {
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-3">
           <LocaleSwitcher />
-          <Link href={`/${locale}/login`} className="btn btn-secondary btn-sm">
+          <Link href="/login" className="btn btn-secondary btn-sm">
             {t("login")}
           </Link>
-          <Link href={`/${locale}/order`} className="btn btn-primary btn-sm">
+          <Link href="/order" className="btn btn-primary btn-sm">
             {t("getStarted")}
           </Link>
         </div>
@@ -144,14 +143,14 @@ export default function Navbar() {
               ))}
               <hr style={{ borderColor: "var(--color-border)" }} />
               <Link
-                href={`/${locale}/login`}
+                href="/login"
                 onClick={() => setIsMobileOpen(false)}
                 className="btn btn-secondary btn-sm w-full"
               >
                 {t("login")}
               </Link>
               <Link
-                href={`/${locale}/order`}
+                href="/order"
                 onClick={() => setIsMobileOpen(false)}
                 className="btn btn-primary btn-sm w-full"
               >
