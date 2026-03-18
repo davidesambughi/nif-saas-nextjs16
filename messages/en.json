@@ -18,9 +18,11 @@
     "statsNifs": "NIFs Issued",
     "statsCountries": "Countries Served",
     "statsDays": "Avg. Processing Days",
-    "statsRating": "Customer Rating"
+    "statsRating": "Customer Rating",
+    "flagsText": "+40 more countries served"
   },
   "howItWorks": {
+    "eyebrow": "The Process",
     "title": "Three Steps to Your NIF",
     "subtitle": "A fully remote process, completed in days — not weeks.",
     "step1Title": "Fill in Your Details",
@@ -31,6 +33,7 @@
     "step3Desc": "We submit your application to the Portuguese tax authority (AT). Your NIF arrives by email."
   },
   "pricing": {
+    "eyebrow": "Pricing",
     "title": "Simple, Transparent Pricing",
     "subtitle": "One-time fee. No subscriptions. No hidden charges.",
     "essential": "Essential",
@@ -60,11 +63,12 @@
     "q3": "What documents do I need?",
     "a3": "A valid passport (or national ID for EU citizens) and proof of address (utility bill, bank statement, or equivalent) issued within the last 3 months.",
     "q4": "How long does it take?",
-    "a4": "Standard service takes 5–7 business days. Express service takes 48–72 hours. Processing times depend on the Portuguese tax authority.",
+    "a4": "Essential and Standard take 7 business days. Premium is 48–72 hours express. Processing times depend on the Portuguese tax authority.",
     "q5": "Is the NIF valid forever?",
     "a5": "Yes. Your NIF is a permanent tax identification number that does not expire."
   },
   "trust": {
+    "eyebrow": "By the Numbers",
     "title": "Trusted by Expats Worldwide",
     "subtitle": "Join thousands of non-residents who have obtained their NIF with us.",
     "review1": "Super fast and professional. Had my NIF in 3 days!",
@@ -77,7 +81,8 @@
   "cta": {
     "title": "Ready to get your NIF?",
     "subtitle": "Start your application today. Takes less than 5 minutes.",
-    "button": "Apply Now — From €79"
+    "button": "Apply Now — From €79",
+    "microcopy": "No subscriptions · No hidden fees · Secure payment via Stripe"
   },
   "footer": {
     "tagline": "The fastest way to get your Portuguese NIF remotely.",

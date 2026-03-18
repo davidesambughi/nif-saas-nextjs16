@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useLocale } from "next-intl";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "@/i18n/navigation";
 import { Globe, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -26,10 +26,7 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
 
   const handleSwitch = (code: string) => {
     setIsOpen(false);
-    // Swap locale prefix in current path
-    const newPath = pathname.replace(/^\/[a-z]{2}/, `/${code}`);
-    router.push(newPath);
-    router.refresh();
+    router.replace(pathname, { locale: code });
   };
 
   const textColor = dark ? "#9ca3af" : "var(--color-ink-muted)";

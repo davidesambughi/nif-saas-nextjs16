@@ -4,7 +4,10 @@
       "Bash(npm run:*)",
       "Bash(npx tsc:*)",
       "Bash(ls:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(find . -maxdepth 3 -not -path */node_modules/* -not -path */.next/* -not -path */.git/* -not -path */.claude/worktrees/*)",
+      "Bash(find /c/Users/sambu/nif-project2/src/components -type f -name *.tsx -o -name *.ts)",
+      "Bash(find /c/Users/sambu/nif-project2 -maxdepth 1 -type f \\\\\\(-name *.config.* -o -name postcss.config.* \\\\\\))"
     ]
   }
 }

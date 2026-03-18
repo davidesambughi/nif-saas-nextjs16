@@ -1,23 +1,22 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ClipboardList, Upload, Mail } from "lucide-react";
 
 const STEPS = [
-  { iconComp: ClipboardList, key: "step1" },
-  { iconComp: Upload, key: "step2" },
-  { iconComp: Mail, key: "step3" },
-];
+  { Icon: ClipboardList, key: "step1" },
+  { Icon: Upload, key: "step2" },
+  { Icon: Mail, key: "step3" },
+] as const;
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.15 } },
+  show: { transition: { staggerChildren: 0.14 } },
 };
 const item = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 28 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
@@ -27,13 +26,29 @@ export default function HowItWorks() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="how-it-works" className="section-pad" style={{ background: "#f0f7f0" }}>
+    <section
+      id="how-it-works"
+      className="section-pad"
+      style={{ background: "var(--color-surface-2)" }}
+    >
       <div className="container-site">
         <div className="text-center mb-14">
-          <h2 className="text-heading-xl mb-4" style={{ color: "var(--color-ink)" }}>
+          <p
+            className="text-xs font-bold uppercase tracking-widest mb-3"
+            style={{ color: "var(--color-green)" }}
+          >
+            {t("eyebrow")}
+          </p>
+          <h2
+            className="text-heading-xl mb-4"
+            style={{ color: "var(--color-ink)" }}
+          >
             {t("title")}
           </h2>
-          <p className="text-base max-w-xl mx-auto" style={{ color: "var(--color-ink-muted)" }}>
+          <p
+            className="text-base max-w-xl mx-auto"
+            style={{ color: "var(--color-ink-muted)" }}
+          >
             {t("subtitle")}
           </p>
         </div>
@@ -43,42 +58,63 @@ export default function HowItWorks() {
           variants={container}
           initial="hidden"
           animate={isInView ? "show" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 relative"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 relative"
         >
-          {STEPS.map(({ iconComp: Icon, key }, index) => (
-            <motion.div key={key} variants={item} className="card p-8 relative">
-              {/* Step number */}
+          {STEPS.map(({ Icon, key }, index) => (
+            <motion.div
+              key={key}
+              variants={item}
+              className="card p-8 relative overflow-hidden"
+            >
+              {/* Large decorative number */}
               <div
-                className="absolute -top-4 left-8 flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white"
-                style={{ background: "var(--color-brand-green)" }}
+                className="pointer-events-none select-none absolute -right-2 -top-4 text-8xl font-black leading-none"
+                style={{
+                  color: "oklch(42% 0.12 152 / 0.06)",
+                  fontFamily: "var(--font-display)",
+                }}
+              >
+                {String(index + 1).padStart(2, "0")}
+              </div>
+
+              {/* Step circle */}
+              <div
+                className="mb-5 flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white"
+                style={{ background: "var(--color-green)" }}
               >
                 {index + 1}
               </div>
 
               {/* Icon */}
               <div
-                className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl"
-                style={{ background: "rgba(0,102,0,0.08)" }}
+                className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl"
+                style={{ background: "oklch(42% 0.12 152 / 0.08)" }}
               >
-                <Icon size={26} style={{ color: "var(--color-brand-green)" }} />
+                <Icon size={22} style={{ color: "var(--color-green)" }} />
               </div>
 
               <h3
                 className="text-lg font-semibold mb-3"
-                style={{ color: "var(--color-ink)" }}
+                style={{
+                  color: "var(--color-ink)",
+                  fontFamily: "var(--font-display)",
+                }}
               >
                 {t(`${key}Title` as "step1Title")}
               </h3>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--color-ink-muted)" }}>
+              <p
+                className="text-sm leading-relaxed"
+                style={{ color: "var(--color-ink-muted)" }}
+              >
                 {t(`${key}Desc` as "step1Desc")}
               </p>
 
-              {/* Connector line (not last) */}
+              {/* Dashed connector (not last card) */}
               {index < 2 && (
                 <div
-                  className="hidden md:block absolute top-10 left-full w-8 h-px z-10"
+                  className="hidden md:block absolute top-10 left-full w-6 z-10 pointer-events-none"
                   style={{
-                    background: "linear-gradient(to right, var(--color-brand-green), transparent)",
+                    borderTop: "2px dashed oklch(42% 0.12 152 / 0.2)",
                     transform: "translateX(-50%)",
                   }}
                 />

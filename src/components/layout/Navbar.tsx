@@ -4,17 +4,24 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Globe, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import LocaleSwitcher from "@/components/shared/LocaleSwitcher";
 
 export default function Navbar() {
   const t = useTranslations("nav");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const locale = useLocale();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const totalHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      setIsScrolled(scrollY > 20);
+      setScrollProgress(totalHeight > 0 ? (scrollY / totalHeight) * 100 : 0);
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -29,27 +36,42 @@ export default function Navbar() {
       className="fixed inset-x-0 top-0 z-50 transition-all duration-300"
       style={{
         background: isScrolled
-          ? "rgba(248, 247, 244, 0.92)"
+          ? "oklch(98.5% 0.008 90 / 0.94)"
           : "transparent",
         backdropFilter: isScrolled ? "blur(16px)" : "none",
         borderBottom: isScrolled ? "1px solid var(--color-border)" : "none",
-        boxShadow: isScrolled
-          ? "0 1px 12px rgba(0,0,0,0.06)"
-          : "none",
+        boxShadow: isScrolled ? "0 1px 12px rgba(0,0,0,0.06)" : "none",
       }}
     >
+      {/* Scroll progress bar */}
+      <div
+        className="absolute top-0 left-0 h-[2.5px] transition-all duration-75"
+        style={{
+          width: `${scrollProgress}%`,
+          background: "var(--color-green)",
+          opacity: scrollProgress > 1 ? 1 : 0,
+        }}
+      />
+
       <nav className="container-site flex h-16 items-center justify-between">
         {/* Logo */}
         <Link
           href={`/${locale}`}
           className="flex items-center gap-2 font-bold text-xl tracking-tight"
-          style={{ color: "var(--color-brand-green)" }}
+          style={{ color: "var(--color-green)", fontFamily: "var(--font-display)" }}
         >
           <span
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-white text-sm font-bold"
-            style={{ background: "var(--color-brand-green)" }}
+            className="relative flex h-9 w-9 items-center justify-center rounded-lg text-white text-xs font-bold"
+            style={{ background: "var(--color-green)", fontFamily: "var(--font-sans)" }}
           >
             NIF
+            <span
+              className="absolute bottom-0 right-0 w-2.5 h-2.5 pointer-events-none"
+              style={{
+                background: "var(--color-terracotta)",
+                borderRadius: "50% 0 0 0",
+              }}
+            />
           </span>
           <span className="hidden sm:block">GetNIFPortugal</span>
         </Link>
@@ -60,8 +82,16 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium transition-colors hover:text-green-700"
+              className="text-sm font-medium transition-colors"
               style={{ color: "var(--color-ink-muted)" }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLElement).style.color =
+                  "var(--color-green)")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLElement).style.color =
+                  "var(--color-ink-muted)")
+              }
             >
               {link.label}
             </Link>
@@ -74,11 +104,7 @@ export default function Navbar() {
           <Link href={`/${locale}/login`} className="btn btn-secondary btn-sm">
             {t("login")}
           </Link>
-          <Link
-            href={`/${locale}/order`}
-            className="btn btn-primary btn-sm"
-            style={{ background: "var(--color-brand-green)" }}
-          >
+          <Link href={`/${locale}/order`} className="btn btn-primary btn-sm">
             {t("getStarted")}
           </Link>
         </div>
@@ -110,7 +136,7 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMobileOpen(false)}
-                  className="text-sm font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="text-sm font-medium py-2 px-3 rounded-lg transition-colors"
                   style={{ color: "var(--color-ink)" }}
                 >
                   {link.label}

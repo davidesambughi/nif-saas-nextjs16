@@ -18,9 +18,11 @@
     "statsNifs": "NIFs Emitidos",
     "statsCountries": "Países Servidos",
     "statsDays": "Dias Médios de Processamento",
-    "statsRating": "Avaliação dos Clientes"
+    "statsRating": "Avaliação dos Clientes",
+    "flagsText": "+40 outros países servidos"
   },
   "howItWorks": {
+    "eyebrow": "O Processo",
     "title": "Três Passos para o Seu NIF",
     "subtitle": "Um processo totalmente remoto, concluído em dias.",
     "step1Title": "Preencha os Seus Dados",
@@ -31,6 +33,7 @@
     "step3Desc": "Submetemos o seu pedido à Autoridade Tributária portuguesa. O seu NIF chega por email."
   },
   "pricing": {
+    "eyebrow": "Preços",
     "title": "Preços Simples e Transparentes",
     "subtitle": "Taxa única. Sem subscrições. Sem custos ocultos.",
     "essential": "Essencial",
@@ -60,12 +63,12 @@
     "q3": "Que documentos preciso?",
     "a3": "Um passaporte válido e um comprovativo de morada emitido nos últimos 3 meses.",
     "q4": "Quanto tempo demora?",
-    "a4": "O serviço standard demora 5–7 dias úteis. O serviço expresso demora 48–72 horas.",
+    "a4": "Os planos Essencial e Standard demoram 7 dias úteis. O Premium é expresso em 48–72 horas.",
     "q5": "O NIF é permanente?",
     "a5": "Sim. O seu NIF é um número de identificação fiscal permanente que não expira."
   },
-  "trust": { "title": "Confiado por Expatriados em Todo o Mundo", "subtitle": "Junte-se a milhares de não residentes.", "review1": "Super rápido e profissional. Tive o meu NIF em 3 dias!", "review1Author": "Sarah K. — Reino Unido", "review2": "O processo foi perfeito. Muito recomendado.", "review2Author": "Marco R. — Itália", "review3": "O melhor €49 que alguma vez gastei.", "review3Author": "Aiko T. — Japão" },
-  "cta": { "title": "Pronto para obter o seu NIF?", "subtitle": "Comece hoje. Demora menos de 5 minutos.", "button": "Candidatar Agora — A partir de €49" },
+  "trust": { "eyebrow": "Em Números", "title": "Confiado por Expatriados em Todo o Mundo", "subtitle": "Junte-se a milhares de não residentes.", "review1": "Super rápido e profissional. Tive o meu NIF em 3 dias!", "review1Author": "Sarah K. — Reino Unido", "review2": "O processo foi perfeito. Muito recomendado.", "review2Author": "Marco R. — Itália", "review3": "O melhor €79 que alguma vez gastei.", "review3Author": "Aiko T. — Japão" },
+  "cta": { "title": "Pronto para obter o seu NIF?", "subtitle": "Comece hoje. Demora menos de 5 minutos.", "button": "Candidatar Agora — A partir de €79", "microcopy": "Sem subscrições · Sem taxas ocultas · Pagamento seguro via Stripe" },
   "footer": { "tagline": "A forma mais rápida de obter o seu NIF português remotamente.", "legal": "Legal", "privacy": "Política de Privacidade", "terms": "Termos de Serviço", "company": "Empresa", "about": "Sobre Nós", "contact": "Contacto", "copyright": "© 2026 GetNIFPortugal. Todos os direitos reservados." },
   "auth": { "loginTitle": "Bem-vindo de volta", "loginSubtitle": "Aceda à sua conta", "signupTitle": "Crie a sua conta", "signupSubtitle": "Comece o seu pedido de NIF hoje", "email": "Endereço de email", "password": "Palavra-passe", "fullName": "Nome completo", "loginButton": "Entrar", "signupButton": "Criar Conta", "noAccount": "Não tem conta?", "hasAccount": "Já tem conta?", "signupLink": "Registar →", "loginLink": "Entrar →", "checkEmail": "Verifique o seu email", "checkEmailDesc": "Enviámos um link de confirmação. Clique nele para ativar a sua conta." },
   "order": { "title": "Iniciar o seu Pedido de NIF", "step1": "Dados Pessoais", "step2": "Documentos", "step3": "Revisão e Pagamento", "fullName": "Nome completo", "nationality": "Nacionalidade", "passportNumber": "Número de passaporte", "dateOfBirth": "Data de nascimento", "address": "Morada atual", "next": "Seguinte →", "back": "← Voltar", "payNow": "Pagar e Submeter", "successTitle": "Pedido Submetido!", "successDesc": "O seu pagamento foi recebido. Enviaremos atualizações por email.", "cancelTitle": "Pagamento Cancelado", "cancelDesc": "O pagamento não foi concluído. O seu pedido foi guardado.", "retryPayment": "Tentar Novamente" },

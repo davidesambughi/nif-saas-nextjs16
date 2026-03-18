@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-fraunces",
+});
+
+const jakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jakarta",
 });
 
 export const metadata: Metadata = {
@@ -14,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | GetNIFPortugal",
   },
   description:
-    "Get your Portuguese NIF (tax number) from anywhere in the world. 100% remote service. Standard from €49.",
+    "Get your Portuguese NIF (tax number) from anywhere in the world. 100% remote service. Starting from €79.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
   ),
@@ -24,17 +30,13 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * Root layout — minimal HTML shell.
- * All locale-specific content is in [locale]/layout.tsx.
- */
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${fraunces.variable} ${jakartaSans.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );

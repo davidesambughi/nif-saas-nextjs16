@@ -24,6 +24,17 @@ export default function CTABanner() {
           className="relative overflow-hidden rounded-2xl px-8 py-14 text-center text-white"
           style={{ background: "var(--color-brand-green)" }}
         >
+          {/* Azulejo tile pattern */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 2L58 30L30 58L2 30Z' fill='none' stroke='%23ffffff' stroke-width='1.2'/%3E%3Cpath d='M30 18L42 30L30 42L18 30Z' fill='none' stroke='%23ffffff' stroke-width='0.8'/%3E%3C/svg%3E\")",
+              backgroundRepeat: "repeat",
+              opacity: 0.08,
+            }}
+          />
+
           {/* Background decoration */}
           <div
             className="pointer-events-none absolute inset-0 opacity-10"
@@ -45,6 +56,12 @@ export default function CTABanner() {
             {t("button")}
             <ArrowRight size={18} />
           </Link>
+          <p
+            className="relative z-10 text-xs mt-5"
+            style={{ color: "rgba(255,255,255,0.5)" }}
+          >
+            {t("microcopy")}
+          </p>
         </motion.div>
       </div>
     </section>
