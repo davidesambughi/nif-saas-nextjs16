@@ -8,13 +8,15 @@ import type { ServiceTier } from "@/db/schema";
  */
 
 const PRICE_MAP: Record<ServiceTier, string> = {
+  essential: env.STRIPE_PRICE_ID_ESSENTIAL,
   standard: env.STRIPE_PRICE_ID_STANDARD,
-  express: env.STRIPE_PRICE_ID_EXPRESS,
+  premium: env.STRIPE_PRICE_ID_PREMIUM,
 };
 
 const TIER_LABELS: Record<ServiceTier, string> = {
-  standard: "NIF Standard (5-7 business days)",
-  express: "NIF Express (48-72 hours)",
+  essential: "NIF Essential — 7 business days",
+  standard: "NIF Standard — 1yr fiscal representation",
+  premium: "NIF Premium — 2yr fiscal rep + 48h express",
 };
 
 export async function createCheckoutSession({

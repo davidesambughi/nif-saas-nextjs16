@@ -33,17 +33,21 @@
   "pricing": {
     "title": "Simple, Transparent Pricing",
     "subtitle": "One-time fee. No subscriptions. No hidden charges.",
+    "essential": "Essential",
     "standard": "Standard",
-    "express": "Express",
-    "standardPrice": "€49",
-    "expressPrice": "€99",
-    "standardDuration": "5–7 business days",
-    "expressDuration": "48–72 hours",
+    "premium": "Premium",
+    "essentialPrice": "€79",
+    "standardPrice": "€129",
+    "premiumPrice": "€199",
+    "essentialDuration": "7 business days",
+    "standardDuration": "7 business days",
+    "premiumDuration": "48–72 hours express",
     "feature1": "Full NIF application",
     "feature2": "Document review",
     "feature3": "Email delivery",
-    "feature4": "Priority processing",
-    "feature5": "Express handling fee",
+    "feature4": "1-year fiscal representation",
+    "feature5": "2-year fiscal representation",
+    "feature6": "Priority 48–72h processing",
     "cta": "Get Started",
     "popular": "Most Popular"
   },
@@ -67,13 +71,13 @@
     "review1Author": "Sarah K. — United Kingdom",
     "review2": "The entire process was seamless. Highly recommended.",
     "review2Author": "Marco R. — Italy",
-    "review3": "Best €49 I ever spent. No flights, no queues.",
+    "review3": "Best €79 I ever spent. No flights, no queues.",
     "review3Author": "Aiko T. — Japan"
   },
   "cta": {
     "title": "Ready to get your NIF?",
     "subtitle": "Start your application today. Takes less than 5 minutes.",
-    "button": "Apply Now — From €49"
+    "button": "Apply Now — From €79"
   },
   "footer": {
     "tagline": "The fastest way to get your Portuguese NIF remotely.",

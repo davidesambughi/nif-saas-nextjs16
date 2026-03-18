@@ -15,8 +15,9 @@ export const orderStatusEnum = pgEnum("order_status", [
 ]);
 
 export const serviceTierEnum = pgEnum("service_tier", [
+  "essential",
   "standard",
-  "express",
+  "premium",
 ]);
 
 export const documentTypeEnum = pgEnum("document_type", [

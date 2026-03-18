@@ -15,13 +15,14 @@ import {
 interface OrderConfirmationEmailProps {
   customerName: string;
   orderId: string;
-  serviceTier: "standard" | "express";
+  serviceTier: "essential" | "standard" | "premium";
   amountPaid: number; // in cents
 }
 
 const tierLabels = {
-  standard: "Standard (5–7 business days)",
-  express: "Express (48–72 hours)",
+  essential: "Essential — NIF only (7 business days)",
+  standard: "Standard — NIF + 1yr fiscal representation",
+  premium: "Premium — NIF + 2yr fiscal rep + 48h express",
 };
 
 export default function OrderConfirmationEmail({

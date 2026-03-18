@@ -48,6 +48,7 @@ Schema is in `src/db/schema/`. Key tables:
 ### Routing & i18n
 
 All user-facing routes are under `src/app/[locale]/` with three route groups:
+
 - `(marketing)` — public homepage
 - `(auth)` — `/login`, `/signup`
 - `(app)` — protected: `/dashboard`, `/order`
@@ -57,6 +58,7 @@ Locales: `en`, `pt`, `fr` (always prefixed in URL). Config: `src/i18n/routing.ts
 ### Auth & proxy
 
 `proxy.ts` (Next.js 16 network proxy, replaces `middleware.ts`) runs on every request:
+
 1. Refreshes Supabase session cookie
 2. Guards `/dashboard` and `/order` — redirects unauthenticated users to `/login`
 3. Redirects authenticated users away from auth pages
@@ -84,14 +86,14 @@ Dashboard Server Component fetches initial data. `RealtimeDashboard` (Client Com
 
 Copy `.env.local.example` to `.env.local`. Required keys:
 
-| Variable | Purpose |
-|----------|---------|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server-only Supabase admin key |
-| `STRIPE_SECRET_KEY` | Stripe server key |
-| `STRIPE_WEBHOOK_SECRET` | Webhook signature verification |
-| `STRIPE_PRICE_ID_STANDARD` / `_EXPRESS` | Stripe Price IDs |
-| `RESEND_API_KEY` / `RESEND_FROM_EMAIL` | Email sending |
-| `NEXT_PUBLIC_SUPABASE_URL` / `_ANON_KEY` | Supabase browser client |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe browser key |
-| `NEXT_PUBLIC_APP_URL` | Base URL (used in emails and redirects) |
+| Variable                                                            | Purpose                                 |
+| ------------------------------------------------------------------- | --------------------------------------- |
+| `DATABASE_URL`                                                      | PostgreSQL connection string            |
+| `SUPABASE_SECRET_KEY`                                               | Server-only Supabase admin key          |
+| `STRIPE_SECRET_KEY`                                                 | Stripe server key                       |
+| `STRIPE_WEBHOOK_SECRET`                                             | Webhook signature verification          |
+| `STRIPE_PRICE_ID_STANDARD` / `_EXPRESS`                             | Stripe Price IDs                        |
+| `RESEND_API_KEY` / `RESEND_FROM_EMAIL`                              | Email sending                           |
+| `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase browser client                 |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`                                | Stripe browser key                      |
+| `NEXT_PUBLIC_APP_URL`                                               | Base URL (used in emails and redirects) |

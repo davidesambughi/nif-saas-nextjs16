@@ -18,7 +18,7 @@ export async function sendOrderConfirmation({
   to: string;
   customerName: string;
   orderId: string;
-  serviceTier: "standard" | "express";
+  serviceTier: "essential" | "standard" | "premium";
   amountPaid: number;
 }): Promise<void> {
   await resend.emails.send({

@@ -14,14 +14,14 @@ type Step = 1 | 2 | 3;
 
 interface OrderState {
   personalInfo: Partial<PersonalInfoInput>;
-  serviceTier: "standard" | "express";
+  serviceTier: "essential" | "standard" | "premium";
   orderId: string | null;
   documentsUploaded: { passport: boolean; address: boolean };
 }
 
 const initialState: OrderState = {
   personalInfo: {},
-  serviceTier: "standard",
+  serviceTier: "essential",
   orderId: null,
   documentsUploaded: { passport: false, address: false },
 };
@@ -37,7 +37,7 @@ export default function OrderPage() {
   const [step, setStep] = useState<Step>(1);
   const [state, setState] = useState<OrderState>({
     ...initialState,
-    serviceTier: (searchParams.get("tier") as "standard" | "express") ?? "standard",
+    serviceTier: (searchParams.get("tier") as "essential" | "standard" | "premium") ?? "essential",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -262,28 +262,36 @@ export default function OrderPage() {
                   <h3 className="text-base font-semibold mb-3" style={{ color: "var(--color-ink)" }}>
                     Service
                   </h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    {(["standard", "express"] as const).map((tier) => (
-                      <button
-                        key={tier}
-                        type="button"
-                        onClick={() => setState((s) => ({ ...s, serviceTier: tier }))}
-                        className="rounded-xl p-4 text-left border-2 transition-all"
-                        style={{
-                          borderColor: state.serviceTier === tier
-                            ? "var(--color-brand-green)"
-                            : "var(--color-border)",
-                          background: state.serviceTier === tier
-                            ? "rgba(0,102,0,0.05)"
-                            : "var(--color-surface-elevated)",
-                        }}
-                      >
-                        <p className="font-semibold capitalize" style={{ color: "var(--color-ink)" }}>{tier}</p>
-                        <p className="text-xs mt-1" style={{ color: "var(--color-ink-muted)" }}>
-                          {tier === "standard" ? "€49 — 5-7 days" : "€99 — 48-72 hrs"}
-                        </p>
-                      </button>
-                    ))}
+                  <div className="grid grid-cols-1 gap-3">
+                    {(["essential", "standard", "premium"] as const).map((tier) => {
+                      const info = {
+                        essential: { price: "€79", desc: "NIF only — 7 business days" },
+                        standard: { price: "€129", desc: "NIF + 1yr fiscal representation" },
+                        premium: { price: "€199", desc: "NIF + 2yr fiscal rep + 48h express" },
+                      }[tier];
+                      return (
+                        <button
+                          key={tier}
+                          type="button"
+                          onClick={() => setState((s) => ({ ...s, serviceTier: tier }))}
+                          className="rounded-xl p-4 text-left border-2 transition-all"
+                          style={{
+                            borderColor: state.serviceTier === tier
+                              ? "var(--color-brand-green)"
+                              : "var(--color-border)",
+                            background: state.serviceTier === tier
+                              ? "rgba(0,102,0,0.05)"
+                              : "var(--color-surface-elevated)",
+                          }}
+                        >
+                          <div className="flex justify-between items-center">
+                            <p className="font-semibold capitalize" style={{ color: "var(--color-ink)" }}>{tier}</p>
+                            <p className="font-bold" style={{ color: "var(--color-brand-green)" }}>{info.price}</p>
+                          </div>
+                          <p className="text-xs mt-1" style={{ color: "var(--color-ink-muted)" }}>{info.desc}</p>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 

@@ -15,7 +15,7 @@ export async function createClient() {
 
   return createServerClient(
     env.NEXT_PUBLIC_SUPABASE_URL,
-    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     {
       cookies: {
         getAll() {
@@ -37,7 +37,7 @@ export async function createClient() {
 }
 
 /**
- * Admin client with service role key — bypasses RLS.
+ * Admin client with secret key — bypasses RLS.
  * Use ONLY in trusted server-side contexts (webhooks, admin actions).
  * NEVER expose this to the client.
  */
@@ -46,7 +46,7 @@ export async function createAdminClient() {
 
   return createServerClient(
     env.NEXT_PUBLIC_SUPABASE_URL,
-    env.SUPABASE_SERVICE_ROLE_KEY,
+    env.SUPABASE_SECRET_KEY,
     {
       cookies: {
         getAll() {

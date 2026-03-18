@@ -20,7 +20,7 @@ export const personalInfoSchema = z.object({
 });
 
 export const serviceTierSchema = z.object({
-  serviceTier: z.enum(["standard", "express"], {
+  serviceTier: z.enum(["essential", "standard", "premium"], {
     error: "Please select a service tier",
   }),
 });
