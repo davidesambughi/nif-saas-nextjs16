@@ -144,8 +144,11 @@ export default function Hero() {
                   "0 24px 64px oklch(42% 0.12 152 / 0.12), 0 4px 16px oklch(42% 0.12 152 / 0.07)",
               }}
             >
-              {/* Card header */}
-              <div className="flex items-center justify-between mb-6">
+              {/* Card header — with divider line */}
+              <div
+                className="flex items-center justify-between pb-4 mb-2"
+                style={{ borderBottom: "1px solid var(--color-border)" }}
+              >
                 <p
                   className="text-sm font-bold"
                   style={{ color: "var(--color-ink)" }}
@@ -163,121 +166,119 @@ export default function Hero() {
                 </span>
               </div>
 
-              {/* Steps */}
-              <div className="space-y-4">
+              {/* Steps — 3-col: circle | content | status */}
+              <div>
                 {/* Step 1 — done */}
-                <div className="flex items-start gap-3">
+                <div className="relative flex items-start gap-3 py-3.5">
+                  {/* vertical connector to next step */}
                   <span
-                    className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                    className="pointer-events-none absolute"
+                    style={{
+                      left: 17,
+                      top: 44,
+                      width: 1,
+                      height: "calc(100% - 10px)",
+                      background: "linear-gradient(to bottom, var(--color-green), transparent)",
+                      opacity: 0.3,
+                    }}
+                  />
+                  <span
+                    className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
                     style={{ background: "var(--color-green)" }}
                   >
                     ✓
                   </span>
-                  <div>
-                    <p
-                      className="text-sm font-semibold"
-                      style={{ color: "var(--color-ink)" }}
-                    >
-                      Payment Received
-                    </p>
-                    <p
-                      className="text-xs"
-                      style={{ color: "var(--color-ink-muted)" }}
-                    >
-                      €129 · Standard Plan
-                    </p>
+                  <div className="flex-1 pt-0.5">
+                    <p className="text-sm font-semibold" style={{ color: "var(--color-ink)" }}>Payment Received</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--color-ink-muted)" }}>€129 · Standard Plan</p>
                   </div>
+                  <span className="text-xs font-semibold pt-0.5" style={{ color: "var(--color-green)" }}>Done</span>
                 </div>
 
                 {/* Step 2 — active */}
-                <div className="flex items-start gap-3">
+                <div className="relative flex items-start gap-3 py-3.5">
                   <span
-                    className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
+                    className="pointer-events-none absolute"
                     style={{
-                      background: "var(--color-gold)",
-                      border: "2px solid var(--color-gold)",
+                      left: 17,
+                      top: 44,
+                      width: 1,
+                      height: "calc(100% - 10px)",
+                      background: "linear-gradient(to bottom, var(--color-green), transparent)",
+                      opacity: 0.3,
+                    }}
+                  />
+                  <span
+                    className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold"
+                    style={{
+                      background: "oklch(42% 0.12 152 / 0.12)",
+                      color: "var(--color-green)",
+                      border: "1.5px solid var(--color-green)",
                     }}
                   >
-                    <span className="h-2 w-2 rounded-full bg-white" />
+                    2
                   </span>
-                  <div>
-                    <p
-                      className="text-sm font-semibold"
-                      style={{ color: "var(--color-ink)" }}
-                    >
-                      Documents Under Review
-                    </p>
-                    <p
-                      className="text-xs"
-                      style={{ color: "var(--color-ink-muted)" }}
-                    >
-                      Reviewing…
-                    </p>
+                  <div className="flex-1 pt-0.5">
+                    <p className="text-sm font-semibold" style={{ color: "var(--color-ink)" }}>Documents Under Review</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--color-ink-muted)" }}>Passport · Proof of address</p>
                   </div>
+                  <span className="text-xs font-semibold pt-0.5" style={{ color: "var(--color-gold)" }}>Reviewing…</span>
                 </div>
 
                 {/* Step 3 — done */}
-                <div className="flex items-start gap-3">
+                <div className="relative flex items-start gap-3 py-3.5">
                   <span
-                    className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                    className="pointer-events-none absolute"
+                    style={{
+                      left: 17,
+                      top: 44,
+                      width: 1,
+                      height: "calc(100% - 10px)",
+                      background: "linear-gradient(to bottom, var(--color-green), transparent)",
+                      opacity: 0.3,
+                    }}
+                  />
+                  <span
+                    className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
                     style={{ background: "var(--color-green)" }}
                   >
                     ✓
                   </span>
-                  <div>
-                    <p
-                      className="text-sm font-semibold"
-                      style={{ color: "var(--color-ink)" }}
-                    >
-                      Submitted to Finanças
-                    </p>
-                    <p
-                      className="text-xs"
-                      style={{ color: "var(--color-ink-muted)" }}
-                    >
-                      By licensed fiscal rep
-                    </p>
+                  <div className="flex-1 pt-0.5">
+                    <p className="text-sm font-semibold" style={{ color: "var(--color-ink)" }}>Submitted to Finanças</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--color-ink-muted)" }}>By licensed fiscal rep</p>
                   </div>
+                  <span className="text-xs font-semibold pt-0.5" style={{ color: "var(--color-green)" }}>Done</span>
                 </div>
 
-                {/* Step 4 — pending */}
-                <div className="flex items-start gap-3">
+                {/* Step 4 — pending (no connector after last step) */}
+                <div className="relative flex items-start gap-3 py-3.5">
                   <span
-                    className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
-                    style={{ border: "2px solid var(--color-border)" }}
-                  />
-                  <div>
-                    <p
-                      className="text-sm font-semibold"
-                      style={{ color: "var(--color-ink-muted)" }}
-                    >
-                      NIF Issued
-                    </p>
-                    <p
-                      className="text-xs"
-                      style={{ color: "var(--color-ink-subtle)" }}
-                    >
-                      Est. 3 days
-                    </p>
+                    className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold"
+                    style={{
+                      background: "var(--color-border)",
+                      color: "var(--color-ink-subtle)",
+                    }}
+                  >
+                    4
+                  </span>
+                  <div className="flex-1 pt-0.5">
+                    <p className="text-sm font-semibold" style={{ color: "var(--color-ink-muted)" }}>NIF Issued</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--color-ink-subtle)" }}>Delivered by email + dashboard</p>
                   </div>
+                  <span className="text-xs pt-0.5" style={{ color: "var(--color-ink-subtle)" }}>Est. 3 days</span>
                 </div>
               </div>
 
-              {/* Footer */}
+              {/* Footer — border-top separator */}
               <div
-                className="mt-6 flex items-center justify-between rounded-xl px-4 py-3"
-                style={{ background: "oklch(42% 0.12 152 / 0.06)" }}
+                className="flex items-center justify-between pt-5 mt-1"
+                style={{ borderTop: "1px solid var(--color-border)" }}
               >
-                <span
-                  className="text-xs font-medium"
-                  style={{ color: "var(--color-green-dark)" }}
-                >
+                <span className="text-xs" style={{ color: "var(--color-ink-muted)" }}>
                   🔒 256-bit encrypted
                 </span>
-                <span
-                  className="text-xs font-medium"
-                  style={{ color: "var(--color-green-dark)" }}
-                >
+                <span className="text-xs font-semibold" style={{ color: "var(--color-green)" }}>
                   4.9★ rated service
                 </span>
               </div>
