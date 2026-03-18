@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { m, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 
@@ -16,7 +15,7 @@ export default function CTABanner() {
   return (
     <section className="section-pad">
       <div className="container-site">
-        <motion.div
+        <m.div
           ref={ref}
           initial={{ opacity: 0, scale: 0.98 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
@@ -62,7 +61,7 @@ export default function CTABanner() {
           >
             {t("microcopy")}
           </p>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

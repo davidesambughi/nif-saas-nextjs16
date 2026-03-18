@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { motion, useInView } from "framer-motion";
+import { m, useInView, type Variants } from "framer-motion";
 import { useRef } from "react";
 import { ClipboardList, Upload, Mail } from "lucide-react";
 
@@ -11,13 +11,26 @@ const STEPS = [
   { Icon: Mail, key: "step3" },
 ] as const;
 
-const container = {
+// Entry rotation per card: -4° | 0° | +4°
+const ENTRY_ROTATIONS = [-4, 0, 4] as const;
+
+const container: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.14 } },
 };
-const item = {
-  hidden: { opacity: 0, y: 28 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+
+const item: Variants = {
+  hidden: (i: number) => ({
+    opacity: 0,
+    y: 28,
+    rotate: (ENTRY_ROTATIONS as readonly number[])[i] ?? 0,
+  }),
+  show: {
+    opacity: 1,
+    y: 0,
+    rotate: 0,
+    transition: { duration: 0.55, ease: "easeOut" },
+  },
 };
 
 export default function HowItWorks() {
@@ -53,7 +66,7 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        <motion.div
+        <m.div
           ref={ref}
           variants={container}
           initial="hidden"
@@ -61,8 +74,9 @@ export default function HowItWorks() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 relative"
         >
           {STEPS.map(({ Icon, key }, index) => (
-            <motion.div
+            <m.div
               key={key}
+              custom={index}
               variants={item}
               className="card p-8 relative overflow-hidden"
             >
@@ -119,9 +133,9 @@ export default function HowItWorks() {
                   }}
                 />
               )}
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

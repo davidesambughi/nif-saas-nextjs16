@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
 const FAQ_KEYS = ["q1", "q2", "q3", "q4", "q5"] as const;
@@ -73,7 +73,7 @@ export default function FAQ() {
 
               <AnimatePresence initial={false}>
                 {openIndex === i && (
-                  <motion.div
+                  <m.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
@@ -90,7 +90,7 @@ export default function FAQ() {
                     >
                       {t(`a${i + 1}` as "a1")}
                     </div>
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
             </div>

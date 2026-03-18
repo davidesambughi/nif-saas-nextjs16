@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { m, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 import { Check, Star, Minus } from "lucide-react";
 
@@ -37,6 +37,9 @@ const PLANS: PlanConfig[] = [
     goldBorder: true,
   },
 ];
+
+// Entry rotation: left tilts left, right tilts right, centre stays flat
+const ENTRY_ROTATIONS = [-2, 0, 2] as const;
 
 type FeatureKey =
   | "feature1"
@@ -83,18 +86,15 @@ export default function Pricing() {
           </p>
         </div>
 
-        <motion.div
+        <div
           ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-start"
         >
-          {PLANS.map(({ key, tier, included, excluded, featured, goldBorder }) => {
+          {PLANS.map(({ key, tier, included, excluded, featured, goldBorder }, planIndex) => {
             const isPremium = key === "premium";
             const isSelected = selected === key;
+            const entryRotation = ENTRY_ROTATIONS[planIndex] ?? 0;
 
-            /* ── accent colours per plan ── */
             const accentColor = isPremium
               ? "var(--color-gold)"
               : "var(--color-green)";
@@ -102,7 +102,6 @@ export default function Pricing() {
               ? "oklch(64% 0.12 75 / 0.22)"
               : "oklch(42% 0.12 152 / 0.18)";
 
-            /* ── border for non-featured cards ── */
             const borderStyle = featured
               ? "none"
               : isSelected
@@ -111,16 +110,14 @@ export default function Pricing() {
               ? "2px solid var(--color-gold)"
               : "1px solid var(--color-border)";
 
-            /* ── shadow ── */
             const shadowStyle = featured
               ? isSelected
-                ? `0 24px 72px oklch(42% 0.12 152 / 0.40), 0 4px 16px oklch(42% 0.12 152 / 0.25), 0 0 0 3px oklch(42% 0.12 152 / 0.25)`
+                ? "0 24px 72px oklch(42% 0.12 152 / 0.40), 0 4px 16px oklch(42% 0.12 152 / 0.25), 0 0 0 3px oklch(42% 0.12 152 / 0.25)"
                 : "0 20px 60px oklch(42% 0.12 152 / 0.30), 0 4px 16px oklch(42% 0.12 152 / 0.20)"
               : isSelected
               ? `0 12px 40px ${accentShadow}, 0 2px 8px rgba(0,0,0,0.06)`
               : "0 2px 8px rgba(0,0,0,0.04)";
 
-            /* ── bg tint for non-featured selected ── */
             const bgStyle = featured
               ? "var(--color-green)"
               : isSelected
@@ -129,18 +126,26 @@ export default function Pricing() {
                 : "oklch(98.5% 0.012 152)"
               : "var(--color-surface-2)";
 
-            /* ── selection badge colours ── */
             const badgeBg = featured
               ? "rgba(255,255,255,0.18)"
               : isPremium
               ? "oklch(64% 0.12 75 / 0.12)"
               : "oklch(42% 0.12 152 / 0.1)";
-            const badgeColor = featured
-              ? "#ffffff"
-              : accentColor;
+            const badgeColor = featured ? "#ffffff" : accentColor;
 
             return (
-              <div key={key} className="relative">
+              /* Entry animation wrapper */
+              <m.div
+                key={key}
+                className="relative"
+                initial={{ opacity: 0, y: 24, rotate: entryRotation }}
+                animate={isInView ? { opacity: 1, y: 0, rotate: 0 } : {}}
+                transition={{
+                  duration: 0.55,
+                  delay: planIndex * 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+              >
                 {/* Most Popular badge */}
                 {featured && (
                   <div
@@ -155,11 +160,14 @@ export default function Pricing() {
                   </div>
                 )}
 
-                <motion.div
+                {/* Selection + hover animation wrapper */}
+                <m.div
                   onClick={() => setSelected(key)}
                   animate={{
                     y: isSelected && !featured ? -4 : 0,
-                    scale: featured ? (isSelected ? 1.04 : 1.03) : isSelected ? 1.01 : 1,
+                    scale: featured
+                      ? isSelected ? 1.04 : 1.03
+                      : isSelected ? 1.01 : 1,
                   }}
                   transition={{ type: "spring", stiffness: 320, damping: 28 }}
                   className="relative rounded-2xl p-8 overflow-hidden flex flex-col h-full cursor-pointer"
@@ -171,10 +179,10 @@ export default function Pricing() {
                     transition: "background 0.25s ease, box-shadow 0.25s ease",
                   }}
                 >
-                  {/* ── Selection badge ── */}
+                  {/* Selection badge */}
                   <AnimatePresence>
                     {isSelected && (
-                      <motion.span
+                      <m.span
                         key="selected-badge"
                         initial={{ opacity: 0, scale: 0.75, y: -4 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -185,7 +193,7 @@ export default function Pricing() {
                       >
                         <Check size={10} strokeWidth={3} />
                         Selected
-                      </motion.span>
+                      </m.span>
                     )}
                   </AnimatePresence>
 
@@ -278,7 +286,7 @@ export default function Pricing() {
                     ))}
                   </ul>
 
-                  {/* CTA — goes primary when selected */}
+                  {/* CTA */}
                   {featured ? (
                     <Link
                       href={`/${locale}/order?tier=${tier}`}
@@ -315,11 +323,11 @@ export default function Pricing() {
                       {t("cta")}
                     </Link>
                   )}
-                </motion.div>
-              </div>
+                </m.div>
+              </m.div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

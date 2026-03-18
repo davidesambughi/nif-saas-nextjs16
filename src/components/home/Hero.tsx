@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 const AZULEJO_SVG =
@@ -43,7 +43,7 @@ export default function Hero() {
           {/* ── LEFT: Content ── */}
           <div>
             {/* Badge */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -55,10 +55,10 @@ export default function Hero() {
               }}
             >
               {t("badge")}
-            </motion.div>
+            </m.div>
 
             {/* Headline */}
-            <motion.h1
+            <m.h1
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.08 }}
@@ -68,10 +68,10 @@ export default function Hero() {
               {t("headline")}
               <br />
               <span className="text-gradient-brand">{t("headlineAccent")}</span>
-            </motion.h1>
+            </m.h1>
 
             {/* Subheadline */}
-            <motion.p
+            <m.p
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.15 }}
@@ -79,10 +79,10 @@ export default function Hero() {
               style={{ color: "var(--color-ink-muted)" }}
             >
               {t("subheadline")}
-            </motion.p>
+            </m.p>
 
             {/* CTAs */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.22 }}
@@ -103,10 +103,10 @@ export default function Hero() {
               >
                 {t("ctaSecondary")}
               </a>
-            </motion.div>
+            </m.div>
 
             {/* Flags row */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.38 }}
@@ -123,17 +123,17 @@ export default function Hero() {
               >
                 {t("flagsText")}
               </span>
-            </motion.div>
+            </m.div>
           </div>
 
           {/* ── RIGHT: Status tracker card ── */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: 28 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.65, delay: 0.25 }}
             className="hidden lg:block"
           >
-            <motion.div
+            <m.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
               className="rounded-2xl p-7"
@@ -282,8 +282,8 @@ export default function Hero() {
                   4.9★ rated service
                 </span>
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
         </div>
       </div>

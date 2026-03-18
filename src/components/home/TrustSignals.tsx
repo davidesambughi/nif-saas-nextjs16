@@ -1,18 +1,27 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { motion, useInView } from "framer-motion";
+import { m, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Star } from "lucide-react";
+import CountUp from "@/components/shared/CountUp";
 
 const REVIEWS = [1, 2, 3] as const;
 
-const STATS = [
-  { value: "2", accent: "K+", label: "NIFs Issued" },
-  { value: "45", accent: "+", label: "Countries" },
-  { value: "4.", accent: "9★", label: "Rating" },
-  { value: "3", accent: "yr", label: "In Business" },
-] as const;
+interface StatItem {
+  to: number;
+  suffix?: string;
+  accent: string;
+  label: string;
+  duration: number;
+}
+
+const STATS: StatItem[] = [
+  { to: 2, accent: "K+", label: "NIFs Issued", duration: 1.0 },
+  { to: 45, accent: "+", label: "Countries", duration: 1.4 },
+  { to: 4, suffix: ".", accent: "9★", label: "Rating", duration: 0.8 },
+  { to: 3, accent: "yr", label: "In Business", duration: 0.8 },
+];
 
 const AZULEJO_SVG =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 2L58 30L30 58L2 30Z' fill='none' stroke='%23ffffff' stroke-width='1.2'/%3E%3Cpath d='M30 18L42 30L30 42L18 30Z' fill='none' stroke='%23ffffff' stroke-width='0.8'/%3E%3C/svg%3E";
@@ -41,7 +50,7 @@ export default function TrustSignals() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-start">
 
           {/* LEFT: stats + title + subtitle */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 24 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.55 }}
@@ -54,7 +63,7 @@ export default function TrustSignals() {
             </p>
 
             <div className="grid grid-cols-2 gap-8">
-              {STATS.map(({ value, accent, label }) => (
+              {STATS.map(({ to, suffix, accent, label, duration }) => (
                 <div key={label}>
                   <p
                     className="text-4xl font-black leading-none mb-1.5"
@@ -63,7 +72,7 @@ export default function TrustSignals() {
                       fontFamily: "var(--font-display)",
                     }}
                   >
-                    {value}
+                    <CountUp to={to} suffix={suffix ?? ""} duration={duration} />
                     <span style={{ color: "var(--color-gold)" }}>{accent}</span>
                   </p>
                   <p
@@ -83,12 +92,12 @@ export default function TrustSignals() {
               {t("title")}
             </h2>
             <p style={{ color: "oklch(68% 0.04 152)" }}>{t("subtitle")}</p>
-          </motion.div>
+          </m.div>
 
           {/* RIGHT: reviews */}
           <div className="space-y-4">
             {REVIEWS.map((n, i) => (
-              <motion.div
+              <m.div
                 key={n}
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -121,7 +130,7 @@ export default function TrustSignals() {
                 >
                   — {t(`review${n}Author` as "review1Author")}
                 </p>
-              </motion.div>
+              </m.div>
             ))}
           </div>
 
