@@ -1,9 +1,7 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
-import { getOrdersByUserId } from "@/repositories/order.repository";
+import { getUserOrdersAction } from "@/modules/orders/actions";
 import RealtimeDashboard from "@/modules/orders/components/RealtimeDashboard";
-import type { Order } from "@/db/schema";
 
 /**
  * Dashboard — Server Component.
@@ -18,15 +16,20 @@ export default async function DashboardPage({
   const { locale } = await params;
   const t = await getTranslations("dashboard");
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Call Module (Server Action) instead of Repository directly
+  const result = await getUserOrdersAction();
 
-  // proxy.ts guarantees user is authenticated — this is a safety net
-  if (!user) return null;
+  // If unauthorized, the action returns success: false
+  if (!result.success) {
+    if (result.code === "UNAUTHORIZED") return null;
+    return (
+      <div className="p-8 text-center text-red-500">
+        {result.error || "Failed to load orders"}
+      </div>
+    );
+  }
 
-  const orders = await getOrdersByUserId(user.id);
+  const orders = result.data;
 
   return (
     <div
@@ -47,7 +50,7 @@ export default async function DashboardPage({
             </p>
           </div>
           <Link
-            href={`/${locale}/order`}
+            href="/order"
             id="dashboard-new-order"
             className="btn btn-primary btn-sm"
           >
@@ -71,7 +74,7 @@ export default async function DashboardPage({
               {t("noOrdersDesc")}
             </p>
             <Link
-              href={`/${locale}/order`}
+              href="/order"
               className="btn btn-primary btn-sm inline-flex"
             >
               {t("startApplication")}

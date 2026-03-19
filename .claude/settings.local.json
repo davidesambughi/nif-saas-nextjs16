@@ -9,7 +9,16 @@
       "Bash(find /c/Users/sambu/nif-project2/src/components -type f -name *.tsx -o -name *.ts)",
       "Bash(find /c/Users/sambu/nif-project2 -maxdepth 1 -type f \\\\\\(-name *.config.* -o -name postcss.config.* \\\\\\))",
       "Bash(npx next:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(find /c/Users/sambu/nif-project2/src/components -type f -name \"*.tsx\" -exec wc -l {} +)",
+      "Bash(grep -r \"export.*TODO\\\\|export.*FIXME\\\\|^\\\\s*//.*TODO\\\\|^\\\\s*//.*FIXME\\\\|''''''''\\\\|\"\"\"\"\" /c/Users/sambu/nif-project2/src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -E \"\\\\.tsx$\")",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_evaluate",
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "mcp__plugin_supabase_supabase__list_projects",
+      "mcp__plugin_supabase_supabase__get_logs"
     ]
   }
 }

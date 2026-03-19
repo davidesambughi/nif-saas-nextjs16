@@ -87,7 +87,15 @@ Locales: `en`, `pt`, `fr` (always prefixed in URL). Config: `src/i18n/routing.ts
 
 ### Realtime dashboard
 
-Dashboard Server Component fetches initial data. `RealtimeDashboard` (Client Component) subscribes to Supabase Realtime on `status_updates` INSERT events and merges updates without a page refresh.
+Dashboard Server Component fetches initial data via `getUserOrdersAction()`. `RealtimeDashboard` (Client Component) subscribes to Supabase Realtime on `status_updates` INSERT events and merges updates without a page refresh.
+
+### Document Uploads
+
+Uploaded via signed URLs (Supabase Storage).
+- **Bucket:** `documents`
+- **Path convention:** `orders/{orderId}/{timestamp}_{filename}`
+- **Permissions:** Restricted; only server-side signed URL creation via `getSignedUploadUrl()`.
+- **Cleanup:** `saveDocumentRecord()` records the path in `order_documents` table for future deletion or retrieval.
 
 ### Validation
 
@@ -106,10 +114,19 @@ Dashboard Server Component fetches initial data. `RealtimeDashboard` (Client Com
 | `STRIPE_SECRET_KEY` | Stripe server key |
 | `STRIPE_WEBHOOK_SECRET` | Webhook signature verification |
 | `STRIPE_PRICE_ID_ESSENTIAL` / `_STANDARD` / `_PREMIUM` | Stripe Price IDs (must be `price_xxx`, not `prod_xxx`) |
-| `RESEND_API_KEY` / `RESEND_FROM_EMAIL` | Email sending |
+| `RESEND_API_KEY` | Resend service key |
+| `RESEND_FROM_EMAIL` | From email address (e.g. `support@getnifportugal.com`) |
+| `RESEND_FROM_NAME` | Display name (e.g. `GetNIFPortugal Support`) |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase browser key (`sb_publishable_...`) |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe browser key |
 | `NEXT_PUBLIC_APP_URL` | Base URL (used in emails and redirects) |
+| `NEXT_PUBLIC_APP_NAME` | Display name for UI/emails |
+
+## Configuration & Known Issues
+
+- **cacheComponents (disabled):** `nextConfig.cacheComponents` is disabled due to incompatibility with `next-intl` (request header access in layout level breaks PPR/static rendering). Re-enable once `next-intl` natively supports PPR.
+- **Stripe Metadata:** Every checkout session MUST include `orderId` in metadata for the webhook to function.
+- **Audit Logs:** The `status_updates` table includes `isAdminAction: boolean` to differentiate customer actions from fiscal rep updates.
 
 Supabase uses the new key naming (post-2025): `sb_publishable_...` replaces the old anon key, `sb_secret_...` replaces the old service_role key. Both are drop-in replacements in all Supabase client calls.

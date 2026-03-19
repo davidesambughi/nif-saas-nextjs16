@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { signUp } from "@/modules/auth/actions";
 import { env } from "@/lib/env";
@@ -22,7 +22,7 @@ export default function SignupForm() {
     setLoading(true);
     setError(null);
 
-    const redirectTo = `${env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard`;
+    const redirectTo = `${env.NEXT_PUBLIC_APP_URL}/api/auth/callback?next=/${locale}/dashboard`;
     const result = await signUp(email, password, fullName, redirectTo);
 
     if (!result.success) {
@@ -123,7 +123,7 @@ export default function SignupForm() {
         <p className="text-center text-sm mt-6" style={{ color: "var(--color-ink-muted)" }}>
           {t("hasAccount")}{" "}
           <Link
-            href={`/${locale}/login`}
+            href="/login"
             className="font-semibold"
             style={{ color: "var(--color-brand-green)" }}
           >

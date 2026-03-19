@@ -1,13 +1,8 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { XCircle } from "lucide-react";
 
-export default async function OrderCancelPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
+export default async function OrderCancelPage() {
   const t = await getTranslations("order");
 
   return (
@@ -30,14 +25,14 @@ export default async function OrderCancelPage({
         </p>
         <div className="flex gap-3">
           <Link
-            href={`/${locale}/order`}
+            href="/order"
             id="cancel-retry"
             className="btn btn-primary flex-1"
           >
             {t("retryPayment")}
           </Link>
           <Link
-            href={`/${locale}/dashboard`}
+            href="/dashboard"
             className="btn btn-secondary flex-1"
           >
             Dashboard

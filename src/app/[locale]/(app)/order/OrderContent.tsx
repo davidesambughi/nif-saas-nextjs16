@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams, isRedirectError } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { createOrderAction } from "@/modules/orders/actions";
 import { createCheckoutSessionAction } from "@/modules/payments/actions";
+import { getSignedUploadUrl, saveDocumentRecord } from "@/modules/documents/actions";
 import { personalInfoSchema } from "@/lib/validators/order";
 import type { PersonalInfoInput } from "@/lib/validators/order";
 import { Upload, CheckCircle, User, FileText } from "lucide-react";
@@ -15,23 +16,45 @@ type Step = 1 | 2 | 3;
 interface OrderState {
   personalInfo: Partial<PersonalInfoInput>;
   serviceTier: "essential" | "standard" | "premium";
-  orderId: string | null;
-  documentsUploaded: { passport: boolean; address: boolean };
+  files: { passport: File | null; address: File | null };
 }
 
 const initialState: OrderState = {
   personalInfo: {},
   serviceTier: "essential",
-  orderId: null,
-  documentsUploaded: { passport: false, address: false },
+  files: { passport: null, address: null },
 };
 
 const STEP_ICONS = [User, Upload, CheckCircle];
 
+async function uploadDocument(
+  file: File,
+  orderId: string,
+  documentType: "passport" | "proof_of_address"
+): Promise<void> {
+  const urlResult = await getSignedUploadUrl(orderId, file.name, file.type, file.size);
+  if (!urlResult.success) throw new Error(urlResult.error);
+
+  const res = await fetch(urlResult.data.signedUrl, {
+    method: "PUT",
+    body: file,
+    headers: { "Content-Type": file.type },
+  });
+  if (!res.ok) throw new Error("Upload failed");
+
+  const saveResult = await saveDocumentRecord({
+    orderId,
+    documentType,
+    fileName: file.name,
+    storagePath: urlResult.data.storagePath,
+    mimeType: file.type,
+  });
+  if (!saveResult.success) throw new Error(saveResult.error);
+}
+
 export default function OrderContent() {
   const t = useTranslations("order");
   const locale = useLocale();
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const [step, setStep] = useState<Step>(1);
@@ -69,29 +92,41 @@ export default function OrderContent() {
 
   async function handleStep2Submit(e: React.FormEvent) {
     e.preventDefault();
-    // Basic doc check — full upload happens in DocumentUploadZone
     setStep(3);
   }
 
   async function handleStep3Submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+    setErrors({});
 
-    const result = await createOrderAction({
-      ...state.personalInfo,
-      serviceTier: state.serviceTier,
-    });
+    try {
+      // 1. Create order
+      const orderResult = await createOrderAction({
+        ...state.personalInfo,
+        serviceTier: state.serviceTier,
+      });
+      if (!orderResult.success) throw new Error(orderResult.error);
+      const { orderId } = orderResult.data;
 
-    if (!result.success) {
+      // 2. Upload documents if present
+      if (state.files.passport) {
+        await uploadDocument(state.files.passport, orderId, "passport");
+      }
+      if (state.files.address) {
+        await uploadDocument(state.files.address, orderId, "proof_of_address");
+      }
+
+      // 3. Start checkout — redirect() throws internally on success
+      await createCheckoutSessionAction(orderId, locale);
+    } catch (err) {
+      if (isRedirectError(err)) throw err;
+
       setLoading(false);
-      setErrors({ submit: result.error });
-      return;
+      setErrors({
+        submit: err instanceof Error ? err.message : "Something went wrong. Please try again.",
+      });
     }
-
-    setState((s) => ({ ...s, orderId: result.data.orderId }));
-
-    // Redirect to Stripe Checkout — this action uses Next.js redirect() internally
-    await createCheckoutSessionAction(result.data.orderId, locale);
   }
 
   const steps = [t("step1"), t("step2"), t("step3")];
@@ -204,16 +239,18 @@ export default function OrderContent() {
                 <DocumentUploadSlot
                   label="Passport / National ID"
                   hint="PDF, JPG or PNG — max 10MB"
-                  uploadKey="passport"
-                  state={state}
-                  setState={setState}
+                  file={state.files.passport}
+                  onFileSelect={(file) =>
+                    setState((s) => ({ ...s, files: { ...s.files, passport: file } }))
+                  }
                 />
                 <DocumentUploadSlot
                   label="Proof of Address"
                   hint="Utility bill or bank statement — max 3 months old"
-                  uploadKey="address"
-                  state={state}
-                  setState={setState}
+                  file={state.files.address}
+                  onFileSelect={(file) =>
+                    setState((s) => ({ ...s, files: { ...s.files, address: file } }))
+                  }
                 />
                 <div className="flex gap-3">
                   <button
@@ -304,6 +341,7 @@ export default function OrderContent() {
                     type="button"
                     onClick={() => setStep(2)}
                     className="btn btn-secondary flex-1"
+                    disabled={loading}
                   >
                     {t("back")}
                   </button>
@@ -327,39 +365,35 @@ export default function OrderContent() {
 }
 
 // Inline DocumentUploadSlot for the order form
-function DocumentUploadSlot({
-  label,
-  hint,
-  uploadKey,
-  state,
-  setState,
-}: {
+interface DocumentUploadSlotProps {
   label: string;
   hint: string;
-  uploadKey: "passport" | "address";
-  state: OrderState;
-  setState: React.Dispatch<React.SetStateAction<OrderState>>;
-}) {
-  const uploaded = state.documentsUploaded[uploadKey];
+  file: File | null;
+  onFileSelect: (file: File) => void;
+}
 
+function DocumentUploadSlot({ label, hint, file, onFileSelect }: DocumentUploadSlotProps) {
   return (
     <div>
       <label className="label">{label}</label>
       <div
         className="rounded-xl border-2 border-dashed p-6 text-center transition-all"
         style={{
-          borderColor: uploaded
+          borderColor: file
             ? "var(--color-brand-green)"
             : "var(--color-border)",
-          background: uploaded
+          background: file
             ? "rgba(0,102,0,0.04)"
             : "var(--color-surface-elevated)",
         }}
       >
-        {uploaded ? (
-          <div className="flex items-center justify-center gap-2" style={{ color: "var(--color-brand-green)" }}>
+        {file ? (
+          <div className="flex flex-col items-center gap-1" style={{ color: "var(--color-brand-green)" }}>
             <CheckCircle size={18} />
-            <span className="text-sm font-medium">Uploaded</span>
+            <span className="text-sm font-medium">{file.name}</span>
+            <span className="text-xs" style={{ color: "var(--color-ink-muted)" }}>
+              {(file.size / 1024 / 1024).toFixed(2)} MB
+            </span>
           </div>
         ) : (
           <>
@@ -376,12 +410,10 @@ function DocumentUploadSlot({
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png"
                 className="sr-only"
-                onChange={() =>
-                  setState((s) => ({
-                    ...s,
-                    documentsUploaded: { ...s.documentsUploaded, [uploadKey]: true },
-                  }))
-                }
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) onFileSelect(f);
+                }}
               />
             </label>
             <p className="text-xs mt-2" style={{ color: "var(--color-ink-subtle)" }}>{hint}</p>

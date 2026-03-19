@@ -1,17 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslations, useLocale } from "next-intl";
+import { Link, useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { signIn } from "@/modules/auth/actions";
 
 export default function LoginForm() {
   const t = useTranslations("auth");
-  const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") ?? `/${locale}/dashboard`;
+  const redirectTo = searchParams.get("redirectTo") ?? "/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -98,7 +97,7 @@ export default function LoginForm() {
         <p className="text-center text-sm mt-6" style={{ color: "var(--color-ink-muted)" }}>
           {t("noAccount")}{" "}
           <Link
-            href={`/${locale}/signup`}
+            href="/signup"
             className="font-semibold"
             style={{ color: "var(--color-brand-green)" }}
           >

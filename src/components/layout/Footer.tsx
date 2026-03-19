@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import LocaleSwitcher from "@/components/shared/LocaleSwitcher";
 
 export default function Footer() {
   const t = useTranslations("footer");
-  const locale = useLocale();
 
   return (
     <footer
@@ -50,7 +49,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href={`/${locale}/privacy`}
+                  href="/privacy"
                   className="text-sm hover:text-white transition-colors"
                 >
                   {t("privacy")}
@@ -58,7 +57,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href={`/${locale}/terms`}
+                  href="/terms"
                   className="text-sm hover:text-white transition-colors"
                 >
                   {t("terms")}
@@ -78,7 +77,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href={`/${locale}/about`}
+                  href="/about"
                   className="text-sm hover:text-white transition-colors"
                 >
                   {t("about")}

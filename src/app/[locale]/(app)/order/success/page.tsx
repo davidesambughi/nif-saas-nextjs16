@@ -1,13 +1,8 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { CheckCircle } from "lucide-react";
 
-export default async function OrderSuccessPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
+export default async function OrderSuccessPage() {
   const t = await getTranslations("order");
 
   return (
@@ -29,7 +24,7 @@ export default async function OrderSuccessPage({
           {t("successDesc")}
         </p>
         <Link
-          href={`/${locale}/dashboard`}
+          href="/dashboard"
           id="success-go-dashboard"
           className="btn btn-primary w-full"
         >
