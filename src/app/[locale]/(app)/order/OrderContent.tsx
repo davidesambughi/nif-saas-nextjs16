@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams, isRedirectError } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { createOrderAction } from "@/modules/orders/actions";
@@ -120,7 +120,12 @@ export default function OrderContent() {
       // 3. Start checkout — redirect() throws internally on success
       await createCheckoutSessionAction(orderId, locale);
     } catch (err) {
-      if (isRedirectError(err)) throw err;
+      // Next.js redirect() throws a special error that must propagate
+      // Check if it's a redirect by examining the error digest
+      if (err && typeof err === 'object' && 'digest' in err && 
+          typeof err.digest === 'string' && err.digest.startsWith('NEXT_REDIRECT')) {
+        throw err;
+      }
 
       setLoading(false);
       setErrors({
