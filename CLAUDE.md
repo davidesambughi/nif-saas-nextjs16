@@ -125,8 +125,9 @@ Uploaded via signed URLs (Supabase Storage).
 
 ## Configuration & Known Issues
 
-- **cacheComponents (disabled):** `nextConfig.cacheComponents` is disabled due to incompatibility with `next-intl` (request header access in layout level breaks PPR/static rendering). Re-enable once `next-intl` natively supports PPR.
+- **cacheComponents (disabled):** `nextConfig.cacheComponents` is disabled due to incompatibility with `next-intl`.
+- **API Routes & Proxy:** All routes starting with `/api/` are explicitly excluded from `proxy.ts` matcher to prevent `next-intl` from interfering with technical callbacks (Auth, Stripe, n8n).
 - **Stripe Metadata:** Every checkout session MUST include `orderId` in metadata for the webhook to function.
-- **Audit Logs:** The `status_updates` table includes `isAdminAction: boolean` to differentiate customer actions from fiscal rep updates.
-
-Supabase uses the new key naming (post-2025): `sb_publishable_...` replaces the old anon key, `sb_secret_...` replaces the old service_role key. Both are drop-in replacements in all Supabase client calls.
+- **Supabase Users Trigger:** A database trigger MUST exist on `auth.users` to sync new signups to `public.users`. Without this, `createOrderAction` will fail with a foreign key error (23503).
+- **Document Storage:** The bucket name is strictly `documents` (not `order-documents`). Policies must allow `authenticated` users to `INSERT` and `SELECT` their own files.
+- **Environment Files:** `.env.local` must be UTF-8 (no BOM) and avoid special characters (like long dashes `—`) in comments to prevent parsing errors during build.
