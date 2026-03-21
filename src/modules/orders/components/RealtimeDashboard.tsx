@@ -30,35 +30,39 @@ export default function RealtimeDashboard({
   useEffect(() => {
     const supabase = createClient();
 
-    // Subscribe to status_updates for all orders owned by the current user
-    const channel = supabase
-      .channel("dashboard-status-updates")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "status_updates",
-        },
-        (payload) => {
-          const update = payload.new as { order_id: string; status: OrderStatus };
+    // Subscribe to status_updates only for the orders we have in state.
+    // This is more efficient than receiving ALL status updates for the entire DB.
+    const channels = orders.map((order) => {
+      return supabase
+        .channel(`order-status-${order.id}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "status_updates",
+            filter: `order_id=eq.${order.id}`,
+          },
+          (payload) => {
+            const update = payload.new as { order_id: string; status: OrderStatus };
 
-          // Update the matching order's status in local state
-          setOrders((prev) =>
-            prev.map((o) =>
-              o.id === update.order_id
-                ? { ...o, status: update.status }
-                : o
-            )
-          );
-        }
-      )
-      .subscribe();
+            // Update the matching order's status in local state
+            setOrders((prev) =>
+              prev.map((o) =>
+                o.id === update.order_id ? { ...o, status: update.status } : o
+              )
+            );
+          }
+        )
+        .subscribe();
+    });
 
     return () => {
-      supabase.removeChannel(channel);
+      channels.forEach((channel) => {
+        supabase.removeChannel(channel);
+      });
     };
-  }, []);
+  }, [orders.length]); // Re-subscribe if the number of orders changes
 
   return (
     <div className="space-y-6">

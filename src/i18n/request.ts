@@ -1,4 +1,5 @@
 import { getRequestConfig } from "next-intl/server";
+import { hasLocale } from "next-intl";
 import { routing } from "./routing";
 
 /**
@@ -6,17 +7,15 @@ import { routing } from "./routing";
  * Loads the correct message file based on the request locale.
  */
 export default getRequestConfig(async ({ requestLocale }) => {
-  let locale = await requestLocale;
+  const requested = await requestLocale;
 
-  // Validate that the incoming locale is one we support
-  if (!locale || !routing.locales.includes(locale as "en" | "pt" | "fr")) {
-    locale = routing.defaultLocale;
-  }
+  // Use next-intl's hasLocale helper instead of manual type casting
+  const locale = hasLocale(routing.locales, requested)
+    ? requested
+    : routing.defaultLocale;
 
   return {
     locale,
-    messages: (
-      await import(`../../messages/${locale}.json`)
-    ).default,
+    messages: (await import(`../../messages/${locale}.json`)).default,
   };
 });

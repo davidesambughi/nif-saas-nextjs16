@@ -11,7 +11,7 @@ export const env = createEnv({
    * Server-side environment variables — never exposed to the client.
    */
   server: {
-    DATABASE_URL: z.string().url(),
+    DATABASE_URL: z.string(),
     SUPABASE_SECRET_KEY: z.string().min(1),
     STRIPE_SECRET_KEY: z.string().startsWith("sk_"),
     STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_"),
@@ -19,7 +19,7 @@ export const env = createEnv({
     STRIPE_PRICE_ID_STANDARD: z.string().startsWith("price_"),
     STRIPE_PRICE_ID_PREMIUM: z.string().startsWith("price_"),
     RESEND_API_KEY: z.string().startsWith("re_"),
-    RESEND_FROM_EMAIL: z.string().email(),
+    RESEND_FROM_EMAIL: z.string(),
     RESEND_FROM_NAME: z.string().default("GetNIFPortugal"),
   },
 
@@ -28,10 +28,10 @@ export const env = createEnv({
    * Must be prefixed with NEXT_PUBLIC_.
    */
   client: {
-    NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
+    NEXT_PUBLIC_SUPABASE_URL: z.string(),
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().startsWith("pk_"),
-    NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:3000"),
+    NEXT_PUBLIC_APP_URL: z.string().default("http://localhost:3000"),
     NEXT_PUBLIC_APP_NAME: z.string().default("GetNIFPortugal"),
   },
 

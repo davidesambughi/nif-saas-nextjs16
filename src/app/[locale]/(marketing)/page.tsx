@@ -5,7 +5,7 @@ import Pricing from "@/components/home/Pricing";
 import TrustSignals from "@/components/home/TrustSignals";
 import FAQ from "@/components/home/FAQ";
 import CTABanner from "@/components/home/CTABanner";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,7 +14,14 @@ export const metadata: Metadata = {
     "Get your Portuguese NIF (tax number) from anywhere in the world. 100% remote service, no travel required. Starting from €79.",
 };
 
-export default async function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations("faq");
 
   const faqSchema = {

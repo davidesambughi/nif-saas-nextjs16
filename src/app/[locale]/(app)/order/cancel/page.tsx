@@ -1,8 +1,15 @@
 import { Link } from "@/i18n/navigation";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { XCircle } from "lucide-react";
 
-export default async function OrderCancelPage() {
+export default async function OrderCancelPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations("order");
 
   return (

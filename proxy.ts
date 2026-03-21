@@ -7,8 +7,8 @@ import { routing } from "./src/i18n/routing";
  * proxy.ts — Next.js 16 network proxy layer.
  *
  * Replaces the old middleware.ts and clarifies network responsibilities:
- *   1. Refresh Supabase auth session cookie on every request
- *   2. Handle locale detection and routing (next-intl)
+ *   1. Handle locale detection and routing (next-intl)
+ *   2. Refresh Supabase auth session cookie on every request (appending to intl response)
  *   3. Guard protected routes — redirect unauthenticated users to /login
  *
  * This file MUST NOT contain business logic. Keep it thin.
@@ -19,9 +19,13 @@ const intlMiddleware = createMiddleware(routing);
 const PROTECTED_PATHS = ["/dashboard", "/order"];
 
 export async function proxy(request: NextRequest) {
-  // --- Step 1: Refresh Supabase session ---
-  let response = NextResponse.next({ request });
+  // --- Step 1: Apply next-intl locale routing ---
+  // Let next-intl generate the base response with localized rewrites
+  const intlResponse = intlMiddleware(request);
 
+  // --- Step 2: Refresh Supabase session ---
+  // Create the client and append any refreshed session cookies to BOTH the request
+  // (so getUser sees them) and the intlResponse (so the browser saves them).
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
@@ -34,9 +38,8 @@ export async function proxy(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
-          response = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
+            intlResponse.cookies.set(name, value, options)
           );
         },
       },
@@ -44,26 +47,39 @@ export async function proxy(request: NextRequest) {
   );
 
   // IMPORTANT: call getUser() — not getSession() — to validate the JWT server-side
+  // This call may trigger the setAll callback above if the session is refreshed.
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // --- Step 2: Check protected routes ---
+  // --- Step 3: Check protected routes ---
+  // Determine current locale and clean pathname safely using routing config
   const pathname = request.nextUrl.pathname;
+  
+  // Find which supported locale the pathname starts with
+  const locale = routing.locales.find((l) =>
+    pathname === `/${l}` || pathname.startsWith(`/${l}/`)
+  ) || routing.defaultLocale;
 
-  // Strip locale prefix (e.g. /en/dashboard → /dashboard)
-  const pathnameWithoutLocale = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, "");
+  // Strip the locale to get the "internal" pathname
+  const pathnameWithoutLocale = pathname.startsWith(`/${locale}`)
+    ? pathname.substring(locale.length + 1) || "/"
+    : pathname;
 
   const isProtected = PROTECTED_PATHS.some((p) =>
     pathnameWithoutLocale.startsWith(p)
   );
 
   if (isProtected && !user) {
-    // Determine current locale from URL or default to "en"
-    const locale = pathname.split("/")[1] || "en";
     const loginUrl = new URL(`/${locale}/login`, request.url);
-    loginUrl.searchParams.set("redirectTo", pathname);
-    return NextResponse.redirect(loginUrl);
+    loginUrl.searchParams.set("redirectTo", request.nextUrl.pathname);
+    
+    // Create a new redirect response but copy the cookies we might have just refreshed
+    const redirectResponse = NextResponse.redirect(loginUrl);
+    intlResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value);
+    });
+    return redirectResponse;
   }
 
   // Redirect logged-in users away from auth pages
@@ -72,19 +88,17 @@ export async function proxy(request: NextRequest) {
   );
 
   if (isAuthPage && user) {
-    const locale = pathname.split("/")[1] || "en";
-    return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));
+    const dashboardUrl = new URL(`/${locale}/dashboard`, request.url);
+    
+    const redirectResponse = NextResponse.redirect(dashboardUrl);
+    intlResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value);
+    });
+    return redirectResponse;
   }
 
-  // --- Step 3: Apply next-intl locale routing ---
-  const intlResponse = intlMiddleware(request);
-
-  // If intl wants to redirect (locale detection), honour that
-  if (intlResponse.status !== 200) {
-    return intlResponse;
-  }
-
-  return response;
+  // Return the intlResponse which now contains both routing data and auth cookies
+  return intlResponse;
 }
 
 export const config = {

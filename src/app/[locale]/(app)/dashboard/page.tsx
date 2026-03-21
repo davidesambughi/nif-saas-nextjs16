@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/navigation";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getUserOrdersAction } from "@/modules/orders/actions";
 import RealtimeDashboard from "@/modules/orders/components/RealtimeDashboard";
 
@@ -14,6 +14,8 @@ export default async function DashboardPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations("dashboard");
 
   // Call Module (Server Action) instead of Repository directly

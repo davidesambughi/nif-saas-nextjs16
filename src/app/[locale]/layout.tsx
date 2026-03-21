@@ -1,10 +1,10 @@
 import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
@@ -27,7 +27,10 @@ export async function generateMetadata({
 /**
  * Locale root layout.
  * Wraps all locale-specific pages with NextIntlClientProvider.
- * Sets the <html lang> attribute for accessibility and SEO.
+ *
+ * setRequestLocale(locale) MUST be called before getMessages() so that
+ * next-intl can propagate the correct locale to all Server Components in
+ * the subtree without prop-drilling.
  */
 export default async function LocaleLayout({
   children,
@@ -41,6 +44,9 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
+  // Register the locale for all Server Components in this subtree.
+  setRequestLocale(locale);
 
   const messages = await getMessages();
 

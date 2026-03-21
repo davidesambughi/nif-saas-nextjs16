@@ -3,13 +3,13 @@
 import { useState, useRef } from "react";
 import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
-import { Globe, ChevronDown } from "lucide-react";
+import { Globe } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 
 const LOCALES = [
-  { code: "en", label: "English", flag: "🇬🇧" },
-  { code: "pt", label: "Português", flag: "🇵🇹" },
-  { code: "fr", label: "Français", flag: "🇫🇷" },
+  { code: "en", label: "English" },
+  { code: "pt", label: "Português" },
+  { code: "fr", label: "Français" },
 ];
 
 interface LocaleSwitcherProps {
@@ -22,11 +22,10 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  const current = LOCALES.find((l) => l.code === locale) ?? LOCALES[0];
-
   const handleSwitch = (code: string) => {
     setIsOpen(false);
     router.replace(pathname, { locale: code });
+    router.refresh(); // force server re-render so Server Components pick up the new locale
   };
 
   const textColor = dark ? "#9ca3af" : "var(--color-ink-muted)";
@@ -40,7 +39,7 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+        className="flex items-center justify-center h-9 w-9 rounded-lg transition-colors"
         style={{
           color: textColor,
           background: bgColor,
@@ -49,9 +48,7 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
         aria-expanded={isOpen}
         aria-label="Switch language"
       >
-        <Globe size={14} />
-        <span>{current.flag} {current.label}</span>
-        <ChevronDown size={12} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <Globe size={18} />
       </button>
 
       <AnimatePresence>
@@ -72,7 +69,7 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
               <button
                 key={l.code}
                 onClick={() => handleSwitch(l.code)}
-                className="flex w-full items-center gap-2 px-4 py-2.5 text-sm transition-colors text-left"
+                className="flex w-full items-center px-4 py-2.5 text-sm transition-colors text-left"
                 style={{
                   color: l.code === locale
                     ? dark ? "#ffffff" : "var(--color-brand-green)"
@@ -86,8 +83,7 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
                   ((e.currentTarget as HTMLElement).style.background = "transparent")
                 }
               >
-                <span>{l.flag}</span>
-                <span>{l.label}</span>
+                {l.label}
               </button>
             ))}
           </m.div>
