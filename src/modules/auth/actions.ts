@@ -66,3 +66,32 @@ export async function getAuthUser() {
   } = await supabase.auth.getUser();
   return user;
 }
+
+export async function resetPassword(
+  email: string,
+  redirectTo: string
+): Promise<ActionResult> {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo,
+  });
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data: undefined };
+}
+
+export async function updatePassword(
+  newPassword: string
+): Promise<ActionResult> {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data: undefined };
+}

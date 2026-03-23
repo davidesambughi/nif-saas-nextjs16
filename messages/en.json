@@ -109,7 +109,18 @@
     "signupLink": "Sign up →",
     "loginLink": "Sign in →",
     "checkEmail": "Check your email",
-    "checkEmailDesc": "We've sent you a confirmation link. Click it to activate your account."
+    "checkEmailDesc": "We've sent you a confirmation link. Click it to activate your account.",
+    "forgotPassword": "Forgot password?",
+    "forgotPasswordTitle": "Reset your password",
+    "forgotPasswordSubtitle": "Enter your email and we'll send you a reset link",
+    "forgotPasswordButton": "Send Reset Link",
+    "forgotPasswordSent": "Check your email for a password reset link.",
+    "resetPasswordTitle": "Set a new password",
+    "resetPasswordSubtitle": "Enter your new password below",
+    "newPassword": "New password",
+    "resetPasswordButton": "Update Password",
+    "resetPasswordSuccess": "Password updated. Redirecting…",
+    "backToLogin": "Back to sign in"
   },
   "order": {
     "title": "Start Your NIF Application",

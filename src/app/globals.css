@@ -95,9 +95,14 @@ body {
    ============================================================ */
 .container-site {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1440px;
   margin-inline: auto;
-  padding-inline: clamp(1rem, 5vw, 2rem);
+  padding-inline: clamp(1rem, 5vw, 3rem);
+}
+
+.container-full {
+  width: 100%;
+  padding-inline: clamp(1rem, 5vw, 3rem);
 }
 
 .section-pad {

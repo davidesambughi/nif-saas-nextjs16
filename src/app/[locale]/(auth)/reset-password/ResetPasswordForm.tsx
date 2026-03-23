@@ -1,18 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Link, useRouter } from "@/i18n/navigation";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { signIn } from "@/modules/auth/actions";
+import { updatePassword } from "@/modules/auth/actions";
 
-export default function LoginForm() {
+export default function ResetPasswordForm() {
   const t = useTranslations("auth");
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") ?? "/dashboard";
 
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -22,7 +18,7 @@ export default function LoginForm() {
     setLoading(true);
     setError(null);
 
-    const result = await signIn(email, password);
+    const result = await updatePassword(password);
 
     if (!result.success) {
       setError(result.error);
@@ -30,7 +26,7 @@ export default function LoginForm() {
       return;
     }
 
-    router.push(redirectTo);
+    router.push("/dashboard");
     router.refresh();
   }
 
@@ -46,42 +42,22 @@ export default function LoginForm() {
             NIF
           </div>
           <h1 className="text-2xl font-bold" style={{ color: "var(--color-ink)" }}>
-            {t("loginTitle")}
+            {t("resetPasswordTitle")}
           </h1>
           <p className="text-sm mt-1" style={{ color: "var(--color-ink-muted)" }}>
-            {t("loginSubtitle")}
+            {t("resetPasswordSubtitle")}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="label">{t("email")}</label>
-            <input
-              id="email"
-              type="email"
-              required
-              autoComplete="email"
-              className="input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <label htmlFor="password" className="label" style={{ margin: 0 }}>{t("password")}</label>
-              <Link
-                href="/forgot-password"
-                className="text-xs"
-                style={{ color: "var(--color-brand-green)" }}
-              >
-                {t("forgotPassword")}
-              </Link>
-            </div>
+            <label htmlFor="password" className="label">{t("newPassword")}</label>
             <input
               id="password"
               type="password"
               required
-              autoComplete="current-password"
+              minLength={8}
+              autoComplete="new-password"
               className="input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -93,26 +69,14 @@ export default function LoginForm() {
           )}
 
           <button
-            id="login-submit"
             type="submit"
             disabled={loading}
             className="btn btn-primary w-full"
             style={{ opacity: loading ? 0.7 : 1 }}
           >
-            {loading ? "Signing in…" : t("loginButton")}
+            {loading ? "…" : t("resetPasswordButton")}
           </button>
         </form>
-
-        <p className="text-center text-sm mt-6" style={{ color: "var(--color-ink-muted)" }}>
-          {t("noAccount")}{" "}
-          <Link
-            href="/signup"
-            className="font-semibold"
-            style={{ color: "var(--color-brand-green)" }}
-          >
-            {t("signupLink")}
-          </Link>
-        </p>
       </div>
     </div>
   );

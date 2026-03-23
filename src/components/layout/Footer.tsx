@@ -16,7 +16,7 @@ export default function Footer() {
         color: "#9ca3af",
       }}
     >
-      <div className="container-site py-14">
+      <div className="container-full py-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">

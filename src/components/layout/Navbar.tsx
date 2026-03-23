@@ -52,7 +52,7 @@ export default function Navbar() {
         }}
       />
 
-      <nav className="container-site flex h-16 items-center justify-between">
+      <nav className="container-full flex h-16 items-center justify-between">
         {/* Logo */}
         <Link
           href="/"

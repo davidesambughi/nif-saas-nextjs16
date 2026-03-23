@@ -18,7 +18,8 @@
       "mcp__plugin_playwright_playwright__browser_evaluate",
       "mcp__plugin_playwright_playwright__browser_console_messages",
       "mcp__plugin_supabase_supabase__list_projects",
-      "mcp__plugin_supabase_supabase__get_logs"
+      "mcp__plugin_supabase_supabase__get_logs",
+      "Bash(find /c/Users/sambu/nif-project2 -not -path */node_modules/* -not -path */.next/* -type d)"
     ]
   }
 }

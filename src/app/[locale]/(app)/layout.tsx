@@ -1,4 +1,4 @@
-import Navbar from "@/components/layout/Navbar";
+import AppHeader from "@/components/layout/AppHeader";
 
 /**
  * Protected app layout — wraps dashboard, order, and other authenticated pages.
@@ -8,7 +8,7 @@ import Navbar from "@/components/layout/Navbar";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Navbar />
+      <AppHeader />
       <main className="min-h-screen pt-16">{children}</main>
     </>
   );
