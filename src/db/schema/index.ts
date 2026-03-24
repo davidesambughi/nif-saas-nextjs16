@@ -9,3 +9,4 @@ export * from "./users";
 export * from "./orders";
 export * from "./documents";
 export * from "./status-updates";
+export * from "./webhook-events";
