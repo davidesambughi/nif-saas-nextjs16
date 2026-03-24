@@ -17,6 +17,7 @@ interface OrderConfirmationEmailProps {
   orderId: string;
   serviceTier: "essential" | "standard" | "premium";
   amountPaid: number; // in cents
+  locale?: string;
 }
 
 const tierLabels = {
@@ -30,6 +31,7 @@ export default function OrderConfirmationEmail({
   orderId,
   serviceTier,
   amountPaid,
+  locale = "en",
 }: OrderConfirmationEmailProps) {
   const amount = (amountPaid / 100).toFixed(2);
 
@@ -82,7 +84,7 @@ export default function OrderConfirmationEmail({
 
               <Button
                 className="mt-4 rounded-lg bg-green-700 px-6 py-3 text-center text-sm font-semibold text-white"
-                href={`${process.env.NEXT_PUBLIC_APP_URL}/en/dashboard`}
+                href={`${process.env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard`}
               >
                 View Dashboard →
               </Button>

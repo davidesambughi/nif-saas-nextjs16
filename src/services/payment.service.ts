@@ -4,11 +4,13 @@ import { env } from "@/lib/env";
 import type { ServiceTier } from "@/db/schema";
 import {
   getOrderById,
+  getOrderByPaymentIntentId,
   updateOrderStripeInfo,
   updateOrderStatus,
 } from "@/repositories/order.repository";
+import { getUserById } from "@/repositories/user.repository";
 import { claimWebhookEvent } from "@/repositories/webhook-events.repository";
-import { sendOrderConfirmation } from "@/services/email.service";
+import { sendOrderConfirmation, sendPaymentFailed } from "@/services/email.service";
 
 // =============================================================================
 // Price configuration
@@ -166,6 +168,10 @@ export async function handleWebhook(event: Stripe.Event): Promise<void> {
       );
       break;
 
+    case "charge.refunded":
+      await processRefund(event.data.object as Stripe.Charge);
+      break;
+
     default:
       // Unhandled events are acknowledged without processing.
       // Stripe stops retrying once it receives a 200.
@@ -301,6 +307,7 @@ async function processSuccessfulCheckout(
         orderId,
         serviceTier: order.serviceTier,
         amountPaid,
+        locale: order.locale,
       });
       console.info(
         `[Payment] Confirmation email sent to ${session.customer_email}`
@@ -336,6 +343,7 @@ async function processFailedPayment(
   paymentIntent: Stripe.PaymentIntent
 ): Promise<void> {
   const orderId = paymentIntent.metadata?.orderId ?? null;
+  const userId = paymentIntent.metadata?.userId ?? null;
   const errorCode = paymentIntent.last_payment_error?.code ?? "unknown";
   const errorMessage =
     paymentIntent.last_payment_error?.message ?? "No message provided";
@@ -351,7 +359,135 @@ async function processFailedPayment(
     errorMessage,
   });
 
-  // No order status update needed — the customer can retry.
-  // The order remains in pending_payment until checkout.session.completed
+  // No order status update — the customer can retry.
+  // The order stays in pending_payment until checkout.session.completed
   // fires (successful retry) or the session expires (typically 24h).
+
+  // ── Customer notification ─────────────────────────────────────────────────
+  // Non-fatal: a Resend outage must not fail this webhook or suppress future
+  // Stripe retries. We need orderId + userId from metadata to locate the
+  // customer's email and locale.
+  if (!orderId || !userId) {
+    console.warn("[Payment] payment_intent.payment_failed: missing metadata — cannot send customer email", {
+      paymentIntentId: paymentIntent.id,
+      orderId,
+      userId,
+    });
+    return;
+  }
+
+  try {
+    // Fetch order (for locale) and user (for email address) in parallel.
+    const [order, user] = await Promise.all([
+      getOrderById(orderId),
+      getUserById(userId),
+    ]);
+
+    if (!order || !user) {
+      console.warn("[Payment] payment_intent.payment_failed: order or user not found", {
+        orderId,
+        userId,
+      });
+      return;
+    }
+
+    await sendPaymentFailed({
+      to: user.email,
+      customerName: order.fullName,
+      orderId: order.id,
+      locale: order.locale,
+    });
+
+    console.info(`[Payment] Payment-failed email sent to ${user.email} for order ${orderId}`);
+  } catch (emailError) {
+    console.error("[Payment] Failed to send payment-failed email:", emailError);
+  }
+}
+
+/**
+ * Handles `charge.refunded`.
+ *
+ * Fired by Stripe when a refund is issued — either manually from the Stripe
+ * dashboard or programmatically via the Refunds API.
+ *
+ * PARTIAL vs FULL REFUND:
+ *   Stripe sets `charge.refunded = true` only when the refund covers the full
+ *   charge amount (charge.amount_refunded === charge.amount).
+ *   Partial refunds are logged for operational visibility but do NOT trigger a
+ *   status transition — they may represent fee adjustments or partial service
+ *   delivery and require manual review.
+ *
+ * REFUNDABLE STATE GUARD:
+ *   We only cancel orders that are still being processed (payment received →
+ *   NIF processing). Orders already in `nif_issued` or `cancelled` are left
+ *   untouched — a refund after delivery does not un-deliver the NIF.
+ *
+ * TODO Sprint 2: send a cancellation confirmation email to the customer.
+ */
+async function processRefund(charge: Stripe.Charge): Promise<void> {
+  // Stripe can expand payment_intent into an object; we only need the ID string.
+  const paymentIntentId =
+    typeof charge.payment_intent === "string"
+      ? charge.payment_intent
+      : charge.payment_intent?.id ?? null;
+
+  if (!paymentIntentId) {
+    console.error("[Payment] charge.refunded received with no payment_intent", {
+      chargeId: charge.id,
+    });
+    return;
+  }
+
+  // ── Partial refund guard ──────────────────────────────────────────────────
+  if (!charge.refunded) {
+    console.info("[Payment] Partial refund detected — manual review required", {
+      chargeId: charge.id,
+      paymentIntentId,
+      amountRefunded: charge.amount_refunded,
+      totalAmount: charge.amount,
+    });
+    return;
+  }
+
+  // ── Lookup order via PaymentIntent ID ─────────────────────────────────────
+  const order = await getOrderByPaymentIntentId(paymentIntentId);
+
+  if (!order) {
+    // Refund for a charge we have no order record for — log and skip.
+    // This can happen if the refund is for a test charge or a session that
+    // never completed webhook processing.
+    console.warn("[Payment] charge.refunded: no order found for PaymentIntent", {
+      chargeId: charge.id,
+      paymentIntentId,
+    });
+    return;
+  }
+
+  // ── Refundable state guard ────────────────────────────────────────────────
+  // States where cancellation is meaningful:
+  //   payment_received, documents_required, documents_under_review, nif_processing
+  // States where we skip (terminal or already cancelled):
+  //   nif_issued — NIF already delivered, refund is a post-delivery dispute
+  //   cancelled  — already cancelled, no-op
+  //   pending_payment — charge.refunded should never fire here (no successful charge)
+  const nonRefundableStatuses = ["nif_issued", "cancelled", "pending_payment"] as const;
+  if ((nonRefundableStatuses as readonly string[]).includes(order.status)) {
+    console.info(
+      `[Payment] charge.refunded: order ${order.id} is in non-refundable state '${order.status}' — skipping cancellation`,
+      { chargeId: charge.id, paymentIntentId }
+    );
+    return;
+  }
+
+  // ── Transition to cancelled ───────────────────────────────────────────────
+  await updateOrderStatus(
+    order.id,
+    "cancelled",
+    `Full refund processed via Stripe (charge ${charge.id})`,
+    false
+  );
+
+  console.info(
+    `[Payment] Order ${order.id} → cancelled ✓ (full refund, charge ${charge.id})`
+  );
 }

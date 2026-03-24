@@ -36,6 +36,11 @@ export const orders = pgTable("orders", {
   stripeSessionId: text("stripe_session_id"),
   stripePaymentIntentId: text("stripe_payment_intent_id"),
 
+  // UI locale at order creation time — persisted so async processes
+  // (webhooks, admin actions) can build locale-correct deep-links in emails.
+  // Defaults to 'en' for backwards-compatibility with any existing rows.
+  locale: text("locale").notNull().default("en"),
+
   // NIF result — populated by admin when issued
   nifNumber: text("nif_number"),
 

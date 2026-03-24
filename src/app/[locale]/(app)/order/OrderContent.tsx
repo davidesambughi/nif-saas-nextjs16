@@ -101,11 +101,12 @@ export default function OrderContent() {
     setErrors({});
 
     try {
-      // 1. Create order
+      // 1. Create order — pass locale so async processes (webhooks, admin)
+      // can build locale-correct deep-links in emails.
       const orderResult = await createOrderAction({
         ...state.personalInfo,
         serviceTier: state.serviceTier,
-      });
+      }, locale);
       if (!orderResult.success) throw new Error(orderResult.error);
       const { orderId } = orderResult.data;
 

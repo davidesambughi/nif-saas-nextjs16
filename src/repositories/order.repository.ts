@@ -77,6 +77,24 @@ export async function updateOrderNif(
     .where(eq(orders.id, orderId));
 }
 
+/**
+ * Looks up an order by its Stripe PaymentIntent ID.
+ *
+ * Used by the `charge.refunded` webhook handler to map a Stripe refund
+ * back to the correct order. `stripePaymentIntentId` is populated during
+ * `checkout.session.completed` processing — it is null for orders that
+ * never reached payment_received, so this function may return null.
+ */
+export async function getOrderByPaymentIntentId(
+  paymentIntentId: string
+): Promise<Order | null> {
+  const [order] = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.stripePaymentIntentId, paymentIntentId));
+  return order ?? null;
+}
+
 export async function getStatusUpdatesByOrderId(orderId: string) {
   return db
     .select()

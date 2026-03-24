@@ -12,23 +12,21 @@ import {
   Hr,
 } from "@react-email/components";
 
-interface NIFIssuedEmailProps {
+interface PaymentFailedEmailProps {
   customerName: string;
-  nifNumber: string;
   orderId: string;
   locale?: string;
 }
 
-export default function NIFIssuedEmail({
+export default function PaymentFailedEmail({
   customerName,
-  nifNumber,
   orderId,
   locale = "en",
-}: NIFIssuedEmailProps) {
+}: PaymentFailedEmailProps) {
   return (
-    <Html lang="en">
+    <Html lang={locale}>
       <Head />
-      <Preview>🎉 Your Portuguese NIF number is ready!</Preview>
+      <Preview>Action required: your payment for NIF #{orderId.slice(0, 8).toUpperCase()} could not be processed</Preview>
       <Tailwind>
         <Body className="bg-gray-50 font-sans">
           <Container className="mx-auto max-w-xl py-8">
@@ -42,44 +40,36 @@ export default function NIFIssuedEmail({
             {/* Body */}
             <Section className="rounded-b-2xl bg-white px-8 py-8 shadow-sm">
               <Text className="text-lg font-semibold text-gray-900">
-                Congratulations, {customerName}! 🎉
+                Hi {customerName},
               </Text>
               <Text className="text-gray-600">
-                Your Portuguese NIF (Número de Identificação Fiscal) has been
-                successfully issued. Here is your number:
+                We were unable to process your payment for NIF application{" "}
+                <strong>#{orderId.slice(0, 8).toUpperCase()}</strong>. This can
+                happen due to an expired card, insufficient funds, or a
+                temporary issue with your bank.
               </Text>
-
-              {/* NIF Highlight */}
-              <Section className="my-6 rounded-xl bg-green-50 px-6 py-5 text-center">
-                <Text className="m-0 text-sm font-medium text-green-700">
-                  Your NIF Number
-                </Text>
-                <Text className="m-0 mt-1 text-4xl font-bold tracking-widest text-green-800">
-                  {nifNumber}
-                </Text>
-              </Section>
 
               <Hr className="my-6" />
 
               <Text className="text-gray-600">
-                <strong>Order Reference:</strong> #{orderId.slice(0, 8).toUpperCase()}
-              </Text>
-              <Text className="text-gray-600">
-                Please save this number in a secure place. You will need it for
-                any financial, tax, or legal activity in Portugal.
+                Your application is still open. Please return to checkout and
+                try again with the same or a different payment method — no new
+                application needed.
               </Text>
 
               <Button
                 className="mt-4 rounded-lg bg-green-700 px-6 py-3 text-center text-sm font-semibold text-white"
                 href={`${process.env.NEXT_PUBLIC_APP_URL}/${locale}/dashboard`}
               >
-                View Full Details →
+                Return to Dashboard →
               </Button>
 
               <Hr className="my-6" />
 
               <Text className="text-sm text-gray-400">
-                Thank you for choosing GetNIFPortugal. We hope to serve you again!
+                If you keep experiencing issues, please reply to this email or
+                contact us at support@getnifportugal.com and we will help you
+                complete your order.
               </Text>
             </Section>
           </Container>

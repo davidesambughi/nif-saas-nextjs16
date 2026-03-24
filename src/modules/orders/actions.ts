@@ -14,7 +14,8 @@ import type { Order } from "@/db/schema";
  */
 
 export async function createOrderAction(
-  formData: unknown
+  formData: unknown,
+  locale = "en"
 ): Promise<ActionResult<{ orderId: string }>> {
   // 1. Authenticate
   const supabase = await createClient();
@@ -47,6 +48,7 @@ export async function createOrderAction(
     dateOfBirth,
     address,
     serviceTier,
+    locale,
     status: "pending_payment",
   });
 
