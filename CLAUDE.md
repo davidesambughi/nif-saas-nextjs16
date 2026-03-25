@@ -45,7 +45,7 @@ Pages/Components  →  Modules (Server Actions)  →  Repositories (Drizzle)  �
 ```
 
 - **`src/modules/`** — Feature folders with `actions.ts` (Server Actions) that orchestrate validation → repository calls → side effects. Components live here too when feature-specific (e.g. `RealtimeDashboard.tsx`).
-- **`src/repositories/`** — All Drizzle queries. Never imported by components directly.
+- **`src/repositories/`** — All Drizzle queries. Never imported by components directly. Key files: `order.repository.ts`, `document.repository.ts`, `user.repository.ts`, `webhook-events.repository.ts`.
 - **`src/services/`** — Pure business logic with no Next.js imports (payment.service, email.service). Callable from Server Actions and the Stripe webhook handler.
 - **`src/lib/`** — Singleton SDK clients (`stripe.ts`, `resend.ts`, `supabase/server.ts`, `supabase/client.ts`) and type-safe env validation (`env.ts` via @t3-oss/env-nextjs).
 
@@ -53,10 +53,11 @@ Pages/Components  →  Modules (Server Actions)  →  Repositories (Drizzle)  �
 
 Schema is in `src/db/schema/`. Key tables:
 
-- **`orders`** — Core NIF applications. `serviceTier` enum: `essential | standard | premium`. Status enum: `pending_payment → payment_received → documents_required → documents_under_review → nif_processing → nif_issued | cancelled`
+- **`orders`** — Core NIF applications. `serviceTier` enum: `essential | standard | premium`. Status enum: `pending_payment → payment_received → documents_required → documents_under_review → nif_processing → nif_issued | cancelled`. Also stores `locale` (persisted at checkout for locale-correct emails/links) and `deadlineAt` (document upload deadline, set for the `documents_required` path only).
 - **`statusUpdates`** — Immutable audit log of status transitions. Supabase Realtime listens to INSERT events on this table to push live updates to the dashboard.
 - **`orderDocuments`** — Supabase Storage file references (passport, proof_of_address, other).
 - **`users`** — Mirrors `auth.users`; populated by a Supabase trigger on signup.
+- **`processedWebhookEvents`** — Idempotency table. `claimWebhookEvent()` does an atomic `INSERT ... ON CONFLICT DO NOTHING` to guarantee exactly-once processing of Stripe events across concurrent Vercel workers.
 
 ### Routing & i18n
 
@@ -82,8 +83,17 @@ Locales: `en`, `pt`, `fr` (always prefixed in URL). Config: `src/i18n/routing.ts
 ### Payment flow
 
 1. `createOrderAction` → creates `orders` row with status `pending_payment`
-2. `createCheckoutSessionAction` → Stripe Checkout Session with `orderId` in metadata → redirect
-3. `POST /api/webhooks/stripe` receives `checkout.session.completed` → updates order status → sends confirmation email via Resend
+2. `createCheckoutSessionAction` → Stripe Checkout Session with `orderId`, `userId`, `serviceTier` in metadata → redirect
+3. `POST /api/webhooks/stripe` receives `checkout.session.completed`:
+   - Layer 1 idempotency: `claimWebhookEvent()` atomic INSERT
+   - Layer 2 guard: order must still be in `pending_payment`
+   - Amount validation against `EXPECTED_AMOUNT_CENTS` map (halts if mismatch)
+   - Transitions to `payment_received`, sends confirmation email
+   - **Document branch**: queries `order_documents` to check if docs were already uploaded
+     - All docs present → `documents_under_review` + `sendDocumentsUnderReview`
+     - Missing docs → `documents_required` + sets `deadlineAt` (3 days for premium, 7 days otherwise) + `sendDocumentsRequired` with specific missing doc list
+4. `charge.refunded` → transitions eligible orders to `cancelled` (skips `nif_issued`, `cancelled`, `pending_payment`)
+5. `payment_intent.payment_failed` → sends `PaymentFailedEmail`; order stays `pending_payment` so customer can retry
 
 ### Realtime dashboard
 
@@ -103,7 +113,17 @@ Uploaded via signed URLs (Supabase Storage).
 
 ### Email templates
 
-`emails/` contains React Email components (`OrderConfirmation.tsx`, `NIFIssued.tsx`) rendered and sent via Resend from `src/services/email.service.ts`.
+`emails/` contains React Email components rendered and sent via Resend from `src/services/email.service.ts`:
+
+| Template | Trigger |
+|----------|---------|
+| `OrderConfirmation.tsx` | Payment confirmed (`checkout.session.completed`) |
+| `DocumentsRequired.tsx` | Docs missing after payment — includes deadline + list of missing docs |
+| `DocumentsUnderReview.tsx` | All docs already present at checkout |
+| `NIFIssued.tsx` | NIF number ready (admin action) |
+| `PaymentFailed.tsx` | `payment_intent.payment_failed` webhook |
+
+All templates accept a `locale` prop (passed from `order.locale`) to construct locale-correct dashboard deep-links.
 
 ## Environment variables
 

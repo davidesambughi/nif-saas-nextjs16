@@ -58,6 +58,28 @@ export async function createOrderAction(
   return { success: true, data: { orderId: order.id } };
 }
 
+export async function getLastOrderAction(): Promise<ActionResult<Pick<Order, "fullName" | "nationality" | "passportNumber" | "dateOfBirth" | "address"> | null>> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return { success: false, error: "Not authenticated", code: "UNAUTHORIZED" };
+
+  const orders = await getOrdersByUserId(user.id);
+  if (orders.length === 0) return { success: true, data: null };
+
+  const last = orders[0];
+  return {
+    success: true,
+    data: {
+      fullName: last.fullName,
+      nationality: last.nationality,
+      passportNumber: last.passportNumber,
+      dateOfBirth: last.dateOfBirth,
+      address: last.address,
+    },
+  };
+}
+
 export async function getUserOrdersAction(): Promise<ActionResult<Order[]>> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { resetPassword } from "@/modules/auth/actions";
+import { createClient } from "@/lib/supabase/client";
 
 export default function ForgotPasswordForm() {
   const t = useTranslations("auth");
@@ -20,13 +20,18 @@ export default function ForgotPasswordForm() {
     setLoading(true);
     setError(null);
 
+    // Use the browser client directly so Supabase can store the PKCE code
+    // verifier in browser localStorage. Calling resetPasswordForEmail from
+    // a Server Action uses the server-side client whose cookie writes are
+    // silently swallowed, causing exchangeCodeForSession to fail in the callback.
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? window.location.origin;
     const redirectTo = `${appUrl}/api/auth/callback?next=/${locale}/reset-password`;
 
-    const result = await resetPassword(email, redirectTo);
+    const supabase = createClient();
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
 
-    if (!result.success) {
-      setError(result.error);
+    if (error) {
+      setError(error.message);
       setLoading(false);
       return;
     }
@@ -55,11 +60,17 @@ export default function ForgotPasswordForm() {
         </div>
 
         {sent ? (
-          <div className="text-center space-y-4">
-            <p className="text-2xl">📬</p>
+          <div className="text-center space-y-6">
+            <p className="text-4xl">📬</p>
             <p className="text-sm" style={{ color: "var(--color-ink-muted)" }}>
               {t("forgotPasswordSent")}
             </p>
+            <Link
+              href="/login"
+              className="btn btn-primary block w-full"
+            >
+              {t("backToLogin")}
+            </Link>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">

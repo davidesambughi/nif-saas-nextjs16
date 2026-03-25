@@ -41,6 +41,11 @@ export const orders = pgTable("orders", {
   // Defaults to 'en' for backwards-compatibility with any existing rows.
   locale: text("locale").notNull().default("en"),
 
+  // Document submission deadline — set at payment time in the documents_required
+  // path only. Null for orders where documents were submitted before payment
+  // (documents_under_review path) or orders not yet paid.
+  deadlineAt: timestamp("deadline_at", { withTimezone: true }),
+
   // NIF result — populated by admin when issued
   nifNumber: text("nif_number"),
 

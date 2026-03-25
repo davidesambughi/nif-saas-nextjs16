@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { getAuthUser } from "@/modules/auth/actions";
+import { env } from "@/lib/env";
 import LogoutButton from "./LogoutButton";
 
 /**
@@ -52,6 +53,15 @@ export default async function AppHeader() {
             >
               {user.email}
             </span>
+          )}
+          {env.ADMIN_EMAIL && user?.email === env.ADMIN_EMAIL && (
+            <Link
+              href="/admin"
+              className="text-sm font-semibold"
+              style={{ color: "var(--color-brand-green)" }}
+            >
+              Admin
+            </Link>
           )}
           <LogoutButton />
         </div>

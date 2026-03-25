@@ -1,7 +1,10 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { createDocument } from "@/repositories/document.repository";
+import { createDocument, getDocumentsByOrderId } from "@/repositories/document.repository";
+import { getOrderById, updateOrderStatus } from "@/repositories/order.repository";
+import { sendDocumentsUnderReview } from "@/services/email.service";
 import type { ActionResult } from "@/types/api.types";
 import type { OrderDocument } from "@/db/schema";
 
@@ -74,4 +77,53 @@ export async function saveDocumentRecord(
 
   const doc = await createDocument(input);
   return { success: true, data: doc };
+}
+
+/**
+ * Called when a customer submits their documents from the dashboard.
+ * Verifies all required documents are present, then transitions the order
+ * from `documents_required` → `documents_under_review` and sends a confirmation email.
+ */
+export async function submitDocumentsAction(orderId: string): Promise<ActionResult> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return { success: false, error: "Not authenticated", code: "UNAUTHORIZED" };
+
+  // Verify order exists and belongs to this user
+  const order = await getOrderById(orderId);
+  if (!order) return { success: false, error: "Order not found" };
+  if (order.userId !== user.id) return { success: false, error: "Forbidden", code: "FORBIDDEN" };
+  if (order.status !== "documents_required") {
+    return { success: false, error: "Documents can only be submitted when status is documents_required" };
+  }
+
+  // Verify all required documents have been uploaded
+  const documents = await getDocumentsByOrderId(orderId);
+  const hasPassport = documents.some((d) => d.documentType === "passport");
+  const hasAddress = documents.some((d) => d.documentType === "proof_of_address");
+
+  if (!hasPassport || !hasAddress) {
+    const missing = [...(!hasPassport ? ["passport"] : []), ...(!hasAddress ? ["proof of address"] : [])];
+    return { success: false, error: `Please upload the missing documents: ${missing.join(", ")}` };
+  }
+
+  // Transition to documents_under_review
+  await updateOrderStatus(orderId, "documents_under_review", "All documents submitted by customer");
+
+  // Send confirmation email — non-fatal
+  try {
+    await sendDocumentsUnderReview({
+      to: user.email!,
+      customerName: order.fullName,
+      orderId: order.id,
+      locale: order.locale,
+      serviceTier: order.serviceTier,
+    });
+  } catch (err) {
+    console.error("[Documents] Failed to send documents_under_review email:", err);
+  }
+
+  revalidatePath("/dashboard");
+  return { success: true, data: undefined };
 }

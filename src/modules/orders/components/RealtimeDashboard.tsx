@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 import type { Order, OrderStatus } from "@/db/schema";
+import DocumentUploadSection from "./DocumentUploadSection";
 
 const STATUS_STEPS: OrderStatus[] = [
   "pending_payment",
@@ -102,6 +103,11 @@ export default function RealtimeDashboard({
           {/* Progress stepper */}
           {order.status !== "cancelled" && (
             <OrderStatusStepper currentStatus={order.status} t={t} />
+          )}
+
+          {/* Document upload — shown only when documents are required */}
+          {order.status === "documents_required" && (
+            <DocumentUploadSection order={order} />
           )}
 
           {order.nifNumber && (

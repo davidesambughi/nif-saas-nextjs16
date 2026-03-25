@@ -1,9 +1,11 @@
 "use server";
 
 import { db } from "@/db";
-import { orders, statusUpdates } from "@/db/schema";
+import { orders, statusUpdates, users } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 import type { NewOrder, Order, OrderStatus } from "@/db/schema";
+
+export type OrderWithUserEmail = Order & { userEmail: string };
 
 /**
  * Order repository — all Drizzle queries for orders and status updates.
@@ -67,6 +69,20 @@ export async function updateOrderStripeInfo(
     .where(eq(orders.id, orderId));
 }
 
+/**
+ * Persists the document submission deadline on an order.
+ * Called only in the documents_required path of the payment webhook.
+ */
+export async function updateOrderDeadline(
+  orderId: string,
+  deadlineAt: Date
+): Promise<void> {
+  await db
+    .update(orders)
+    .set({ deadlineAt, updatedAt: new Date() })
+    .where(eq(orders.id, orderId));
+}
+
 export async function updateOrderNif(
   orderId: string,
   nifNumber: string
@@ -101,4 +117,74 @@ export async function getStatusUpdatesByOrderId(orderId: string) {
     .from(statusUpdates)
     .where(eq(statusUpdates.orderId, orderId))
     .orderBy(desc(statusUpdates.createdAt));
+}
+
+/**
+ * Returns all orders joined with the customer's email — for the admin panel.
+ * Sorted newest first.
+ */
+export async function getAllOrders(): Promise<OrderWithUserEmail[]> {
+  const rows = await db
+    .select({
+      id: orders.id,
+      userId: orders.userId,
+      fullName: orders.fullName,
+      nationality: orders.nationality,
+      passportNumber: orders.passportNumber,
+      dateOfBirth: orders.dateOfBirth,
+      address: orders.address,
+      serviceTier: orders.serviceTier,
+      status: orders.status,
+      amountPaid: orders.amountPaid,
+      currency: orders.currency,
+      stripeSessionId: orders.stripeSessionId,
+      stripePaymentIntentId: orders.stripePaymentIntentId,
+      locale: orders.locale,
+      deadlineAt: orders.deadlineAt,
+      nifNumber: orders.nifNumber,
+      createdAt: orders.createdAt,
+      updatedAt: orders.updatedAt,
+      userEmail: users.email,
+    })
+    .from(orders)
+    .leftJoin(users, eq(orders.userId, users.id))
+    .orderBy(desc(orders.createdAt));
+
+  return rows.map((r) => ({ ...r, userEmail: r.userEmail ?? "" }));
+}
+
+/**
+ * Returns a single order joined with the customer's email — for the admin detail page.
+ */
+export async function getOrderWithUserEmail(
+  orderId: string
+): Promise<OrderWithUserEmail | null> {
+  const [row] = await db
+    .select({
+      id: orders.id,
+      userId: orders.userId,
+      fullName: orders.fullName,
+      nationality: orders.nationality,
+      passportNumber: orders.passportNumber,
+      dateOfBirth: orders.dateOfBirth,
+      address: orders.address,
+      serviceTier: orders.serviceTier,
+      status: orders.status,
+      amountPaid: orders.amountPaid,
+      currency: orders.currency,
+      stripeSessionId: orders.stripeSessionId,
+      stripePaymentIntentId: orders.stripePaymentIntentId,
+      locale: orders.locale,
+      deadlineAt: orders.deadlineAt,
+      nifNumber: orders.nifNumber,
+      createdAt: orders.createdAt,
+      updatedAt: orders.updatedAt,
+      userEmail: users.email,
+    })
+    .from(orders)
+    .leftJoin(users, eq(orders.userId, users.id))
+    .where(eq(orders.id, orderId));
+
+  if (!row) return null;
+  return { ...row, userEmail: row.userEmail ?? "" };
 }

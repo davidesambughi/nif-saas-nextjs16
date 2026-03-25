@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import { signUp } from "@/modules/auth/actions";
+import { createClient } from "@/lib/supabase/client";
 import { env } from "@/lib/env";
 
 export default function SignupForm() {
@@ -22,11 +22,20 @@ export default function SignupForm() {
     setLoading(true);
     setError(null);
 
+    // Use browser client directly — NOT a Server Action.
+    // Server-side Supabase client cannot write the PKCE code verifier to the
+    // browser (setAll fails silently in server context). Without the verifier,
+    // the confirmation link in the email would fail at /api/auth/callback.
+    const supabase = createClient();
     const redirectTo = `${env.NEXT_PUBLIC_APP_URL}/api/auth/callback?next=/${locale}/dashboard`;
-    const result = await signUp(email, password, fullName, redirectTo);
+    const { error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: fullName }, emailRedirectTo: redirectTo },
+    });
 
-    if (!result.success) {
-      setError(result.error);
+    if (signUpError) {
+      setError(signUpError.message);
       setLoading(false);
       return;
     }

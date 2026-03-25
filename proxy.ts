@@ -16,7 +16,7 @@ import { routing } from "./src/i18n/routing";
 
 const intlMiddleware = createMiddleware(routing);
 
-const PROTECTED_PATHS = ["/dashboard", "/order"];
+const PROTECTED_PATHS = ["/dashboard", "/order", "/admin"];
 
 export async function proxy(request: NextRequest) {
   // --- Step 1: Apply next-intl locale routing ---

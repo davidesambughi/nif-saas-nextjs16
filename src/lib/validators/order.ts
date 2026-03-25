@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { COUNTRIES } from "@/lib/countries";
 
 /**
  * Zod schemas for order form validation.
@@ -9,14 +10,40 @@ export const personalInfoSchema = z.object({
   fullName: z
     .string()
     .min(2, "Full name must be at least 2 characters")
-    .max(100),
-  nationality: z.string().min(2, "Please select your nationality"),
+    .max(100, "Full name is too long")
+    .regex(/^[a-zA-ZÀ-ÖØ-öø-ÿ\s'\-]+$/, "Full name can only contain letters, spaces, hyphens and apostrophes"),
+
+  nationality: z
+    .string()
+    .refine((val) => (COUNTRIES as readonly string[]).includes(val), {
+      message: "Please select a valid nationality",
+    }),
+
   passportNumber: z
     .string()
     .min(5, "Passport number must be at least 5 characters")
-    .max(20),
-  dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format (YYYY-MM-DD)"),
-  address: z.string().min(10, "Please enter your full address").max(500),
+    .max(20, "Passport number is too long")
+    .regex(/^[A-Z0-9\-]+$/i, "Passport number can only contain letters, numbers and hyphens"),
+
+  dateOfBirth: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format")
+    .refine((val) => {
+      const date = new Date(val);
+      if (isNaN(date.getTime())) return false;
+      const today = new Date();
+      const age = today.getFullYear() - date.getFullYear();
+      const monthDiff = today.getMonth() - date.getMonth();
+      const actualAge = monthDiff < 0 || (monthDiff === 0 && today.getDate() < date.getDate())
+        ? age - 1
+        : age;
+      return actualAge >= 18 && actualAge <= 120;
+    }, "You must be at least 18 years old"),
+
+  address: z
+    .string()
+    .min(10, "Please enter your full address (street, city, country)")
+    .max(500, "Address is too long"),
 });
 
 export const serviceTierSchema = z.object({

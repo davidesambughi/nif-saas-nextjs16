@@ -5,12 +5,19 @@ import type { ServiceTier } from "@/db/schema";
 import {
   getOrderById,
   getOrderByPaymentIntentId,
+  updateOrderDeadline,
   updateOrderStripeInfo,
   updateOrderStatus,
 } from "@/repositories/order.repository";
+import { getDocumentsByOrderId } from "@/repositories/document.repository";
 import { getUserById } from "@/repositories/user.repository";
 import { claimWebhookEvent } from "@/repositories/webhook-events.repository";
-import { sendOrderConfirmation, sendPaymentFailed } from "@/services/email.service";
+import {
+  sendOrderConfirmation,
+  sendPaymentFailed,
+  sendDocumentsRequired,
+  sendDocumentsUnderReview,
+} from "@/services/email.service";
 
 // =============================================================================
 // Price configuration
@@ -284,7 +291,7 @@ async function processSuccessfulCheckout(
     currency: session.currency ?? "eur",
   });
 
-  // ── 6. Transition order status ────────────────────────────────────────────
+  // ── 6. Transition: payment_received ─────────────────────────────────────
   // Atomic transaction: updates orders.status AND inserts a status_updates row.
   // The status_updates INSERT triggers the Supabase Realtime subscription
   // that pushes a live update to the customer's dashboard.
@@ -317,8 +324,100 @@ async function processSuccessfulCheckout(
     }
   }
 
+  // ── 8. Document check — branch to correct post-payment state ─────────────
+  //
+  // The order form allows customers to upload documents before paying.
+  // We query order_documents to determine which documents (if any) were
+  // already submitted, then branch:
+  //
+  //   All docs present (passport + proof_of_address)
+  //     → documents_under_review + notify customer
+  //
+  //   Missing at least one doc (skipped upload step or partial)
+  //     → documents_required + set deadline + notify with specific list
+  //
+  // Both transitions are non-fatal with respect to email delivery —
+  // the status update is committed regardless of Resend availability.
+  const customerEmail = session.customer_email;
+  try {
+    const docs = await getDocumentsByOrderId(orderId);
+    const hasPassport = docs.some((d) => d.documentType === "passport");
+    const hasAddress = docs.some((d) => d.documentType === "proof_of_address");
+    const allDocsPresent = hasPassport && hasAddress;
+
+    if (allDocsPresent) {
+      // ── Path A: documents already submitted ────────────────────────────
+      await updateOrderStatus(
+        orderId,
+        "documents_under_review",
+        "All documents submitted at checkout",
+        false
+      );
+      if (customerEmail) {
+        try {
+          await sendDocumentsUnderReview({
+            to: customerEmail,
+            customerName: order.fullName,
+            orderId,
+            locale: order.locale,
+            serviceTier: order.serviceTier,
+          });
+        } catch (emailError) {
+          console.error("[Payment] Failed to send documents-under-review email:", emailError);
+        }
+      }
+      console.info(`[Payment] Order ${orderId} → documents_under_review ✓ (docs submitted at checkout)`);
+    } else {
+      // ── Path B: documents missing or partial ───────────────────────────
+      const missingDocs: Array<"passport" | "proof_of_address"> = [
+        ...(!hasPassport ? (["passport"] as const) : []),
+        ...(!hasAddress  ? (["proof_of_address"] as const) : []),
+      ];
+
+      // Deadline: Premium gets 3 days (48h express delivery SLA),
+      // Essential and Standard get 7 days.
+      const deadlineDays = order.serviceTier === "premium" ? 3 : 7;
+      const deadlineAt = new Date(Date.now() + deadlineDays * 24 * 60 * 60 * 1000);
+
+      await updateOrderDeadline(orderId, deadlineAt);
+      await updateOrderStatus(
+        orderId,
+        "documents_required",
+        `Awaiting customer documents (deadline: ${deadlineAt.toISOString().split("T")[0]})`,
+        false
+      );
+
+      if (customerEmail) {
+        try {
+          await sendDocumentsRequired({
+            to: customerEmail,
+            customerName: order.fullName,
+            orderId,
+            locale: order.locale,
+            deadlineAt,
+            missingDocs,
+          });
+        } catch (emailError) {
+          console.error("[Payment] Failed to send documents-required email:", emailError);
+        }
+      }
+      console.info(
+        `[Payment] Order ${orderId} → documents_required ✓ ` +
+          `(missing: ${missingDocs.join(", ")}, deadline: ${deadlineAt.toISOString().split("T")[0]})`
+      );
+    }
+  } catch (docCheckError) {
+    // Document check failure must not leave the order stuck in payment_received.
+    // Log the error and fall through — the order will need manual review.
+    console.error(
+      `[Payment] CRITICAL: Document check failed for order ${orderId}. ` +
+        `Order left in payment_received — manual review required.`,
+      docCheckError
+    );
+  }
+
   console.info(
-    `[Payment] Order ${orderId} → payment_received ✓ ` +
+    `[Payment] Order ${orderId} processed ✓ ` +
       `(€${(amountPaid / 100).toFixed(2)}, tier: ${serviceTier})`
   );
 }

@@ -13,6 +13,7 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string(),
     SUPABASE_SECRET_KEY: z.string().min(1),
+    ADMIN_EMAIL: z.string().email().optional(),
     STRIPE_SECRET_KEY: z.string().startsWith("sk_"),
     STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_"),
     STRIPE_PRICE_ID_ESSENTIAL: z.string().startsWith("price_"),
@@ -41,6 +42,7 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY,
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     STRIPE_PRICE_ID_ESSENTIAL: process.env.STRIPE_PRICE_ID_ESSENTIAL,

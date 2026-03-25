@@ -1,15 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
-import { createOrderAction } from "@/modules/orders/actions";
+import { createOrderAction, getLastOrderAction } from "@/modules/orders/actions";
 import { createCheckoutSessionAction } from "@/modules/payments/actions";
 import { getSignedUploadUrl, saveDocumentRecord } from "@/modules/documents/actions";
 import { personalInfoSchema } from "@/lib/validators/order";
+import { COUNTRIES } from "@/lib/countries";
 import type { PersonalInfoInput } from "@/lib/validators/order";
-import { Upload, CheckCircle, User, FileText } from "lucide-react";
+import { Upload, CheckCircle, User, FileText, Save } from "lucide-react";
+
+const DRAFT_KEY = "nif_order_draft";
 
 type Step = 1 | 2 | 3;
 
@@ -19,13 +22,15 @@ interface OrderState {
   files: { passport: File | null; address: File | null };
 }
 
-const initialState: OrderState = {
-  personalInfo: {},
-  serviceTier: "essential",
-  files: { passport: null, address: null },
+const initialForm = {
+  fullName: "",
+  nationality: "",
+  passportNumber: "",
+  dateOfBirth: "",
+  address: "",
 };
 
-const STEP_ICONS = [User, Upload, CheckCircle];
+const STEP_ICONS = [User, Upload, FileText];
 
 async function uploadDocument(
   file: File,
@@ -58,21 +63,54 @@ export default function OrderContent() {
   const searchParams = useSearchParams();
 
   const [step, setStep] = useState<Step>(1);
-  const [state, setState] = useState<OrderState>({
-    ...initialState,
-    serviceTier: (searchParams.get("tier") as "essential" | "standard" | "premium") ?? "essential",
-  });
+  const [serviceTier, setServiceTier] = useState<OrderState["serviceTier"]>(
+    (searchParams.get("tier") as OrderState["serviceTier"]) ?? "essential"
+  );
+  const [files, setFiles] = useState<OrderState["files"]>({ passport: null, address: null });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const [draftSaved, setDraftSaved] = useState(false);
 
-  // Step 1 fields
-  const [form, setForm] = useState({
-    fullName: "",
-    nationality: "",
-    passportNumber: "",
-    dateOfBirth: "",
-    address: "",
-  });
+  const [form, setForm] = useState(initialForm);
+
+  // Restore draft from localStorage on mount, then try to pre-fill from last order
+  useEffect(() => {
+    const draft = localStorage.getItem(DRAFT_KEY);
+    if (draft) {
+      try {
+        const parsed = JSON.parse(draft);
+        setForm((f) => ({ ...f, ...parsed }));
+        setDraftSaved(true);
+        return; // draft takes priority over last order
+      } catch {
+        localStorage.removeItem(DRAFT_KEY);
+      }
+    }
+
+    // No draft — pre-fill from last order
+    getLastOrderAction().then((result) => {
+      if (result.success && result.data) {
+        setForm((f) => ({ ...f, ...result.data }));
+      }
+    });
+  }, []);
+
+  // Auto-save draft to localStorage on every form change
+  useEffect(() => {
+    const hasData = Object.values(form).some((v) => v.trim() !== "");
+    if (hasData) {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(form));
+    }
+  }, [form]);
+
+  function handleFormChange(field: keyof typeof form, value: string) {
+    setForm((f) => ({ ...f, [field]: value }));
+    setDraftSaved(false);
+  }
+
+  function clearDraft() {
+    localStorage.removeItem(DRAFT_KEY);
+  }
 
   async function handleStep1Submit(e: React.FormEvent) {
     e.preventDefault();
@@ -86,7 +124,6 @@ export default function OrderContent() {
       return;
     }
     setErrors({});
-    setState((s) => ({ ...s, personalInfo: parsed.data }));
     setStep(2);
   }
 
@@ -101,33 +138,23 @@ export default function OrderContent() {
     setErrors({});
 
     try {
-      // 1. Create order — pass locale so async processes (webhooks, admin)
-      // can build locale-correct deep-links in emails.
       const orderResult = await createOrderAction({
-        ...state.personalInfo,
-        serviceTier: state.serviceTier,
+        ...form,
+        serviceTier,
       }, locale);
       if (!orderResult.success) throw new Error(orderResult.error);
       const { orderId } = orderResult.data;
 
-      // 2. Upload documents if present
-      if (state.files.passport) {
-        await uploadDocument(state.files.passport, orderId, "passport");
-      }
-      if (state.files.address) {
-        await uploadDocument(state.files.address, orderId, "proof_of_address");
-      }
+      if (files.passport) await uploadDocument(files.passport, orderId, "passport");
+      if (files.address) await uploadDocument(files.address, orderId, "proof_of_address");
 
-      // 3. Start checkout — redirect() throws internally on success
+      clearDraft();
       await createCheckoutSessionAction(orderId, locale);
     } catch (err) {
-      // Next.js redirect() throws a special error that must propagate
-      // Check if it's a redirect by examining the error digest
-      if (err && typeof err === 'object' && 'digest' in err && 
-          typeof err.digest === 'string' && err.digest.startsWith('NEXT_REDIRECT')) {
+      if (err && typeof err === "object" && "digest" in err &&
+        typeof err.digest === "string" && err.digest.startsWith("NEXT_REDIRECT")) {
         throw err;
       }
-
       setLoading(false);
       setErrors({
         submit: err instanceof Error ? err.message : "Something went wrong. Please try again.",
@@ -138,17 +165,22 @@ export default function OrderContent() {
   const steps = [t("step1"), t("step2"), t("step3")];
 
   return (
-    <div
-      className="min-h-screen py-12 px-4"
-      style={{ background: "var(--color-surface)" }}
-    >
+    <div className="min-h-screen py-12 px-4" style={{ background: "var(--color-surface)" }}>
       <div className="container-site max-w-lg">
-        <h1
-          className="text-heading-lg mb-8 text-center"
-          style={{ color: "var(--color-ink)" }}
-        >
+        <h1 className="text-heading-lg mb-8 text-center" style={{ color: "var(--color-ink)" }}>
           {t("title")}
         </h1>
+
+        {/* Draft restored banner */}
+        {draftSaved && (
+          <div
+            className="flex items-center gap-2 rounded-lg px-4 py-2 mb-6 text-sm"
+            style={{ background: "rgba(0,102,0,0.08)", color: "var(--color-brand-green)" }}
+          >
+            <Save size={14} />
+            Draft restored — your previous progress has been loaded.
+          </div>
+        )}
 
         {/* Progress stepper */}
         <div className="flex items-center justify-between mb-10">
@@ -164,9 +196,7 @@ export default function OrderContent() {
                   <div
                     className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold transition-all duration-300"
                     style={{
-                      background: isDone || isActive
-                        ? "var(--color-brand-green)"
-                        : "var(--color-border)",
+                      background: isDone || isActive ? "var(--color-brand-green)" : "var(--color-border)",
                       color: isDone || isActive ? "#ffffff" : "var(--color-ink-muted)",
                     }}
                   >
@@ -174,11 +204,7 @@ export default function OrderContent() {
                   </div>
                   <span
                     className="text-xs font-medium text-center hidden sm:block"
-                    style={{
-                      color: isActive
-                        ? "var(--color-brand-green)"
-                        : "var(--color-ink-muted)",
-                    }}
+                    style={{ color: isActive ? "var(--color-brand-green)" : "var(--color-ink-muted)" }}
                   >
                     {label}
                   </span>
@@ -186,11 +212,7 @@ export default function OrderContent() {
                 {i < 2 && (
                   <div
                     className="flex-1 h-px mx-2 mt-px transition-all duration-500"
-                    style={{
-                      background: step > stepNum
-                        ? "var(--color-brand-green)"
-                        : "var(--color-border)",
-                    }}
+                    style={{ background: step > stepNum ? "var(--color-brand-green)" : "var(--color-border)" }}
                   />
                 )}
               </div>
@@ -198,90 +220,124 @@ export default function OrderContent() {
           })}
         </div>
 
-        {/* Step panels */}
         <AnimatePresence mode="wait">
           {step === 1 && (
-            <motion.div
-              key="step1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.25 }}
-            >
+            <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
               <form onSubmit={handleStep1Submit} className="card p-8 space-y-5">
-                {(["fullName", "nationality", "passportNumber", "dateOfBirth", "address"] as const).map((field) => (
-                  <div key={field}>
-                    <label htmlFor={field} className="label">{t(field as "fullName")}</label>
-                    <input
-                      id={field}
-                      type={field === "dateOfBirth" ? "date" : "text"}
-                      className={`input ${errors[field] ? "error" : ""}`}
-                      value={form[field]}
-                      onChange={(e) =>
-                        setForm((f) => ({ ...f, [field]: e.target.value }))
-                      }
-                    />
-                    {errors[field] && (
-                      <p className="error-text">{errors[field]}</p>
-                    )}
-                  </div>
-                ))}
-                <button type="submit" className="btn btn-primary w-full">
-                  {t("next")}
-                </button>
+
+                {/* Full name */}
+                <div>
+                  <label htmlFor="fullName" className="label">{t("fullName")}</label>
+                  <input
+                    id="fullName"
+                    type="text"
+                    className={`input ${errors.fullName ? "error" : ""}`}
+                    value={form.fullName}
+                    onChange={(e) => handleFormChange("fullName", e.target.value)}
+                    placeholder="As it appears on your passport"
+                  />
+                  {errors.fullName && <p className="error-text">{errors.fullName}</p>}
+                </div>
+
+                {/* Nationality — searchable select via datalist */}
+                <div>
+                  <label htmlFor="nationality" className="label">{t("nationality")}</label>
+                  <input
+                    id="nationality"
+                    type="text"
+                    list="countries-list"
+                    className={`input ${errors.nationality ? "error" : ""}`}
+                    value={form.nationality}
+                    onChange={(e) => handleFormChange("nationality", e.target.value)}
+                    placeholder="Type to search your country…"
+                    autoComplete="off"
+                  />
+                  <datalist id="countries-list">
+                    {COUNTRIES.map((c) => <option key={c} value={c} />)}
+                  </datalist>
+                  {errors.nationality && <p className="error-text">{errors.nationality}</p>}
+                </div>
+
+                {/* Passport number */}
+                <div>
+                  <label htmlFor="passportNumber" className="label">{t("passportNumber")}</label>
+                  <input
+                    id="passportNumber"
+                    type="text"
+                    className={`input ${errors.passportNumber ? "error" : ""}`}
+                    value={form.passportNumber}
+                    onChange={(e) => handleFormChange("passportNumber", e.target.value.toUpperCase())}
+                    placeholder="e.g. AA123456"
+                  />
+                  {errors.passportNumber && <p className="error-text">{errors.passportNumber}</p>}
+                </div>
+
+                {/* Date of birth */}
+                <div>
+                  <label htmlFor="dateOfBirth" className="label">{t("dateOfBirth")}</label>
+                  <input
+                    id="dateOfBirth"
+                    type="date"
+                    className={`input ${errors.dateOfBirth ? "error" : ""}`}
+                    value={form.dateOfBirth}
+                    onChange={(e) => handleFormChange("dateOfBirth", e.target.value)}
+                    max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split("T")[0]}
+                  />
+                  {errors.dateOfBirth && <p className="error-text">{errors.dateOfBirth}</p>}
+                </div>
+
+                {/* Address */}
+                <div>
+                  <label htmlFor="address" className="label">{t("address")}</label>
+                  <textarea
+                    id="address"
+                    rows={3}
+                    className={`input ${errors.address ? "error" : ""}`}
+                    value={form.address}
+                    onChange={(e) => handleFormChange("address", e.target.value)}
+                    placeholder="Street, city, country"
+                  />
+                  {errors.address && <p className="error-text">{errors.address}</p>}
+                </div>
+
+                {/* Auto-save note */}
+                <p className="text-xs text-center" style={{ color: "var(--color-ink-subtle)" }}>
+                  Your progress is saved automatically. You can close this page and return later.
+                </p>
+
+                <button type="submit" className="btn btn-primary w-full">{t("next")}</button>
               </form>
             </motion.div>
           )}
 
           {step === 2 && (
-            <motion.div
-              key="step2"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.25 }}
-            >
+            <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
               <form onSubmit={handleStep2Submit} className="card p-8 space-y-6">
                 <DocumentUploadSlot
                   label="Passport / National ID"
                   hint="PDF, JPG or PNG — max 10MB"
-                  file={state.files.passport}
-                  onFileSelect={(file) =>
-                    setState((s) => ({ ...s, files: { ...s.files, passport: file } }))
-                  }
+                  file={files.passport}
+                  onFileSelect={(file) => setFiles((f) => ({ ...f, passport: file }))}
                 />
                 <DocumentUploadSlot
                   label="Proof of Address"
                   hint="Utility bill or bank statement — max 3 months old"
-                  file={state.files.address}
-                  onFileSelect={(file) =>
-                    setState((s) => ({ ...s, files: { ...s.files, address: file } }))
-                  }
+                  file={files.address}
+                  onFileSelect={(file) => setFiles((f) => ({ ...f, address: file }))}
                 />
+                <p className="text-xs text-center" style={{ color: "var(--color-ink-subtle)" }}>
+                  Documents are optional here — you can upload them after payment too.
+                </p>
                 <div className="flex gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setStep(1)}
-                    className="btn btn-secondary flex-1"
-                  >
-                    {t("back")}
-                  </button>
-                  <button type="submit" className="btn btn-primary flex-1">
-                    {t("next")}
-                  </button>
+                  <button type="button" onClick={() => setStep(1)} className="btn btn-secondary flex-1">{t("back")}</button>
+                  <button type="submit" className="btn btn-primary flex-1">{t("next")}</button>
                 </div>
               </form>
             </motion.div>
           )}
 
           {step === 3 && (
-            <motion.div
-              key="step3"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.25 }}
-            >
+            <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
               <form onSubmit={handleStep3Submit} className="card p-8 space-y-6">
                 {/* Review summary */}
                 <div>
@@ -289,22 +345,28 @@ export default function OrderContent() {
                     Personal Information
                   </h3>
                   <div className="rounded-lg p-4 space-y-2" style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}>
-                    {Object.entries(state.personalInfo).map(([k, v]) => (
-                      <div key={k} className="flex justify-between text-sm">
+                    {(Object.entries(form) as [string, string][]).map(([k, v]) => (
+                      <div key={k} className="flex justify-between text-sm gap-4">
                         <span style={{ color: "var(--color-ink-muted)", textTransform: "capitalize" }}>
                           {k.replace(/([A-Z])/g, " $1")}
                         </span>
-                        <span className="font-medium" style={{ color: "var(--color-ink)" }}>{v as string}</span>
+                        <span className="font-medium text-right" style={{ color: "var(--color-ink)" }}>{v}</span>
                       </div>
                     ))}
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="text-xs mt-2"
+                    style={{ color: "var(--color-brand-green)" }}
+                  >
+                    Edit information
+                  </button>
                 </div>
 
                 {/* Service tier selector */}
                 <div>
-                  <h3 className="text-base font-semibold mb-3" style={{ color: "var(--color-ink)" }}>
-                    Service
-                  </h3>
+                  <h3 className="text-base font-semibold mb-3" style={{ color: "var(--color-ink)" }}>Service</h3>
                   <div className="grid grid-cols-1 gap-3">
                     {(["essential", "standard", "premium"] as const).map((tier) => {
                       const info = {
@@ -316,15 +378,11 @@ export default function OrderContent() {
                         <button
                           key={tier}
                           type="button"
-                          onClick={() => setState((s) => ({ ...s, serviceTier: tier }))}
+                          onClick={() => setServiceTier(tier)}
                           className="rounded-xl p-4 text-left border-2 transition-all"
                           style={{
-                            borderColor: state.serviceTier === tier
-                              ? "var(--color-brand-green)"
-                              : "var(--color-border)",
-                            background: state.serviceTier === tier
-                              ? "rgba(0,102,0,0.05)"
-                              : "var(--color-surface-elevated)",
+                            borderColor: serviceTier === tier ? "var(--color-brand-green)" : "var(--color-border)",
+                            background: serviceTier === tier ? "rgba(0,102,0,0.05)" : "var(--color-surface-elevated)",
                           }}
                         >
                           <div className="flex justify-between items-center">
@@ -338,17 +396,10 @@ export default function OrderContent() {
                   </div>
                 </div>
 
-                {errors.submit && (
-                  <p className="error-text text-center">{errors.submit}</p>
-                )}
+                {errors.submit && <p className="error-text text-center">{errors.submit}</p>}
 
                 <div className="flex gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setStep(2)}
-                    className="btn btn-secondary flex-1"
-                    disabled={loading}
-                  >
+                  <button type="button" onClick={() => setStep(2)} className="btn btn-secondary flex-1" disabled={loading}>
                     {t("back")}
                   </button>
                   <button
@@ -370,7 +421,6 @@ export default function OrderContent() {
   );
 }
 
-// Inline DocumentUploadSlot for the order form
 interface DocumentUploadSlotProps {
   label: string;
   hint: string;
@@ -385,12 +435,8 @@ function DocumentUploadSlot({ label, hint, file, onFileSelect }: DocumentUploadS
       <div
         className="rounded-xl border-2 border-dashed p-6 text-center transition-all"
         style={{
-          borderColor: file
-            ? "var(--color-brand-green)"
-            : "var(--color-border)",
-          background: file
-            ? "rgba(0,102,0,0.04)"
-            : "var(--color-surface-elevated)",
+          borderColor: file ? "var(--color-brand-green)" : "var(--color-border)",
+          background: file ? "rgba(0,102,0,0.04)" : "var(--color-surface-elevated)",
         }}
       >
         {file ? (
@@ -404,13 +450,8 @@ function DocumentUploadSlot({ label, hint, file, onFileSelect }: DocumentUploadS
         ) : (
           <>
             <Upload size={24} className="mx-auto mb-2" style={{ color: "var(--color-ink-subtle)" }} />
-            <p className="text-sm font-medium mb-1" style={{ color: "var(--color-ink)" }}>
-              Drop file here or
-            </p>
-            <label
-              className="cursor-pointer text-sm font-semibold"
-              style={{ color: "var(--color-brand-green)" }}
-            >
+            <p className="text-sm font-medium mb-1" style={{ color: "var(--color-ink)" }}>Drop file here or</p>
+            <label className="cursor-pointer text-sm font-semibold" style={{ color: "var(--color-brand-green)" }}>
               Browse
               <input
                 type="file"

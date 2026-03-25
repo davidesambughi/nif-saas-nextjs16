@@ -20,7 +20,9 @@
       "mcp__plugin_supabase_supabase__list_projects",
       "mcp__plugin_supabase_supabase__get_logs",
       "Bash(find /c/Users/sambu/nif-project2 -not -path */node_modules/* -not -path */.next/* -type d)",
-      "Bash(grep -r \"TODO\\\\|FIXME\\\\|XXX\\\\|HACK\\\\|BUG\" /c/Users/sambu/nif-project2/src --include=*.ts --include=*.tsx)"
+      "Bash(grep -r \"TODO\\\\|FIXME\\\\|XXX\\\\|HACK\\\\|BUG\" /c/Users/sambu/nif-project2/src --include=*.ts --include=*.tsx)",
+      "mcp__plugin_supabase_supabase__execute_sql",
+      "mcp__plugin_supabase_supabase__apply_migration"
     ]
   }
 }
