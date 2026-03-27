@@ -91,6 +91,14 @@ export default function Footer() {
                   {t("contact")}
                 </a>
               </li>
+              <li>
+                <Link
+                  href="/guide/eu-citizen-portugal-checklist"
+                  className="text-sm hover:text-white transition-colors"
+                >
+                  {t("guideLink")}
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

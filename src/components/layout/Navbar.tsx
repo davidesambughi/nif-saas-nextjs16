@@ -28,6 +28,7 @@ export default function Navbar() {
   const navLinks = [
     { href: "/#how-it-works", label: t("howItWorks") },
     { href: "/#pricing", label: t("pricing") },
+    { href: "/guide/eu-citizen-portugal-checklist", label: t("guide") },
   ];
 
   return (
