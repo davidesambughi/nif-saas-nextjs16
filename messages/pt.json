@@ -196,5 +196,35 @@
       "home": "Início",
       "guide": "Guia"
     }
+  },
+  "orderSuccess": {
+    "stepComplete": "Passo 0 concluído: pedido de NIF submetido ✓",
+    "subtitle": "O seu NIF abre todas as etapas de conformidade que se seguem. Veja o que vem a seguir.",
+    "whatsNextTitle": "O Seu Roteiro de Conformidade em Portugal",
+    "step0Title": "NIF — Número de Identificação Fiscal",
+    "step0Status": "✓ Submetido — processamento em curso",
+    "step1Title": "CRUE — Certificado de Registo de Cidadão da UE",
+    "step1Desc": "Registe-se na Câmara Municipal após 90 dias em Portugal.",
+    "step1Warning": "Coima de €400–€1.500 se não cumprir",
+    "step2Title": "NISS — Número de Segurança Social",
+    "step2Desc": "Exige o CRUE. Não pode ser processado em paralelo.",
+    "step3Title": "SNS — Serviço Nacional de Saúde",
+    "step3Desc": "Registe-se com o NISS para aceder aos cuidados de saúde públicos.",
+    "step4Title": "IFICI — Incentivo Fiscal à Internacionalização",
+    "step4Desc": "Candidate-se até 15 jan. do ano seguinte ao da residência fiscal.",
+    "step4Warning": "Prazo de 15 de janeiro — perda permanente se não cumprir",
+    "ificiAlertTitle": "⚠ Prazo Definitivo IFICI",
+    "ificiAlertBody": "Se pretende beneficiar do regime IFICI (que substituiu o RNH em 2024), deve candidatar-se até 15 de janeiro do ano seguinte ao da residência fiscal em Portugal. Falhar este prazo é permanente — sem prorrogação, sem recurso.",
+    "ificiGuideLink": "Ler o guia IFICI completo →",
+    "upsellTitle": "Precisa de ajuda com os próximos passos?",
+    "upsellFiscalTitle": "Renovação de Representação Fiscal",
+    "upsellFiscalDesc": "Prolongue a sua representação fiscal após o plano expirar.",
+    "upsellNissTitle": "Assistência NISS",
+    "upsellNissDesc": "Orientamos no pedido de NISS após a obtenção do CRUE.",
+    "upsellBankTitle": "Abertura de Conta Bancária",
+    "upsellBankDesc": "Abra uma conta bancária portuguesa remotamente.",
+    "upsellComingSoon": "Em Breve",
+    "dashboardCta": "Ir para o Painel →",
+    "guideReadMore": "Ler o guia de conformidade completo"
   }
 }

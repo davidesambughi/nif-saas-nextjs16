@@ -55,9 +55,9 @@ Last updated: 2026-03-27
 
 ---
 
-## Phase 4 — Post-Purchase Moment + Off-site GEO
+## Phase 4 — Post-Purchase Moment + Off-site GEO ✅ COMPLETE
 
-- [ ] `order/success/page.tsx` — upgrade to Compliance Roadmap card
+- [x] `order/success/page.tsx` — upgrade to Compliance Roadmap card ✅
   - "Step 0 complete: NIF application submitted ✓"
   - Show full compliance timeline with next steps
   - Surface IFICI deadline warning if applicable
@@ -65,7 +65,7 @@ Last updated: 2026-03-27
 - [ ] Off-site GEO (Perplexity cites Reddit 46.7% of the time):
   - [ ] Post CRUE/AIMA answer on r/portugal
   - [ ] Post CRUE/AIMA answer on r/expats
-  - [ ] LinkedIn article: "EU Citizen Portugal Compliance Checklist 2024"
+  - [ ] LinkedIn article: "EU Citizen Portugal Compliance Checklist 2026"
 
 ---
 

@@ -283,5 +283,35 @@
       "home": "Home",
       "guide": "Guide"
     }
+  },
+  "orderSuccess": {
+    "stepComplete": "Step 0 complete: NIF application submitted ✓",
+    "subtitle": "Your NIF unlocks every compliance step that follows. Here's what comes next.",
+    "whatsNextTitle": "Your Portugal Compliance Roadmap",
+    "step0Title": "NIF — Portuguese Tax Number",
+    "step0Status": "✓ Submitted — processing in progress",
+    "step1Title": "CRUE — EU Residency Certificate",
+    "step1Desc": "Register at your Câmara Municipal after 90 days in Portugal.",
+    "step1Warning": "€400–€1,500 fine if missed",
+    "step2Title": "NISS — Social Security Number",
+    "step2Desc": "Requires CRUE. Cannot be processed in parallel.",
+    "step3Title": "SNS — National Health Service",
+    "step3Desc": "Register using your NISS to access public healthcare.",
+    "step4Title": "IFICI — Tax Incentive Regime",
+    "step4Desc": "Apply by Jan 15 of the year after establishing tax residency.",
+    "step4Warning": "January 15 deadline — permanent loss if missed",
+    "ificiAlertTitle": "⚠ IFICI Hard Deadline",
+    "ificiAlertBody": "If you plan to apply for the IFICI tax regime (which replaced NHR in 2024), you must apply by January 15 of the year after you establish tax residency in Portugal. Missing this deadline is permanent — no extension, no appeal.",
+    "ificiGuideLink": "Read the full IFICI guide →",
+    "upsellTitle": "Need help with the next steps?",
+    "upsellFiscalTitle": "Fiscal Rep Renewal",
+    "upsellFiscalDesc": "Extend your fiscal representation after your plan expires.",
+    "upsellNissTitle": "NISS Assistance",
+    "upsellNissDesc": "We'll guide you through the NISS application after you receive CRUE.",
+    "upsellBankTitle": "Bank Account Opening",
+    "upsellBankDesc": "Get help opening a Portuguese bank account remotely.",
+    "upsellComingSoon": "Coming Soon",
+    "dashboardCta": "Go to Dashboard →",
+    "guideReadMore": "Read the full compliance guide"
   }
 }

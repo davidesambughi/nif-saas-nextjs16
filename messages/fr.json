@@ -101,5 +101,35 @@
       "home": "Accueil",
       "guide": "Guide"
     }
+  },
+  "orderSuccess": {
+    "stepComplete": "Étape 0 complète : demande de NIF soumise ✓",
+    "subtitle": "Votre NIF ouvre chaque étape de conformité qui suit. Voici ce qui vient ensuite.",
+    "whatsNextTitle": "Votre Feuille de Route de Conformité au Portugal",
+    "step0Title": "NIF — Numéro d'Identification Fiscale",
+    "step0Status": "✓ Soumis — traitement en cours",
+    "step1Title": "CRUE — Certificat d'Enregistrement de Citoyen UE",
+    "step1Desc": "Inscrivez-vous à la Câmara Municipal après 90 jours au Portugal.",
+    "step1Warning": "Amende de 400–1 500 € si manquée",
+    "step2Title": "NISS — Numéro de Sécurité Sociale",
+    "step2Desc": "Exige le CRUE. Ne peut pas être traité en parallèle.",
+    "step3Title": "SNS — Service National de Santé",
+    "step3Desc": "Inscrivez-vous avec votre NISS pour accéder aux soins publics.",
+    "step4Title": "IFICI — Régime Fiscal d'Incitation",
+    "step4Desc": "Postulez avant le 15 janv. de l'année suivant l'établissement de la résidence fiscale.",
+    "step4Warning": "Échéance du 15 janvier — perte permanente si manquée",
+    "ificiAlertTitle": "⚠ Échéance absolue IFICI",
+    "ificiAlertBody": "Si vous souhaitez bénéficier du régime IFICI (qui a remplacé le RNH en 2024), vous devez postuler avant le 15 janvier de l'année suivant l'établissement de votre résidence fiscale au Portugal. Manquer cette échéance est définitif — aucune prolongation, aucun recours.",
+    "ificiGuideLink": "Lire le guide IFICI complet →",
+    "upsellTitle": "Besoin d'aide pour les prochaines étapes ?",
+    "upsellFiscalTitle": "Renouvellement de Représentation Fiscale",
+    "upsellFiscalDesc": "Prolongez votre représentation fiscale après expiration de votre plan.",
+    "upsellNissTitle": "Assistance NISS",
+    "upsellNissDesc": "Nous vous guiderons pour le NISS après réception du CRUE.",
+    "upsellBankTitle": "Ouverture de Compte Bancaire",
+    "upsellBankDesc": "Ouvrez un compte bancaire portugais à distance.",
+    "upsellComingSoon": "Bientôt Disponible",
+    "dashboardCta": "Accéder au Tableau de Bord →",
+    "guideReadMore": "Lire le guide de conformité complet"
   }
 }

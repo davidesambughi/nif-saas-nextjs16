@@ -29,8 +29,18 @@ Sprint 1 ✅ e Sprint 2 ✅ completati e testati.
 
 ### Dashboard utente
 
+- [ ] **Redesign dashboard** — la dashboard attuale è minimale. Migliorare con: stato ordine chiaro
+      (progress step visuale), documenti caricati, prossimi step compliance, link rapidi.
+      Eventualmente integrare la compliance roadmap (senza impatti SEO — è auth-gated).
+- [ ] **Audit UI/UX dell'intero sito** — passare in rassegna homepage, order flow, dashboard e
+      success page. Verificare coerenza visiva, micro-interazioni, responsive mobile, accessibilità
+      di base (contrasti, focus states).
+
 - [ ] **Ordini pending_payment nascosti** — filtrare o raggruppare ordini con pagamento fallito
 - [ ] **"Retry Payment" link** — per ordini legittimamente in attesa di pagamento
+- [ ] **Riprendere / cancellare un ordine esistente** — nella dashboard, permettere all'utente di
+      riprendere un processo già iniziato (es. tornare al checkout per un ordine pending_payment)
+      oppure cancellarlo esplicitamente. Attualmente non c'è nessun pulsante visibile per farlo.
 - [ ] **Skeleton loading** — per RealtimeDashboard durante il caricamento iniziale
 - [ ] **Spinner infinito dopo upload documenti** — mostrare stato successo invece di loading
       mentre Realtime aggiorna lo stato (fix in DocumentUploadSection.tsx)
@@ -66,6 +76,18 @@ Sprint 1 ✅ e Sprint 2 ✅ completati e testati.
 - [ ] **"Redirecting to Stripe" UI** — migliorare schermata di redirect durante submit ordine
 
 ### SEO & GEO
+
+- [ ] **Off-site GEO — Reddit** (non bloccante, ma alto ROI per citazioni AI)
+      Obiettivo: rispondere a thread esistenti su r/portugal e r/expats con info CRUE/AIMA answer-first.
+      NON creare post nuovi — cercare thread già con upvotes e rispondere lì.
+      Query: "CRUE" / "EU citizen registration Portugal" → filtrare Top → Past Year.
+      Copy pronta da generare con AI quando si è pronti.
+      **Prerequisito: account Reddit con qualche karma (non usare account nuovo da zero).**
+
+- [ ] **Off-site GEO — LinkedIn** (non bloccante)
+      Articolo: "EU Citizen Portugal Compliance Checklist 2026" — mirror della guide page.
+      Link al sito. Indicizzato da Google → aumenta domain authority.
+      Copy + struttura pronta da generare con AI quando si è pronti.
 
 - [ ] **JSON-LD schema** — aggiungere "Service" e "Review" per citazioni LLM
 - [ ] **Landing page copy** — ottimizzare per query natural language ("How do I get a NIF remotely?")
