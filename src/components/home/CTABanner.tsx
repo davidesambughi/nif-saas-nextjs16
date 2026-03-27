@@ -46,7 +46,7 @@ export default function CTABanner() {
             {t("subtitle")}
           </p>
           <Link
-            href="/order"
+            href="/login?redirectTo=/order"
             id="cta-banner-button"
             className="btn btn-lg relative z-10 inline-flex"
             style={{ background: "#ffffff", color: "var(--color-brand-green)", fontWeight: 700 }}

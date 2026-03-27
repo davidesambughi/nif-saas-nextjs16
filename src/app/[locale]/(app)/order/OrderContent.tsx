@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link, useRouter } from "@/i18n/navigation";
 import { createOrderAction, getLastOrderAction } from "@/modules/orders/actions";
 import { createCheckoutSessionAction } from "@/modules/payments/actions";
 import { getSignedUploadUrl, saveDocumentRecord } from "@/modules/documents/actions";
@@ -11,8 +12,6 @@ import { personalInfoSchema } from "@/lib/validators/order";
 import { COUNTRIES } from "@/lib/countries";
 import type { PersonalInfoInput } from "@/lib/validators/order";
 import { Upload, CheckCircle, User, FileText, Save } from "lucide-react";
-
-const DRAFT_KEY = "nif_order_draft";
 
 type Step = 1 | 2 | 3;
 
@@ -57,11 +56,13 @@ async function uploadDocument(
   if (!saveResult.success) throw new Error(saveResult.error);
 }
 
-export default function OrderContent() {
+export default function OrderContent({ userId }: { userId: string }) {
+  const DRAFT_KEY = `nif_order_draft_${userId}`;
   const t = useTranslations("order");
   const locale = useLocale();
   const searchParams = useSearchParams();
 
+  const router = useRouter();
   const [step, setStep] = useState<Step>(1);
   const [serviceTier, setServiceTier] = useState<OrderState["serviceTier"]>(
     (searchParams.get("tier") as OrderState["serviceTier"]) ?? "essential"
@@ -142,7 +143,14 @@ export default function OrderContent() {
         ...form,
         serviceTier,
       }, locale);
-      if (!orderResult.success) throw new Error(orderResult.error);
+      if (!orderResult.success) {
+        if (orderResult.code === "UNAUTHORIZED") {
+          setLoading(false);
+          router.push(`/login?redirectTo=/order`);
+          return;
+        }
+        throw new Error(orderResult.error);
+      }
       const { orderId } = orderResult.data;
 
       if (files.passport) await uploadDocument(files.passport, orderId, "passport");
@@ -239,22 +247,18 @@ export default function OrderContent() {
                   {errors.fullName && <p className="error-text">{errors.fullName}</p>}
                 </div>
 
-                {/* Nationality — searchable select via datalist */}
+                {/* Nationality */}
                 <div>
                   <label htmlFor="nationality" className="label">{t("nationality")}</label>
-                  <input
+                  <select
                     id="nationality"
-                    type="text"
-                    list="countries-list"
                     className={`input ${errors.nationality ? "error" : ""}`}
                     value={form.nationality}
                     onChange={(e) => handleFormChange("nationality", e.target.value)}
-                    placeholder="Type to search your country…"
-                    autoComplete="off"
-                  />
-                  <datalist id="countries-list">
-                    {COUNTRIES.map((c) => <option key={c} value={c} />)}
-                  </datalist>
+                  >
+                    <option value="">Select your nationality…</option>
+                    {COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                  </select>
                   {errors.nationality && <p className="error-text">{errors.nationality}</p>}
                 </div>
 

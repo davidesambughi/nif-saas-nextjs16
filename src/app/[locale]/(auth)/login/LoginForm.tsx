@@ -17,6 +17,20 @@ export default function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  function mapAuthError(msg: string): string {
+    const m = msg.toLowerCase();
+    if (m.includes("invalid login") || m.includes("invalid credentials") || m.includes("wrong password")) {
+      return "Incorrect email or password. Please try again.";
+    }
+    if (m.includes("rate limit") || m.includes("too many") || m.includes("after")) {
+      return "Too many login attempts. Please wait a few minutes before trying again.";
+    }
+    if (m.includes("email not confirmed")) {
+      return "Please confirm your email address before signing in. Check your inbox.";
+    }
+    return "Something went wrong. Please try again.";
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -25,7 +39,7 @@ export default function LoginForm() {
     const result = await signIn(email, password);
 
     if (!result.success) {
-      setError(result.error);
+      setError(mapAuthError(result.error ?? ""));
       setLoading(false);
       return;
     }
@@ -36,6 +50,11 @@ export default function LoginForm() {
 
   return (
     <div className="w-full max-w-sm">
+      <div className="mb-4">
+        <Link href="/" className="inline-flex items-center gap-1 text-sm" style={{ color: "var(--color-ink-muted)" }}>
+          ← Back to home
+        </Link>
+      </div>
       <div className="card p-8">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -52,6 +71,19 @@ export default function LoginForm() {
             {t("loginSubtitle")}
           </p>
         </div>
+
+        {redirectTo.includes("/order") && (
+          <div
+            className="rounded-lg px-4 py-3 mb-2 text-sm text-center"
+            style={{ background: "oklch(42% 0.12 152 / 0.08)", color: "var(--color-green-dark)", border: "1px solid oklch(42% 0.12 152 / 0.15)" }}
+          >
+            Sign in or{" "}
+            <Link href={`/signup?redirectTo=${encodeURIComponent(redirectTo)}`} className="font-semibold underline">
+              create an account
+            </Link>{" "}
+            to continue with your NIF application.
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

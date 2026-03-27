@@ -35,8 +35,17 @@ export default function SignupForm() {
     });
 
     if (signUpError) {
-      setError(signUpError.message);
-      setLoading(false);
+      const msg = signUpError.message.toLowerCase();
+      // Password validation errors should be surfaced directly
+      if (msg.includes("password")) {
+        setError("Password must be at least 8 characters.");
+        setLoading(false);
+      } else {
+        // All other errors (email already exists, SMTP failures, etc.) are
+        // treated as success — show the "check email" screen.
+        // This prevents leaking whether an email is registered (enumeration).
+        setDone(true);
+      }
       return;
     }
 
@@ -54,6 +63,12 @@ export default function SignupForm() {
           <p className="text-sm" style={{ color: "var(--color-ink-muted)" }}>
             {t("checkEmailDesc")}
           </p>
+          <p className="text-xs mt-4" style={{ color: "var(--color-ink-subtle)" }}>
+            Already have an account?{" "}
+            <Link href="/login" className="font-semibold" style={{ color: "var(--color-brand-green)" }}>
+              Sign in instead
+            </Link>
+          </p>
         </div>
       </div>
     );
@@ -61,6 +76,11 @@ export default function SignupForm() {
 
   return (
     <div className="w-full max-w-sm">
+      <div className="mb-4">
+        <Link href="/" className="inline-flex items-center gap-1 text-sm" style={{ color: "var(--color-ink-muted)" }}>
+          ← Back to home
+        </Link>
+      </div>
       <div className="card p-8">
         <div className="text-center mb-8">
           <div

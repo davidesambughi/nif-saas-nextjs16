@@ -288,7 +288,7 @@ export default function Pricing() {
                   {/* CTA */}
                   {featured ? (
                     <Link
-                      href={`/order?tier=${tier}`}
+                      href={`/login?redirectTo=${encodeURIComponent(`/order?tier=${tier}`)}`}
                       id={`pricing-${tier}-cta`}
                       className="btn btn-ivory w-full mt-2 text-center"
                       onClick={(e) => e.stopPropagation()}
@@ -297,7 +297,7 @@ export default function Pricing() {
                     </Link>
                   ) : isSelected ? (
                     <Link
-                      href={`/order?tier=${tier}`}
+                      href={`/login?redirectTo=${encodeURIComponent(`/order?tier=${tier}`)}`}
                       id={`pricing-${tier}-cta`}
                       className="btn btn-primary w-full mt-2 text-center"
                       onClick={(e) => e.stopPropagation()}
@@ -306,7 +306,7 @@ export default function Pricing() {
                     </Link>
                   ) : (
                     <Link
-                      href={`/order?tier=${tier}`}
+                      href={`/login?redirectTo=${encodeURIComponent(`/order?tier=${tier}`)}`}
                       id={`pricing-${tier}-cta`}
                       className="btn btn-secondary w-full mt-2 text-center"
                       onClick={(e) => e.stopPropagation()}

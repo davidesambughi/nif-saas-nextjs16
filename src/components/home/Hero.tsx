@@ -88,7 +88,7 @@ export default function Hero() {
               className="flex flex-col sm:flex-row items-start gap-4 mb-12"
             >
               <Link
-                href="/order"
+                href="/login?redirectTo=/order"
                 id="hero-cta-primary"
                 className="btn btn-primary btn-lg"
               >

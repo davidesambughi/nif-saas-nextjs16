@@ -83,6 +83,7 @@ export async function createCheckoutSession({
 }): Promise<{ url: string }> {
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
+    payment_method_types: ["card"],
     line_items: [
       {
         price: PRICE_ID_MAP[serviceTier],

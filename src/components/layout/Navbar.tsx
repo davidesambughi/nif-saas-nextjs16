@@ -103,7 +103,7 @@ export default function Navbar() {
           <Link href="/login" className="btn btn-secondary btn-sm">
             {t("login")}
           </Link>
-          <Link href="/order" className="btn btn-primary btn-sm">
+          <Link href="/login?redirectTo=/order" className="btn btn-primary btn-sm">
             {t("getStarted")}
           </Link>
         </div>
@@ -150,7 +150,7 @@ export default function Navbar() {
                 {t("login")}
               </Link>
               <Link
-                href="/order"
+                href="/login?redirectTo=/order"
                 onClick={() => setIsMobileOpen(false)}
                 className="btn btn-primary btn-sm w-full"
               >
