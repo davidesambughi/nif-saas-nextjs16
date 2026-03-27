@@ -1,0 +1,56 @@
+# robots.txt — GetNIFPortugal
+# Last updated: 2026-03-27
+# Strategy: Allow all retrieval crawlers for maximum AI citation visibility.
+# Content supports our product (not IS the product), so visibility wins.
+
+# -----------------------------------------------
+# Traditional search engines
+# -----------------------------------------------
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# -----------------------------------------------
+# AI Retrieval crawlers
+# Allow these — they power real-time AI citations in ChatGPT, Perplexity, Claude, Gemini.
+# Blocking these = invisible in AI search answers.
+# -----------------------------------------------
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Gemini-User
+Allow: /
+
+# -----------------------------------------------
+# Default: allow everything
+# -----------------------------------------------
+User-agent: *
+Allow: /
+
+# Private app routes — no SEO value, exclude from crawl budget
+Disallow: /*/dashboard
+Disallow: /*/order
+Disallow: /*/admin
+Disallow: /api/
+
+Sitemap: https://www.getnifportugal.com/sitemap.xml

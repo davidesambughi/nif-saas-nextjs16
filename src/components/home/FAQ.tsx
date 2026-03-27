@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { m, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
-const FAQ_KEYS = ["q1", "q2", "q3", "q4", "q5"] as const;
+const FAQ_KEYS = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10", "q11"] as const;
 
 export default function FAQ() {
   const t = useTranslations("faq");

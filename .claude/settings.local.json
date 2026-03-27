@@ -24,7 +24,10 @@
       "mcp__plugin_supabase_supabase__execute_sql",
       "mcp__plugin_supabase_supabase__apply_migration",
       "Bash(find src/app/[locale] -type f -name \"*.tsx\" -o -name \"*.ts\")",
-      "Bash(find src/app/[locale] -type d)"
+      "Bash(find src/app/[locale] -type d)",
+      "Bash(node:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

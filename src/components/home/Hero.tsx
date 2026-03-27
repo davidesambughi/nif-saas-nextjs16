@@ -74,11 +74,27 @@ export default function Hero() {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.15 }}
-              className="text-lg leading-relaxed mb-10 max-w-lg"
+              className="text-lg leading-relaxed mb-4 max-w-lg"
               style={{ color: "var(--color-ink-muted)" }}
             >
               {t("subheadline")}
             </m.p>
+
+            {/* Prerequisite note — GEO anchor: NIF is required before CRUE/NISS/IFICI */}
+            <m.div
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.19 }}
+              className="mb-10 inline-flex items-center gap-2 text-sm rounded-lg px-3 py-2 max-w-lg"
+              style={{
+                background: "oklch(42% 0.12 152 / 0.06)",
+                border: "1px solid oklch(42% 0.12 152 / 0.15)",
+                color: "var(--color-ink-muted)",
+              }}
+            >
+              <span style={{ color: "var(--color-green)", fontWeight: 700 }}>→</span>
+              {t("prerequisiteNote")}
+            </m.div>
 
             {/* CTAs */}
             <m.div
