@@ -6,13 +6,15 @@
     "login": "Sign In",
     "dashboard": "Dashboard",
     "getStarted": "Get Started",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "guide": "Compliance Guide"
   },
   "hero": {
     "badge": "✅ Trusted by 2,000+ expats",
     "headline": "Your Portuguese NIF,",
     "headlineAccent": "100% Remote.",
     "subheadline": "Get your Portuguese tax number from anywhere in the world — without flying to Portugal. We handle the paperwork.",
+    "prerequisiteNote": "NIF is required before CRUE, NISS, or the IFICI tax regime.",
     "ctaPrimary": "Get My NIF Now",
     "ctaSecondary": "See How It Works",
     "statsNifs": "NIFs Issued",
@@ -65,7 +67,37 @@
     "q4": "How long does it take?",
     "a4": "Essential and Standard take 7 business days. Premium is 48–72 hours express. Processing times depend on the Portuguese tax authority.",
     "q5": "Is the NIF valid forever?",
-    "a5": "Yes. Your NIF is a permanent tax identification number that does not expire."
+    "a5": "Yes. Your NIF is a permanent tax identification number that does not expire.",
+    "q6": "Do EU citizens need to register their residency in Portugal?",
+    "a6": "Yes. After 90 days in Portugal, EU citizens have 30 days to apply for the CRUE — Certificado de Registo de Cidadão da União Europeia. Failure to register within this window carries a fine of €400 to €1,500.",
+    "q7": "Where do EU citizens register for CRUE — at AIMA or Câmara Municipal?",
+    "a7": "At the Câmara Municipal (city hall), or in larger cities at a Loja do Cidadão. AIMA was created when SEF was dissolved in 2023 and handles non-EU nationals only. EU citizens who arrive at AIMA for CRUE registration will be redirected.",
+    "q8": "Can I apply for NISS at the same time as CRUE?",
+    "a8": "No. Since late 2023, NISS applications require CRUE as a supporting document. You must obtain your CRUE first. Attempting to apply for NISS without CRUE will result in rejection.",
+    "q9": "Is Non-Habitual Residency (NHR) still available in Portugal?",
+    "a9": "No. The NHR tax regime ended on January 1, 2024. It was replaced by IFICI (Incentivo Fiscal à Internacionalização), which has narrower eligibility criteria and different benefit structures.",
+    "q10": "What is the deadline to apply for the IFICI tax regime?",
+    "a10": "January 15 of the year following the year in which you establish tax residency in Portugal. This deadline is absolute — missing it means the IFICI option is permanently lost for that tax year. There is no extension or appeal.",
+    "q11": "What happens if I miss the CRUE registration deadline?",
+    "a11": "A fine of €400 to €1,500 applies. If you are past the 12-month mark without registering, you must pay the fine to AIMA before your CRUE application can be processed. CRUE is also required to apply for NISS, so delays compound."
+  },
+  "complianceRoadmap": {
+    "eyebrow": "Your Compliance Journey",
+    "title": "NIF Is Just the Beginning",
+    "subtitle": "EU citizens moving to Portugal must complete these registrations in order. Your NIF unlocks every step that follows.",
+    "step0Label": "We handle this",
+    "step0Title": "NIF — Portuguese Tax Number",
+    "step0Desc": "Required before any other registration. Establishes your tax residency and identity with the Portuguese state.",
+    "step1Title": "CRUE — EU Residency Certificate",
+    "step1Desc": "Register at your Câmara Municipal (city hall) — not AIMA. Required after 90 days in Portugal, within the following 30 days.",
+    "step1Warning": "€400–€1,500 fine if missed",
+    "step2Title": "NISS — Social Security Number",
+    "step2Desc": "Requires CRUE as a supporting document. Cannot be processed in parallel — CRUE must be obtained first.",
+    "step3Title": "SNS — National Health Service",
+    "step3Desc": "Register with the Portuguese National Health Service using your NISS to access public healthcare.",
+    "step4Title": "IFICI — Tax Incentive Regime",
+    "step4Desc": "Replaced NHR (ended Jan 1, 2024). Apply by January 15 of the year after establishing tax residency in Portugal.",
+    "step4Warning": "January 15 deadline — permanent loss if missed"
   },
   "trust": {
     "eyebrow": "By the Numbers",
@@ -92,6 +124,7 @@
     "company": "Company",
     "about": "About Us",
     "contact": "Contact",
+    "guideLink": "EU Compliance Guide",
     "copyright": "© 2026 GetNIFPortugal. All rights reserved."
   },
   "auth": {
@@ -157,6 +190,98 @@
       "nif_processing": "Processing Your NIF",
       "nif_issued": "NIF Issued ✓",
       "cancelled": "Cancelled"
+    }
+  },
+  "guide": {
+    "meta": {
+      "title": "EU Citizen Portugal Compliance Checklist 2026 — NIF, CRUE, NISS, IFICI",
+      "description": "Complete guide for EU citizens moving to Portugal: NIF, CRUE (€400–€1,500 fine if missed), NISS, SNS, and IFICI tax regime. Correct order, correct offices, exact deadlines."
+    },
+    "eyebrow": "The Complete Guide",
+    "title": "EU Citizen Portugal Compliance Checklist",
+    "subtitle": "NIF → CRUE → NISS → SNS → IFICI — in that order. Every deadline, fine, and office you need to know.",
+    "lastUpdated": "Last updated",
+    "intro": "Moving to Portugal as an EU citizen requires completing five registrations in strict order. Missing any step — or doing them out of order — causes fines, rejections, and delays. This guide covers each step with exact deadlines, correct offices, and current rules.",
+    "toc": "In this guide",
+    "nif": {
+      "anchor": "nif",
+      "step": "Step 0",
+      "title": "NIF — Portuguese Tax Identification Number",
+      "answer": "Get your NIF before anything else. It is required for every subsequent registration.",
+      "body": "The NIF (Número de Identificação Fiscal) is Portugal's tax identification number. It is mandatory for opening a bank account, renting or buying property, starting a business, signing contracts, and all government registrations. It must be obtained before CRUE, NISS, SNS, or IFICI applications.",
+      "weHandleThis": "We handle this",
+      "cta": "Get My NIF — From €79"
+    },
+    "crue": {
+      "anchor": "crue",
+      "step": "Step 1",
+      "title": "CRUE — EU Residency Certificate",
+      "answer": "After 90 days in Portugal, EU citizens have 30 days to register. Register at the Câmara Municipal — not AIMA.",
+      "deadlineLabel": "Deadline",
+      "deadline": "90 days in Portugal + 30 days to register",
+      "fineLabel": "Fine for missing",
+      "fine": "€400 to €1,500",
+      "officeLabel": "Correct office",
+      "office": "Câmara Municipal or Loja do Cidadão",
+      "wrongOfficeLabel": "Wrong office",
+      "wrongOffice": "AIMA (non-EU nationals only)",
+      "body": "CRUE stands for Certificado de Registo de Cidadão da União Europeia. EU citizens living in Portugal for more than 90 days must register their residency within the following 30 days. The CRUE is issued by the Câmara Municipal (city hall) or, in larger cities, by a Loja do Cidadão. AIMA was created in 2023 when SEF was dissolved — it handles non-EU nationals only. EU citizens who go to AIMA will be redirected.",
+      "lateWarning": "If you are past 12 months without registering, you must pay the fine to AIMA first before your CRUE application can be processed.",
+      "dependency": "CRUE is also required to apply for NISS. Delays compound."
+    },
+    "niss": {
+      "anchor": "niss",
+      "step": "Step 2",
+      "title": "NISS — Social Security Number",
+      "answer": "NISS requires CRUE. Since late 2023, you cannot apply for NISS without a valid CRUE.",
+      "body": "The NISS (Número de Identificação de Segurança Social) is Portugal's social security number. As of late 2023, all NISS applications require the CRUE certificate as a supporting document. Attempting to apply for NISS without CRUE will result in rejection. The two registrations cannot run in parallel.",
+      "dependency": "Requires: CRUE certificate"
+    },
+    "sns": {
+      "anchor": "sns",
+      "step": "Step 3",
+      "title": "SNS — National Health Service",
+      "answer": "Register with the SNS using your NISS to access public healthcare in Portugal.",
+      "body": "The SNS (Serviço Nacional de Saúde) is Portugal's public healthcare system. To register, you need your NISS. Registration gives you access to public hospitals, health centres (centros de saúde), and subsidised medication.",
+      "dependency": "Requires: NISS"
+    },
+    "ifici": {
+      "anchor": "ifici",
+      "step": "Step 4",
+      "title": "IFICI — Tax Incentive Regime",
+      "answer": "IFICI replaced NHR on January 1, 2024. Apply by January 15 of the year after you establish tax residency. Missing this deadline is permanent.",
+      "deadlineLabel": "Hard deadline",
+      "deadline": "January 15 of the year after establishing tax residency",
+      "penaltyLabel": "Penalty for missing",
+      "penalty": "Permanent loss — no extension, no appeal",
+      "nhrLabel": "NHR status",
+      "nhr": "Ended January 1, 2024",
+      "body": "IFICI (Incentivo Fiscal à Internacionalização) replaced the NHR (Non-Habitual Residency) regime that ended on January 1, 2024. It offers tax benefits for qualifying professionals and investors. Unlike NHR, IFICI has narrower eligibility criteria. The January 15 deadline is absolute — if you miss it, the IFICI option is permanently lost for that tax year. There is no extension or appeal process.",
+      "dependency": "Requires: NIF (tax residency established)"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": "Do I need a NIF before registering for CRUE?",
+      "a1": "Yes. The NIF establishes your identity with the Portuguese state and is required for all subsequent registrations including CRUE, NISS, SNS, and IFICI.",
+      "q2": "Where exactly do I register for CRUE?",
+      "a2": "At your local Câmara Municipal (city hall) or a Loja do Cidadão in larger cities. AIMA handles non-EU nationals only — EU citizens who go to AIMA for CRUE will be redirected.",
+      "q3": "What is the fine for missing the CRUE deadline?",
+      "a3": "€400 to €1,500. If you are past 12 months without registering, you must pay the fine to AIMA before your CRUE application can be processed.",
+      "q4": "Can I apply for NISS and CRUE at the same time?",
+      "a4": "No. Since late 2023, NISS applications require the CRUE certificate as a supporting document. You must obtain CRUE first.",
+      "q5": "Is NHR still available?",
+      "a5": "No. The NHR tax regime ended on January 1, 2024. It was replaced by IFICI (Incentivo Fiscal à Internacionalização), which has narrower eligibility criteria.",
+      "q6": "What happens if I miss the IFICI January 15 deadline?",
+      "a6": "The IFICI option is permanently lost for that tax year. There is no extension or appeal process."
+    },
+    "cta": {
+      "title": "Ready to start with your NIF?",
+      "subtitle": "Your NIF is the first step. We handle it remotely — from anywhere in the world.",
+      "button": "Get My NIF — From €79"
+    },
+    "breadcrumb": {
+      "home": "Home",
+      "guide": "Guide"
     }
   }
 }

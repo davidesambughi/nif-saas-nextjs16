@@ -6,13 +6,15 @@
     "login": "Entrar",
     "dashboard": "Painel",
     "getStarted": "Começar",
-    "signOut": "Sair"
+    "signOut": "Sair",
+    "guide": "Guia de Conformidade"
   },
   "hero": {
     "badge": "✅ Confiado por mais de 2.000 expatriados",
     "headline": "O seu NIF Português,",
     "headlineAccent": "100% Remoto.",
     "subheadline": "Obtenha o seu número de identificação fiscal português de qualquer parte do mundo — sem precisar de vir a Portugal.",
+    "prerequisiteNote": "O NIF é necessário antes do CRUE, NISS ou regime IFICI.",
     "ctaPrimary": "Obter o Meu NIF",
     "ctaSecondary": "Ver Como Funciona",
     "statsNifs": "NIFs Emitidos",
@@ -65,12 +67,134 @@
     "q4": "Quanto tempo demora?",
     "a4": "Os planos Essencial e Standard demoram 7 dias úteis. O Premium é expresso em 48–72 horas.",
     "q5": "O NIF é permanente?",
-    "a5": "Sim. O seu NIF é um número de identificação fiscal permanente que não expira."
+    "a5": "Sim. O seu NIF é um número de identificação fiscal permanente que não expira.",
+    "q6": "Os cidadãos da UE precisam de registar a sua residência em Portugal?",
+    "a6": "Sim. Após 90 dias em Portugal, os cidadãos da UE têm 30 dias para se registar no CRUE — Certificado de Registo de Cidadão da União Europeia. A falta de registo implica uma coima de €400 a €1.500.",
+    "q7": "Onde se registam os cidadãos da UE para o CRUE — na AIMA ou na Câmara Municipal?",
+    "a7": "Na Câmara Municipal ou, nas grandes cidades, numa Loja do Cidadão. A AIMA foi criada com a extinção do SEF em 2023 e trata apenas de cidadãos não europeus. Cidadãos da UE que se dirijam à AIMA serão encaminhados.",
+    "q8": "Posso candidatar-me ao NISS ao mesmo tempo que ao CRUE?",
+    "a8": "Não. Desde finais de 2023, o pedido de NISS exige o CRUE como documento de suporte. É obrigatório obter o CRUE primeiro. Tentar candidatar-se ao NISS sem o CRUE resultará em rejeição.",
+    "q9": "O Regime de Residência Não Habitual (RNH) ainda está disponível?",
+    "a9": "Não. O regime RNH terminou a 1 de janeiro de 2024. Foi substituído pelo IFICI (Incentivo Fiscal à Internacionalização), com critérios de elegibilidade mais restritos.",
+    "q10": "Qual é o prazo para candidatura ao regime IFICI?",
+    "a10": "15 de janeiro do ano seguinte àquele em que estabelece residência fiscal em Portugal. Este prazo é definitivo — a sua perda é permanente, sem possibilidade de prorrogação.",
+    "q11": "O que acontece se não cumprir o prazo de registo no CRUE?",
+    "a11": "Aplica-se uma coima de €400 a €1.500. Se ultrapassar os 12 meses sem se registar, deverá pagar a coima na AIMA antes de poder processar o CRUE. O CRUE é também necessário para o NISS, pelo que os atrasos se acumulam."
+  },
+  "complianceRoadmap": {
+    "eyebrow": "A Sua Jornada de Conformidade",
+    "title": "O NIF É Apenas o Início",
+    "subtitle": "Os cidadãos da UE que se mudam para Portugal devem completar estes registos por ordem. O seu NIF abre todas as etapas seguintes.",
+    "step0Label": "Tratamos disto",
+    "step0Title": "NIF — Número de Identificação Fiscal",
+    "step0Desc": "Necessário antes de qualquer outro registo. Estabelece a sua residência fiscal e identidade junto do Estado português.",
+    "step1Title": "CRUE — Certificado de Registo de Cidadão da UE",
+    "step1Desc": "Registe-se na sua Câmara Municipal — não na AIMA. Obrigatório após 90 dias em Portugal, nos 30 dias seguintes.",
+    "step1Warning": "Coima de €400–€1.500 se não cumprir",
+    "step2Title": "NISS — Número de Segurança Social",
+    "step2Desc": "Exige o CRUE como documento de suporte. Não pode ser processado em paralelo — o CRUE tem de ser obtido primeiro.",
+    "step3Title": "SNS — Serviço Nacional de Saúde",
+    "step3Desc": "Registe-se no SNS com o seu NISS para aceder aos cuidados de saúde públicos portugueses.",
+    "step4Title": "IFICI — Incentivo Fiscal à Internacionalização",
+    "step4Desc": "Substituiu o RNH (terminou a 1 jan. 2024). Candidate-se até 15 de janeiro do ano seguinte ao da residência fiscal.",
+    "step4Warning": "Prazo de 15 de janeiro — perda permanente se não cumprir"
   },
   "trust": { "eyebrow": "Em Números", "title": "Confiado por Expatriados em Todo o Mundo", "subtitle": "Junte-se a milhares de não residentes.", "review1": "Super rápido e profissional. Tive o meu NIF em 3 dias!", "review1Author": "Sarah K. — Reino Unido", "review2": "O processo foi perfeito. Muito recomendado.", "review2Author": "Marco R. — Itália", "review3": "O melhor €79 que alguma vez gastei.", "review3Author": "Aiko T. — Japão" },
   "cta": { "title": "Pronto para obter o seu NIF?", "subtitle": "Comece hoje. Demora menos de 5 minutos.", "button": "Candidatar Agora — A partir de €79", "microcopy": "Sem subscrições · Sem taxas ocultas · Pagamento seguro via Stripe" },
-  "footer": { "tagline": "A forma mais rápida de obter o seu NIF português remotamente.", "legal": "Legal", "privacy": "Política de Privacidade", "terms": "Termos de Serviço", "company": "Empresa", "about": "Sobre Nós", "contact": "Contacto", "copyright": "© 2026 GetNIFPortugal. Todos os direitos reservados." },
+  "footer": { "tagline": "A forma mais rápida de obter o seu NIF português remotamente.", "legal": "Legal", "privacy": "Política de Privacidade", "terms": "Termos de Serviço", "company": "Empresa", "about": "Sobre Nós", "contact": "Contacto", "guideLink": "Guia de Conformidade UE", "copyright": "© 2026 GetNIFPortugal. Todos os direitos reservados." },
   "auth": { "loginTitle": "Bem-vindo de volta", "loginSubtitle": "Aceda à sua conta", "signupTitle": "Crie a sua conta", "signupSubtitle": "Comece o seu pedido de NIF hoje", "email": "Endereço de email", "password": "Palavra-passe", "fullName": "Nome completo", "loginButton": "Entrar", "signupButton": "Criar Conta", "noAccount": "Não tem conta?", "hasAccount": "Já tem conta?", "signupLink": "Registar →", "loginLink": "Entrar →", "checkEmail": "Verifique o seu email", "checkEmailDesc": "Enviámos um link de confirmação. Clique nele para ativar a sua conta.", "forgotPassword": "Esqueceu a palavra-passe?", "forgotPasswordTitle": "Redefinir palavra-passe", "forgotPasswordSubtitle": "Introduza o seu email e enviaremos um link", "forgotPasswordButton": "Enviar Link", "forgotPasswordSent": "Verifique o seu email para o link de redefinição.", "resetPasswordTitle": "Definir nova palavra-passe", "resetPasswordSubtitle": "Introduza a sua nova palavra-passe abaixo", "newPassword": "Nova palavra-passe", "resetPasswordButton": "Atualizar", "resetPasswordSuccess": "Palavra-passe atualizada. A redirecionar…", "backToLogin": "Voltar ao início de sessão" },
   "order": { "title": "Iniciar o seu Pedido de NIF", "step1": "Dados Pessoais", "step2": "Documentos", "step3": "Revisão e Pagamento", "fullName": "Nome completo", "nationality": "Nacionalidade", "passportNumber": "Número de passaporte", "dateOfBirth": "Data de nascimento", "address": "Morada atual", "next": "Seguinte →", "back": "← Voltar", "payNow": "Pagar e Submeter", "successTitle": "Pedido Submetido!", "successDesc": "O seu pagamento foi recebido. Enviaremos atualizações por email.", "cancelTitle": "Pagamento Cancelado", "cancelDesc": "O pagamento não foi concluído. O seu pedido foi guardado.", "retryPayment": "Tentar Novamente" },
-  "dashboard": { "title": "O Meu Painel", "subtitle": "Acompanhe o estado do seu pedido de NIF", "noOrders": "Ainda não tem pedidos", "noOrdersDesc": "Inicie o seu primeiro pedido de NIF.", "startApplication": "Iniciar Pedido", "orderId": "Pedido #", "submitted": "Submetido", "status": { "pending_payment": "Aguarda Pagamento", "payment_received": "Pagamento Recebido", "documents_required": "Documentos Necessários", "documents_under_review": "Documentos em Revisão", "nif_processing": "A Processar NIF", "nif_issued": "NIF Emitido ✓", "cancelled": "Cancelado" } }
+  "dashboard": { "title": "O Meu Painel", "subtitle": "Acompanhe o estado do seu pedido de NIF", "noOrders": "Ainda não tem pedidos", "noOrdersDesc": "Inicie o seu primeiro pedido de NIF.", "startApplication": "Iniciar Pedido", "orderId": "Pedido #", "submitted": "Submetido", "status": { "pending_payment": "Aguarda Pagamento", "payment_received": "Pagamento Recebido", "documents_required": "Documentos Necessários", "documents_under_review": "Documentos em Revisão", "nif_processing": "A Processar NIF", "nif_issued": "NIF Emitido ✓", "cancelled": "Cancelado" } },
+  "guide": {
+    "meta": {
+      "title": "Checklist de Conformidade para Cidadãos da UE em Portugal 2026 — NIF, CRUE, NISS, IFICI",
+      "description": "Guia completo para cidadãos da UE que se mudam para Portugal: NIF, CRUE (coima €400–€1.500), NISS, SNS e regime IFICI. Ordem correta, serviços corretos, prazos exatos."
+    },
+    "eyebrow": "O Guia Completo",
+    "title": "Checklist de Conformidade para Cidadãos da UE em Portugal",
+    "subtitle": "NIF → CRUE → NISS → SNS → IFICI — por esta ordem. Todos os prazos, coimas e serviços que precisa de saber.",
+    "lastUpdated": "Última atualização",
+    "intro": "Mudar-se para Portugal como cidadão da UE implica concluir cinco registos numa ordem estrita. Falhar qualquer passo — ou fazê-los fora de ordem — implica coimas, rejeições e atrasos. Este guia cobre cada passo com prazos exatos, serviços corretos e as regras em vigor.",
+    "toc": "Neste guia",
+    "nif": {
+      "anchor": "nif",
+      "step": "Passo 0",
+      "title": "NIF — Número de Identificação Fiscal",
+      "answer": "Obtenha o NIF antes de qualquer outra coisa. É necessário para todos os registos subsequentes.",
+      "body": "O NIF (Número de Identificação Fiscal) é o número de identificação fiscal de Portugal. É obrigatório para abrir conta bancária, arrendar ou comprar imóveis, criar uma empresa, assinar contratos e todos os registos governamentais. Deve ser obtido antes do CRUE, NISS, SNS ou pedidos de IFICI.",
+      "weHandleThis": "Tratamos disto",
+      "cta": "Obter o Meu NIF — A partir de €79"
+    },
+    "crue": {
+      "anchor": "crue",
+      "step": "Passo 1",
+      "title": "CRUE — Certificado de Registo de Cidadão da União Europeia",
+      "answer": "Após 90 dias em Portugal, os cidadãos da UE têm 30 dias para se registar. Registe-se na Câmara Municipal — não na AIMA.",
+      "deadlineLabel": "Prazo",
+      "deadline": "90 dias em Portugal + 30 dias para registar",
+      "fineLabel": "Coima por incumprimento",
+      "fine": "€400 a €1.500",
+      "officeLabel": "Serviço correto",
+      "office": "Câmara Municipal ou Loja do Cidadão",
+      "wrongOfficeLabel": "Serviço errado",
+      "wrongOffice": "AIMA (apenas para cidadãos não europeus)",
+      "body": "O CRUE é o Certificado de Registo de Cidadão da União Europeia. Os cidadãos da UE que residam em Portugal há mais de 90 dias devem registar a sua residência nos 30 dias seguintes. O CRUE é emitido pela Câmara Municipal ou, nas grandes cidades, por uma Loja do Cidadão. A AIMA foi criada em 2023 com a extinção do SEF — trata apenas de cidadãos não europeus. Os cidadãos da UE que se dirijam à AIMA serão encaminhados.",
+      "lateWarning": "Se já passaram mais de 12 meses sem se registar, deve pagar a coima na AIMA antes de poder processar o CRUE.",
+      "dependency": "O CRUE é também necessário para o pedido de NISS. Os atrasos acumulam-se."
+    },
+    "niss": {
+      "anchor": "niss",
+      "step": "Passo 2",
+      "title": "NISS — Número de Identificação de Segurança Social",
+      "answer": "O NISS exige o CRUE. Desde finais de 2023, não é possível candidatar-se ao NISS sem um CRUE válido.",
+      "body": "O NISS (Número de Identificação de Segurança Social) é o número de segurança social de Portugal. Desde finais de 2023, todos os pedidos de NISS exigem o certificado CRUE como documento de suporte. Tentar candidatar-se ao NISS sem CRUE resultará em rejeição. Os dois registos não podem ser feitos em paralelo.",
+      "dependency": "Exige: certificado CRUE"
+    },
+    "sns": {
+      "anchor": "sns",
+      "step": "Passo 3",
+      "title": "SNS — Serviço Nacional de Saúde",
+      "answer": "Registe-se no SNS com o seu NISS para aceder aos cuidados de saúde públicos em Portugal.",
+      "body": "O SNS (Serviço Nacional de Saúde) é o sistema de saúde pública de Portugal. Para se registar, precisa do seu NISS. O registo dá-lhe acesso a hospitais públicos, centros de saúde e medicação subsidiada.",
+      "dependency": "Exige: NISS"
+    },
+    "ifici": {
+      "anchor": "ifici",
+      "step": "Passo 4",
+      "title": "IFICI — Incentivo Fiscal à Internacionalização",
+      "answer": "O IFICI substituiu o RNH a 1 de janeiro de 2024. Candidate-se até 15 de janeiro do ano seguinte ao da residência fiscal. Falhar este prazo é permanente.",
+      "deadlineLabel": "Prazo definitivo",
+      "deadline": "15 de janeiro do ano seguinte ao da residência fiscal",
+      "penaltyLabel": "Penalidade por incumprimento",
+      "penalty": "Perda permanente — sem prorrogação, sem recurso",
+      "nhrLabel": "Estado do RNH",
+      "nhr": "Terminou a 1 de janeiro de 2024",
+      "body": "O IFICI (Incentivo Fiscal à Internacionalização) substituiu o regime RNH (Residência Não Habitual) que terminou a 1 de janeiro de 2024. Oferece benefícios fiscais a profissionais e investidores qualificados. Ao contrário do RNH, o IFICI tem critérios de elegibilidade mais restritos. O prazo de 15 de janeiro é definitivo — se falhar, a opção IFICI perde-se permanentemente para esse ano fiscal. Não existe processo de prorrogação ou recurso.",
+      "dependency": "Exige: NIF (residência fiscal estabelecida)"
+    },
+    "faq": {
+      "title": "Perguntas Frequentes",
+      "q1": "Preciso de NIF antes de me registar no CRUE?",
+      "a1": "Sim. O NIF estabelece a sua identidade junto do Estado português e é necessário para todos os registos subsequentes, incluindo CRUE, NISS, SNS e IFICI.",
+      "q2": "Onde exatamente me registo para o CRUE?",
+      "a2": "Na sua Câmara Municipal ou numa Loja do Cidadão nas grandes cidades. A AIMA trata apenas de cidadãos não europeus — os cidadãos da UE que se dirijam à AIMA serão encaminhados.",
+      "q3": "Qual é a coima por falhar o prazo do CRUE?",
+      "a3": "€400 a €1.500. Se já passaram mais de 12 meses sem se registar, deve pagar a coima na AIMA antes de poder processar o CRUE.",
+      "q4": "Posso candidatar-me ao NISS e ao CRUE ao mesmo tempo?",
+      "a4": "Não. Desde finais de 2023, os pedidos de NISS exigem o certificado CRUE como documento de suporte. Deve obter o CRUE primeiro.",
+      "q5": "O RNH ainda está disponível?",
+      "a5": "Não. O regime RNH terminou a 1 de janeiro de 2024. Foi substituído pelo IFICI (Incentivo Fiscal à Internacionalização), com critérios de elegibilidade mais restritos.",
+      "q6": "O que acontece se falhar o prazo de 15 de janeiro do IFICI?",
+      "a6": "A opção IFICI perde-se permanentemente para esse ano fiscal. Não existe processo de prorrogação ou recurso."
+    },
+    "cta": {
+      "title": "Pronto para começar com o seu NIF?",
+      "subtitle": "O NIF é o primeiro passo. Tratamos remotamente — de qualquer parte do mundo.",
+      "button": "Obter o Meu NIF — A partir de €79"
+    },
+    "breadcrumb": {
+      "home": "Início",
+      "guide": "Guia"
+    }
+  }
 }

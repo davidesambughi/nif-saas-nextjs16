@@ -1,13 +1,105 @@
 {
-  "nav": { "home": "Accueil", "howItWorks": "Comment ça marche", "pricing": "Tarifs", "login": "Connexion", "dashboard": "Tableau de bord", "getStarted": "Commencer", "signOut": "Déconnexion" },
-  "hero": { "badge": "✅ Approuvé par plus de 2 000 expatriés", "headline": "Votre NIF Portugais,", "headlineAccent": "100% à Distance.", "subheadline": "Obtenez votre numéro fiscal portugais depuis n'importe où dans le monde — sans voyager au Portugal.", "ctaPrimary": "Obtenir Mon NIF", "ctaSecondary": "Voir Comment Ça Marche", "statsNifs": "NIFs Délivrés", "statsCountries": "Pays Servis", "statsDays": "Jours de Traitement Moyens", "statsRating": "Note Clients", "flagsText": "+40 autres pays desservis" },
+  "nav": { "home": "Accueil", "howItWorks": "Comment ça marche", "pricing": "Tarifs", "login": "Connexion", "dashboard": "Tableau de bord", "getStarted": "Commencer", "signOut": "Déconnexion", "guide": "Guide de Conformité" },
+  "hero": { "badge": "✅ Approuvé par plus de 2 000 expatriés", "headline": "Votre NIF Portugais,", "headlineAccent": "100% à Distance.", "subheadline": "Obtenez votre numéro fiscal portugais depuis n'importe où dans le monde — sans voyager au Portugal.", "prerequisiteNote": "Le NIF est requis avant le CRUE, le NISS ou le régime IFICI.", "ctaPrimary": "Obtenir Mon NIF", "ctaSecondary": "Voir Comment Ça Marche", "statsNifs": "NIFs Délivrés", "statsCountries": "Pays Servis", "statsDays": "Jours de Traitement Moyens", "statsRating": "Note Clients", "flagsText": "+40 autres pays desservis" },
   "howItWorks": { "eyebrow": "Le Processus", "title": "Trois Étapes pour Votre NIF", "subtitle": "Un processus entièrement à distance, complété en quelques jours.", "step1Title": "Remplissez Vos Informations", "step1Desc": "Complétez notre formulaire sécurisé avec vos informations personnelles et de passeport.", "step2Title": "Téléchargez les Documents", "step2Desc": "Téléchargez en toute sécurité une copie de votre passeport et un justificatif de domicile.", "step3Title": "Recevez Votre NIF", "step3Desc": "Nous soumettons votre demande à l'autorité fiscale portugaise. Votre NIF arrive par email." },
   "pricing": { "eyebrow": "Tarifs", "title": "Tarifs Simples et Transparents", "subtitle": "Frais uniques. Sans abonnement. Sans frais cachés.", "essential": "Essentiel", "standard": "Standard", "premium": "Premium", "essentialPrice": "€79", "standardPrice": "€129", "premiumPrice": "€199", "essentialDuration": "7 jours ouvrables", "standardDuration": "7 jours ouvrables", "premiumDuration": "48–72 heures express", "feature1": "Demande NIF complète", "feature2": "Vérification des documents", "feature3": "Livraison par email", "feature4": "Représentation fiscale 1 an", "feature5": "Représentation fiscale 2 ans", "feature6": "Traitement prioritaire 48–72h", "cta": "Commencer", "popular": "Le Plus Populaire" },
-  "faq": { "title": "Questions Fréquentes", "q1": "Qui a besoin d'un NIF portugais?", "a1": "Toute personne souhaitant ouvrir un compte bancaire portugais, acheter ou louer un bien immobilier, créer une entreprise ou travailler au Portugal.", "q2": "Dois-je aller au Portugal?", "a2": "Non. Notre service est 100% à distance. Nous agissons comme votre représentant fiscal.", "q3": "Quels documents sont nécessaires?", "a3": "Un passeport valide et un justificatif de domicile datant de moins de 3 mois.", "q4": "Combien de temps cela prend-il?", "a4": "Les formules Essentiel et Standard prennent 7 jours ouvrables. La formule Premium est express en 48–72 heures.", "q5": "Le NIF est-il permanent?", "a5": "Oui. Votre NIF est un numéro d'identification fiscale permanent qui n'expire pas." },
+  "faq": { "title": "Questions Fréquentes", "q1": "Qui a besoin d'un NIF portugais?", "a1": "Toute personne souhaitant ouvrir un compte bancaire portugais, acheter ou louer un bien immobilier, créer une entreprise ou travailler au Portugal.", "q2": "Dois-je aller au Portugal?", "a2": "Non. Notre service est 100% à distance. Nous agissons comme votre représentant fiscal.", "q3": "Quels documents sont nécessaires?", "a3": "Un passeport valide et un justificatif de domicile datant de moins de 3 mois.", "q4": "Combien de temps cela prend-il?", "a4": "Les formules Essentiel et Standard prennent 7 jours ouvrables. La formule Premium est express en 48–72 heures.", "q5": "Le NIF est-il permanent?", "a5": "Oui. Votre NIF est un numéro d'identification fiscale permanent qui n'expire pas.", "q6": "Les citoyens de l'UE doivent-ils enregistrer leur résidence au Portugal?", "a6": "Oui. Après 90 jours au Portugal, les citoyens de l'UE ont 30 jours pour s'inscrire au CRUE — Certificado de Registo de Cidadão da União Europeia. L'absence d'enregistrement entraîne une amende de 400 à 1 500 €.", "q7": "Où les citoyens de l'UE s'enregistrent-ils pour le CRUE — à l'AIMA ou à la Câmara Municipal?", "a7": "À la Câmara Municipal (mairie), ou dans les grandes villes à une Loja do Cidadão. L'AIMA a été créée lors de la dissolution du SEF en 2023 et ne traite que les ressortissants non communautaires. Les citoyens de l'UE qui se présentent à l'AIMA seront redirigés.", "q8": "Puis-je demander le NISS en même temps que le CRUE?", "a8": "Non. Depuis fin 2023, les demandes de NISS exigent le CRUE comme pièce justificative. Vous devez d'abord obtenir votre CRUE.", "q9": "Le régime de Résidence Non Habituelle (RNH) est-il toujours disponible?", "a9": "Non. Le régime RNH a pris fin le 1er janvier 2024. Il a été remplacé par l'IFICI (Incentivo Fiscal à Internacionalização), avec des critères d'éligibilité plus stricts.", "q10": "Quelle est la date limite pour demander le régime IFICI?", "a10": "Le 15 janvier de l'année suivant celle au cours de laquelle vous établissez votre résidence fiscale au Portugal. Cette date limite est définitive — la manquer entraîne une perte permanente, sans possibilité de report.", "q11": "Que se passe-t-il si je manque la date limite d'enregistrement CRUE?", "a11": "Une amende de 400 à 1 500 € s'applique. Si vous dépassez les 12 mois sans vous enregistrer, vous devez payer l'amende à l'AIMA avant que votre dossier CRUE puisse être traité. Le CRUE est également nécessaire pour le NISS, donc les retards se cumulent." }, "complianceRoadmap": { "eyebrow": "Votre Parcours de Conformité", "title": "Le NIF N'Est Que le Début", "subtitle": "Les citoyens de l'UE s'installant au Portugal doivent compléter ces démarches dans l'ordre. Votre NIF ouvre chaque étape suivante.", "step0Label": "Nous gérons ceci", "step0Title": "NIF — Numéro d'Identification Fiscale", "step0Desc": "Requis avant toute autre démarche. Établit votre résidence fiscale et votre identité auprès de l'État portugais.", "step1Title": "CRUE — Certificat d'Enregistrement de Citoyen UE", "step1Desc": "Enregistrez-vous à votre Câmara Municipal — pas à l'AIMA. Obligatoire après 90 jours au Portugal, dans les 30 jours suivants.", "step1Warning": "Amende de 400–1 500 € si non respecté", "step2Title": "NISS — Numéro de Sécurité Sociale", "step2Desc": "Nécessite le CRUE comme pièce justificative. Ne peut pas être traité en parallèle — le CRUE doit être obtenu en premier.", "step3Title": "SNS — Service National de Santé", "step3Desc": "Inscrivez-vous au service national de santé portugais avec votre NISS pour accéder aux soins publics.", "step4Title": "IFICI — Régime Fiscal d'Incitation", "step4Desc": "A remplacé le RNH (terminé le 1er jan. 2024). Postulez avant le 15 janvier de l'année suivant l'établissement de la résidence fiscale.", "step4Warning": "Échéance du 15 janvier — perte permanente si manquée" },
   "trust": { "eyebrow": "En Chiffres", "title": "Approuvé par les Expatriés du Monde Entier", "subtitle": "Rejoignez des milliers de non-résidents.", "review1": "Super rapide et professionnel. J'ai eu mon NIF en 3 jours!", "review1Author": "Sarah K. — Royaume-Uni", "review2": "Le processus était parfait. Très recommandé.", "review2Author": "Marco R. — Italie", "review3": "Les meilleurs €79 jamais dépensés.", "review3Author": "Aiko T. — Japon" },
   "cta": { "title": "Prêt à obtenir votre NIF?", "subtitle": "Commencez aujourd'hui. Moins de 5 minutes.", "button": "Postuler Maintenant — À partir de €79", "microcopy": "Sans abonnement · Sans frais cachés · Paiement sécurisé via Stripe" },
-  "footer": { "tagline": "La façon la plus rapide d'obtenir votre NIF portugais à distance.", "legal": "Légal", "privacy": "Politique de Confidentialité", "terms": "Conditions d'Utilisation", "company": "Entreprise", "about": "À Propos", "contact": "Contact", "copyright": "© 2026 GetNIFPortugal. Tous droits réservés." },
+  "footer": { "tagline": "La façon la plus rapide d'obtenir votre NIF portugais à distance.", "legal": "Légal", "privacy": "Politique de Confidentialité", "terms": "Conditions d'Utilisation", "company": "Entreprise", "about": "À Propos", "contact": "Contact", "guideLink": "Guide de Conformité UE", "copyright": "© 2026 GetNIFPortugal. Tous droits réservés." },
   "auth": { "loginTitle": "Bon retour", "loginSubtitle": "Connectez-vous à votre compte", "signupTitle": "Créez votre compte", "signupSubtitle": "Commencez votre demande de NIF aujourd'hui", "email": "Adresse email", "password": "Mot de passe", "fullName": "Nom complet", "loginButton": "Se Connecter", "signupButton": "Créer un Compte", "noAccount": "Pas encore de compte?", "hasAccount": "Déjà un compte?", "signupLink": "S'inscrire →", "loginLink": "Se connecter →", "checkEmail": "Vérifiez votre email", "checkEmailDesc": "Nous vous avons envoyé un lien de confirmation.", "forgotPassword": "Mot de passe oublié?", "forgotPasswordTitle": "Réinitialisez votre mot de passe", "forgotPasswordSubtitle": "Entrez votre email et nous vous enverrons un lien", "forgotPasswordButton": "Envoyer le lien", "forgotPasswordSent": "Vérifiez votre email pour le lien de réinitialisation.", "resetPasswordTitle": "Définir un nouveau mot de passe", "resetPasswordSubtitle": "Entrez votre nouveau mot de passe ci-dessous", "newPassword": "Nouveau mot de passe", "resetPasswordButton": "Mettre à jour", "resetPasswordSuccess": "Mot de passe mis à jour. Redirection…", "backToLogin": "Retour à la connexion" },
   "order": { "title": "Commencer Votre Demande de NIF", "step1": "Informations Personnelles", "step2": "Documents", "step3": "Récapitulatif et Paiement", "fullName": "Nom complet", "nationality": "Nationalité", "passportNumber": "Numéro de passeport", "dateOfBirth": "Date de naissance", "address": "Adresse actuelle", "next": "Suivant →", "back": "← Retour", "payNow": "Payer et Soumettre", "successTitle": "Demande Soumise!", "successDesc": "Votre paiement a été reçu. Nous vous enverrons des mises à jour par email.", "cancelTitle": "Paiement Annulé", "cancelDesc": "Le paiement n'a pas été effectué. Votre demande a été sauvegardée.", "retryPayment": "Réessayer" },
-  "dashboard": { "title": "Mon Tableau de Bord", "subtitle": "Suivez l'état de votre demande de NIF", "noOrders": "Aucune demande pour l'instant", "noOrdersDesc": "Commencez votre première demande de NIF.", "startApplication": "Commencer une Demande", "orderId": "Demande #", "submitted": "Soumis", "status": { "pending_payment": "En Attente de Paiement", "payment_received": "Paiement Reçu", "documents_required": "Documents Requis", "documents_under_review": "Documents en Cours de Révision", "nif_processing": "Traitement du NIF", "nif_issued": "NIF Émis ✓", "cancelled": "Annulé" } }
+  "dashboard": { "title": "Mon Tableau de Bord", "subtitle": "Suivez l'état de votre demande de NIF", "noOrders": "Aucune demande pour l'instant", "noOrdersDesc": "Commencez votre première demande de NIF.", "startApplication": "Commencer une Demande", "orderId": "Demande #", "submitted": "Soumis", "status": { "pending_payment": "En Attente de Paiement", "payment_received": "Paiement Reçu", "documents_required": "Documents Requis", "documents_under_review": "Documents en Cours de Révision", "nif_processing": "Traitement du NIF", "nif_issued": "NIF Émis ✓", "cancelled": "Annulé" } },
+  "guide": {
+    "meta": {
+      "title": "Checklist de Conformité pour Citoyens UE au Portugal 2026 — NIF, CRUE, NISS, IFICI",
+      "description": "Guide complet pour les citoyens UE qui s'installent au Portugal : NIF, CRUE (amende €400–€1.500), NISS, SNS et régime IFICI. Ordre correct, bons organismes, délais exacts."
+    },
+    "eyebrow": "Le Guide Complet",
+    "title": "Checklist de Conformité pour Citoyens UE au Portugal",
+    "subtitle": "NIF → CRUE → NISS → SNS → IFICI — dans cet ordre. Tous les délais, amendes et organismes à connaître.",
+    "lastUpdated": "Dernière mise à jour",
+    "intro": "S'installer au Portugal en tant que citoyen UE nécessite de compléter cinq démarches dans un ordre strict. Manquer une étape — ou les faire dans le mauvais ordre — entraîne amendes, rejets et retards. Ce guide couvre chaque étape avec des délais exacts, les bons organismes et les règles en vigueur.",
+    "toc": "Dans ce guide",
+    "nif": {
+      "anchor": "nif",
+      "step": "Étape 0",
+      "title": "NIF — Numéro d'Identification Fiscale",
+      "answer": "Obtenez votre NIF avant toute autre démarche. Il est nécessaire pour toutes les inscriptions suivantes.",
+      "body": "Le NIF (Número de Identificação Fiscal) est le numéro fiscal portugais. Il est obligatoire pour ouvrir un compte bancaire, louer ou acheter un bien immobilier, créer une entreprise, signer des contrats et effectuer toutes les démarches administratives. Il doit être obtenu avant le CRUE, le NISS, le SNS ou les demandes IFICI.",
+      "weHandleThis": "Nous gérons cela",
+      "cta": "Obtenir Mon NIF — À partir de €79"
+    },
+    "crue": {
+      "anchor": "crue",
+      "step": "Étape 1",
+      "title": "CRUE — Certificat d'Enregistrement de Citoyen UE",
+      "answer": "Après 90 jours au Portugal, les citoyens UE ont 30 jours pour s'inscrire. Inscrivez-vous à la Câmara Municipal — pas à l'AIMA.",
+      "deadlineLabel": "Délai",
+      "deadline": "90 jours au Portugal + 30 jours pour s'inscrire",
+      "fineLabel": "Amende en cas de dépassement",
+      "fine": "€400 à €1.500",
+      "officeLabel": "Bon organisme",
+      "office": "Câmara Municipal ou Loja do Cidadão",
+      "wrongOfficeLabel": "Mauvais organisme",
+      "wrongOffice": "AIMA (ressortissants non-UE uniquement)",
+      "body": "Le CRUE est le Certificado de Registo de Cidadão da União Europeia. Les citoyens UE résidant au Portugal depuis plus de 90 jours doivent enregistrer leur résidence dans les 30 jours suivants. Le CRUE est délivré par la Câmara Municipal (mairie) ou, dans les grandes villes, par une Loja do Cidadão. L'AIMA a été créée en 2023 lors de la dissolution du SEF — elle traite uniquement les ressortissants non-UE. Les citoyens UE qui se rendent à l'AIMA seront redirigés.",
+      "lateWarning": "Si vous dépassez les 12 mois sans vous inscrire, vous devez payer l'amende à l'AIMA avant que votre dossier CRUE puisse être traité.",
+      "dependency": "Le CRUE est également nécessaire pour la demande de NISS. Les retards se cumulent."
+    },
+    "niss": {
+      "anchor": "niss",
+      "step": "Étape 2",
+      "title": "NISS — Numéro de Sécurité Sociale",
+      "answer": "Le NISS exige le CRUE. Depuis fin 2023, il est impossible de demander le NISS sans CRUE valide.",
+      "body": "Le NISS (Número de Identificação de Segurança Social) est le numéro de sécurité sociale portugais. Depuis fin 2023, toutes les demandes de NISS exigent le certificat CRUE comme pièce justificative. Tenter de demander le NISS sans CRUE entraînera un rejet. Les deux démarches ne peuvent pas être effectuées en parallèle.",
+      "dependency": "Exige : certificat CRUE"
+    },
+    "sns": {
+      "anchor": "sns",
+      "step": "Étape 3",
+      "title": "SNS — Service National de Santé",
+      "answer": "Inscrivez-vous au SNS avec votre NISS pour accéder aux soins de santé publics au Portugal.",
+      "body": "Le SNS (Serviço Nacional de Saúde) est le système de santé public portugais. Pour vous inscrire, vous avez besoin de votre NISS. L'inscription vous donne accès aux hôpitaux publics, aux centres de santé (centros de saúde) et aux médicaments subventionnés.",
+      "dependency": "Exige : NISS"
+    },
+    "ifici": {
+      "anchor": "ifici",
+      "step": "Étape 4",
+      "title": "IFICI — Régime Fiscal d'Incitation à l'Internationalisation",
+      "answer": "L'IFICI a remplacé le RNH le 1er janvier 2024. Déposez votre demande avant le 15 janvier de l'année suivant l'établissement de votre résidence fiscale. Manquer cette échéance est définitif.",
+      "deadlineLabel": "Échéance absolue",
+      "deadline": "15 janvier de l'année suivant l'établissement de la résidence fiscale",
+      "penaltyLabel": "Pénalité en cas de dépassement",
+      "penalty": "Perte permanente — sans prolongation, sans recours",
+      "nhrLabel": "Statut RNH",
+      "nhr": "Terminé le 1er janvier 2024",
+      "body": "L'IFICI (Incentivo Fiscal à Internacionalização) a remplacé le régime RNH (Résidence Non Habituelle) qui a pris fin le 1er janvier 2024. Il offre des avantages fiscaux aux professionnels et investisseurs qualifiés. Contrairement au RNH, l'IFICI a des critères d'éligibilité plus stricts. L'échéance du 15 janvier est absolue — si vous la manquez, l'option IFICI est définitivement perdue pour cette année fiscale. Il n'existe aucun processus de prolongation ou de recours.",
+      "dependency": "Exige : NIF (résidence fiscale établie)"
+    },
+    "faq": {
+      "title": "Questions Fréquentes",
+      "q1": "Ai-je besoin d'un NIF avant de m'inscrire au CRUE ?",
+      "a1": "Oui. Le NIF établit votre identité auprès de l'État portugais et est nécessaire pour toutes les démarches suivantes, notamment CRUE, NISS, SNS et IFICI.",
+      "q2": "Où exactement m'inscrire pour le CRUE ?",
+      "a2": "À votre Câmara Municipal (mairie) ou dans une Loja do Cidadão dans les grandes villes. L'AIMA traite uniquement les ressortissants non-UE — les citoyens UE qui s'y rendent pour le CRUE seront redirigés.",
+      "q3": "Quelle est l'amende pour avoir manqué le délai CRUE ?",
+      "a3": "€400 à €1.500. Si vous dépassez les 12 mois sans vous inscrire, vous devez payer l'amende à l'AIMA avant que votre dossier CRUE puisse être traité.",
+      "q4": "Puis-je demander le NISS et le CRUE en même temps ?",
+      "a4": "Non. Depuis fin 2023, les demandes de NISS exigent le certificat CRUE comme pièce justificative. Vous devez d'abord obtenir le CRUE.",
+      "q5": "Le RNH est-il encore disponible ?",
+      "a5": "Non. Le régime RNH a pris fin le 1er janvier 2024. Il a été remplacé par l'IFICI (Incentivo Fiscal à Internacionalização), avec des critères d'éligibilité plus stricts.",
+      "q6": "Que se passe-t-il si je manque l'échéance du 15 janvier pour l'IFICI ?",
+      "a6": "L'option IFICI est définitivement perdue pour cette année fiscale. Il n'existe aucun processus de prolongation ou de recours."
+    },
+    "cta": {
+      "title": "Prêt à commencer avec votre NIF ?",
+      "subtitle": "Le NIF est la première étape. Nous le gérons à distance — depuis n'importe où dans le monde.",
+      "button": "Obtenir Mon NIF — À partir de €79"
+    },
+    "breadcrumb": {
+      "home": "Accueil",
+      "guide": "Guide"
+    }
+  }
 }
