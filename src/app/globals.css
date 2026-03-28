@@ -18,17 +18,17 @@
   --color-brand-gold-light: oklch(78% 0.10 75);
 
   /* ── Surface ──────────────────────────────────────────────  */
-  --color-surface: oklch(98.5% 0.008 90);
-  --color-surface-2: oklch(96% 0.008 90);
+  --color-surface: oklch(99% 0.005 152);
+  --color-surface-2: oklch(97% 0.005 152);
   --color-surface-elevated: oklch(100% 0 0);
 
   /* ── Ink ────────────────────────────────────────────────── */
-  --color-ink: oklch(15% 0.02 152);
-  --color-ink-muted: oklch(50% 0.02 152);
-  --color-ink-subtle: oklch(70% 0.01 152);
+  --color-ink: oklch(12% 0.015 152);
+  --color-ink-muted: oklch(45% 0.015 152);
+  --color-ink-subtle: oklch(65% 0.01 152);
 
   /* ── Border ─────────────────────────────────────────────── */
-  --color-border: oklch(90% 0.01 152);
+  --color-border: oklch(92% 0.01 152);
 
   /* ── Typography ─────────────────────────────────────────── */
   --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
@@ -37,9 +37,9 @@
   /* ── Radii ──────────────────────────────────────────────── */
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-2xl: 2rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 2rem;
+  --radius-2xl: 3rem;
 }
 
 /* ============================================================
@@ -53,6 +53,7 @@
 
 html {
   scroll-behavior: smooth;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 body {
@@ -68,25 +69,25 @@ body {
    ============================================================ */
 .text-display {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-size: clamp(2.75rem, 8vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
   font-weight: 800;
 }
 
 .text-heading-xl {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 4vw, 2.75rem);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   font-weight: 700;
 }
 
 .text-heading-lg {
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
-  line-height: 1.25;
-  letter-spacing: -0.01em;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   font-weight: 600;
 }
 
@@ -97,7 +98,7 @@ body {
   width: 100%;
   max-width: 1440px;
   margin-inline: auto;
-  padding-inline: clamp(1rem, 5vw, 3rem);
+  padding-inline: clamp(1.5rem, 6vw, 4rem);
 }
 
 .container-full {
@@ -106,7 +107,42 @@ body {
 }
 
 .section-pad {
-  padding-block: clamp(4rem, 10vw, 7rem);
+  padding-block: clamp(5rem, 12vw, 9rem);
+}
+
+/* ============================================================
+   Image Placeholder Utility
+   ============================================================ */
+.image-placeholder {
+  position: relative;
+  background-color: var(--color-surface-2);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.image-placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.5;
+}
+
+.image-placeholder-label {
+  position: relative;
+  z-index: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-ink-muted);
+  max-width: 280px;
 }
 
 /* ============================================================
