@@ -97,36 +97,45 @@ export default async function AdminOrderDetailPage({
           {documents.length === 0 ? (
             <p className="text-sm" style={{ color: "var(--color-ink-muted)" }}>No documents uploaded yet.</p>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {documents.map((doc) => (
                 <div
                   key={doc.id}
-                  className="flex items-center justify-between rounded-lg px-4 py-3"
+                  className="rounded-lg px-4 py-3 space-y-2"
                   style={{ background: "var(--color-surface-2)", border: "1px solid var(--color-border)" }}
                 >
-                  <div>
-                    <span className="font-medium text-sm capitalize" style={{ color: "var(--color-ink)" }}>
-                      {doc.documentType.replace("_", " ")}
-                    </span>
-                    <span className="ml-2 text-xs" style={{ color: "var(--color-ink-muted)" }}>
-                      {doc.fileName}
-                    </span>
+                  {/* Row 1: doc type, filename, view button */}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="font-medium text-sm capitalize shrink-0" style={{ color: "var(--color-ink)" }}>
+                        {doc.documentType.replace("_", " ")}
+                      </span>
+                      <span className="text-xs truncate" style={{ color: "var(--color-ink-muted)" }}>
+                        {doc.fileName}
+                      </span>
+                    </div>
+                    {doc.signedUrl ? (
+                      <a
+                        href={doc.signedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-sm shrink-0"
+                        style={{ fontSize: "0.75rem", padding: "0.25rem 0.75rem" }}
+                      >
+                        View ↗
+                      </a>
+                    ) : (
+                      <span className="text-xs shrink-0" style={{ color: "var(--color-ink-muted)" }}>
+                        URL unavailable
+                      </span>
+                    )}
                   </div>
-                  {doc.signedUrl ? (
-                    <a
-                      href={doc.signedUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-sm"
-                      style={{ fontSize: "0.75rem", padding: "0.25rem 0.75rem" }}
-                    >
-                      View ↗
-                    </a>
-                  ) : (
-                    <span className="text-xs" style={{ color: "var(--color-ink-muted)" }}>
-                      URL unavailable
-                    </span>
-                  )}
+
+                  {/* Row 2: AI review badge + findings */}
+                  <AiReviewPanel
+                    status={doc.aiReviewStatus}
+                    notes={doc.aiReviewNotes}
+                  />
                 </div>
               ))}
             </div>
@@ -214,6 +223,83 @@ const STATUS_STYLES: Record<OrderStatus, { bg: string; text: string; label: stri
   nif_issued:             { bg: "#d1fae5", text: "#065f46", label: "NIF Issued ✓" },
   cancelled:              { bg: "#fee2e2", text: "#991b1b", label: "Cancelled" },
 };
+
+// ─── AI Review Panel ──────────────────────────────────────────────────────────
+
+/**
+ * Displays the AI review result for one document.
+ * A Server Component — no interactivity needed, just reads and renders data.
+ */
+function AiReviewPanel({
+  status,
+  notes,
+}: {
+  status: string;
+  notes: string | null;
+}) {
+  // Badge config for each possible AI verdict
+  const BADGE: Record<string, { label: string; bg: string; text: string }> = {
+    pending:  { label: "⏳ AI: Pending",  bg: "#f1f5f9", text: "#64748b" },
+    approved: { label: "✅ AI: Approved", bg: "#d1fae5", text: "#065f46" },
+    flagged:  { label: "⚠️ AI: Flagged",  bg: "#fef3c7", text: "#92400e" },
+    error:    { label: "❌ AI: Error",    bg: "#fee2e2", text: "#991b1b" },
+  };
+
+  const badge = BADGE[status] ?? BADGE.error;
+
+  // Parse the notes JSON — wrap in try/catch since it came from an AI
+  let parsed: Record<string, unknown> | null = null;
+  if (notes) {
+    try { parsed = JSON.parse(notes); } catch { /* malformed JSON — show raw */ }
+  }
+
+  return (
+    <div className="flex flex-wrap items-start gap-3">
+      {/* Status badge */}
+      <span
+        className="inline-block rounded-full px-2 py-0.5 text-xs font-semibold shrink-0"
+        style={{ background: badge.bg, color: badge.text }}
+      >
+        {badge.label}
+      </span>
+
+      {/* Findings — only shown when there's something useful to say */}
+      {parsed && (
+        <div className="text-xs space-y-0.5" style={{ color: "var(--color-ink-muted)" }}>
+
+          {/* Error message (when AI call itself failed) */}
+          {typeof parsed.error === "string" && (
+            <p style={{ color: "#991b1b" }}>{parsed.error}</p>
+          )}
+
+          {/* Issues list (flagged documents) */}
+          {Array.isArray(parsed.issues) && parsed.issues.length > 0 && (
+            <ul className="list-disc list-inside space-y-0.5">
+              {(parsed.issues as string[]).map((issue, i) => (
+                <li key={i} style={{ color: "#92400e" }}>{issue}</li>
+              ))}
+            </ul>
+          )}
+
+          {/* Key findings row (name, date, confidence) */}
+          {(typeof parsed.nameFound === "string" || typeof parsed.expiryOrIssueDate === "string" || typeof parsed.confidence === "string") && (
+            <p className="flex flex-wrap gap-x-3">
+              {typeof parsed.nameFound === "string" && (
+                <span>Name on doc: <strong>{parsed.nameFound}</strong></span>
+              )}
+              {typeof parsed.expiryOrIssueDate === "string" && (
+                <span>Date: <strong>{parsed.expiryOrIssueDate}</strong></span>
+              )}
+              {typeof parsed.confidence === "string" && (
+                <span>Confidence: <strong>{parsed.confidence}</strong></span>
+              )}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function StatusBadgeLarge({ status }: { status: OrderStatus }) {
   const s = STATUS_STYLES[status];

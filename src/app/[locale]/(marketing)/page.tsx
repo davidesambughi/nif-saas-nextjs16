@@ -4,9 +4,11 @@ import HowItWorks from "@/components/home/HowItWorks";
 import ComplianceRoadmap from "@/components/home/ComplianceRoadmap";
 import Pricing from "@/components/home/Pricing";
 import TrustSignals from "@/components/home/TrustSignals";
+import { FAQ_KEYS } from "@/components/home/FAQ";
 import FAQ from "@/components/home/FAQ";
 import CTABanner from "@/components/home/CTABanner";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Suspense } from "react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -100,12 +102,12 @@ export default async function HomePage({
       },
       {
         "@type": "FAQPage",
-        mainEntity: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((n) => ({
+        mainEntity: FAQ_KEYS.map((key, i) => ({
           "@type": "Question",
-          name: t(`q${n}` as "q1"),
+          name: t(key as "q1"),
           acceptedAnswer: {
             "@type": "Answer",
-            text: t(`a${n}` as "a1"),
+            text: t(`a${i + 1}` as "a1"),
           },
         })),
       },
@@ -124,7 +126,9 @@ export default async function HomePage({
       <ComplianceRoadmap />
       <Pricing />
       <TrustSignals />
-      <FAQ />
+      <Suspense>
+        <FAQ />
+      </Suspense>
       <CTABanner />
     </>
   );

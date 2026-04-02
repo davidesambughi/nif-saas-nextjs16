@@ -1,10 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
-import { createDocument, getDocumentsByOrderId } from "@/repositories/document.repository";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
+import {
+  createDocument,
+  getDocumentsByOrderId,
+  updateDocumentAiReview,
+} from "@/repositories/document.repository";
 import { getOrderById, updateOrderStatus } from "@/repositories/order.repository";
 import { sendDocumentsUnderReview } from "@/services/email.service";
+import { analyzeDocument } from "@/services/document-ai.service";
 import type { ActionResult } from "@/types/api.types";
 import type { OrderDocument } from "@/db/schema";
 
@@ -111,6 +116,9 @@ export async function submitDocumentsAction(orderId: string): Promise<ActionResu
   // Transition to documents_under_review
   await updateOrderStatus(orderId, "documents_under_review", "All documents submitted by customer");
 
+  // AI analysis now runs per-document at upload time (see analyzeUploadedDocumentAction).
+  // No need for after() here — results are already in the DB when the user submits.
+
   // Send confirmation email — non-fatal
   try {
     await sendDocumentsUnderReview({
@@ -126,4 +134,61 @@ export async function submitDocumentsAction(orderId: string): Promise<ActionResu
 
   revalidatePath("/dashboard");
   return { success: true, data: undefined };
+}
+
+/**
+ * Analyzes a single already-uploaded document with Gemini and saves the result.
+ * Called client-side immediately after each file upload so users get instant feedback.
+ *
+ * WHY a separate action from submitDocumentsAction?
+ * The UX goal is per-document feedback at upload time, not at submit time.
+ * Keeping it separate means the upload → analyze → show result cycle is
+ * independent for each document slot.
+ */
+export async function analyzeUploadedDocumentAction(
+  docId: string,
+  orderId: string
+): Promise<ActionResult<{ aiStatus: string; issues: string[] }>> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Not authenticated", code: "UNAUTHORIZED" };
+
+  // Verify the order belongs to this user (never trust client-supplied IDs)
+  const order = await getOrderById(orderId);
+  if (!order || order.userId !== user.id) {
+    return { success: false, error: "Forbidden", code: "FORBIDDEN" };
+  }
+
+  // Find the specific document within this order
+  const documents = await getDocumentsByOrderId(orderId);
+  const doc = documents.find((d) => d.id === docId);
+  if (!doc) return { success: false, error: "Document not found" };
+
+  // Generate a short-lived URL to download the file for Gemini
+  // WHY createAdminClient? The regular client respects RLS (row-level security).
+  // Storage RLS might block server-side reads of a user's file depending on policy.
+  // The admin client uses the secret key and bypasses RLS — safe here since we've
+  // already verified the order belongs to the authenticated user above.
+  const supabaseAdmin = await createAdminClient();
+  const { data: urlData } = await supabaseAdmin.storage
+    .from("documents")
+    .createSignedUrl(doc.storagePath, 120);
+
+  if (!urlData?.signedUrl) {
+    return { success: false, error: "Could not generate download URL" };
+  }
+
+  // Run the analysis (this takes 2–8 seconds — the client shows a spinner)
+  const result = await analyzeDocument(doc, urlData.signedUrl, order.fullName);
+  await updateDocumentAiReview(doc.id, result.status, result.notes);
+
+  // Parse the issues list to return to the client for display
+  let issues: string[] = [];
+  try {
+    const parsed = JSON.parse(result.notes);
+    issues = Array.isArray(parsed.issues) ? parsed.issues : [];
+    if (parsed.error) issues = [parsed.error];
+  } catch { /* malformed notes — return empty */ }
+
+  return { success: true, data: { aiStatus: result.status, issues } };
 }

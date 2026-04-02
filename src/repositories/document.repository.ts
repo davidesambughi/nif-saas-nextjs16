@@ -24,3 +24,23 @@ export async function getDocumentsByOrderId(
     .from(orderDocuments)
     .where(eq(orderDocuments.orderId, orderId));
 }
+
+/**
+ * Persists the AI review result for a single document.
+ * Called by the AI service after Gemini returns a verdict.
+ *
+ * WHY a dedicated function instead of a generic updateDocument()?
+ * Following the repository pattern: each function has one clear purpose.
+ * A generic update would accept any partial, making it easy to accidentally
+ * overwrite fields like storagePath or documentType.
+ */
+export async function updateDocumentAiReview(
+  docId: string,
+  status: "approved" | "flagged" | "error",
+  notes: string
+): Promise<void> {
+  await db
+    .update(orderDocuments)
+    .set({ aiReviewStatus: status, aiReviewNotes: notes })
+    .where(eq(orderDocuments.id, docId));
+}

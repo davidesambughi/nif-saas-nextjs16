@@ -14,6 +14,7 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.54",
     "@hookform/resolvers": "^5.2.2",
     "@react-email/components": "^1.0.10",
     "@react-email/render": "^2.0.4",
@@ -22,6 +23,7 @@
     "@supabase/supabase-js": "^2.99.2",
     "@t3-oss/env-nextjs": "^0.13.10",
     "@vercel/speed-insights": "^2.0.0",
+    "ai": "^6.0.141",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.1",

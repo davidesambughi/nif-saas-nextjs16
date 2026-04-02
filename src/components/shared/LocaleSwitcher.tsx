@@ -39,7 +39,7 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center h-9 w-9 rounded-lg transition-colors"
+        className="flex items-center gap-1.5 h-9 px-2.5 rounded-lg transition-colors"
         style={{
           color: textColor,
           background: bgColor,
@@ -48,7 +48,10 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
         aria-expanded={isOpen}
         aria-label="Switch language"
       >
-        <Globe size={18} />
+        <Globe size={16} style={{ color: "#38bdf8", flexShrink: 0 }} />
+        <span style={{ fontSize: "0.8rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+          {locale}
+        </span>
       </button>
 
       <AnimatePresence>

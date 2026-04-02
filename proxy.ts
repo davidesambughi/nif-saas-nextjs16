@@ -76,8 +76,8 @@ export async function proxy(request: NextRequest) {
     
     // Create a new redirect response but copy the cookies we might have just refreshed
     const redirectResponse = NextResponse.redirect(loginUrl);
-    intlResponse.cookies.getAll().forEach((cookie) => {
-      redirectResponse.cookies.set(cookie.name, cookie.value);
+    intlResponse.cookies.getAll().forEach(({ name, value, ...options }) => {
+      redirectResponse.cookies.set(name, value, options);
     });
     return redirectResponse;
   }
@@ -91,8 +91,8 @@ export async function proxy(request: NextRequest) {
     const dashboardUrl = new URL(`/${locale}/dashboard`, request.url);
     
     const redirectResponse = NextResponse.redirect(dashboardUrl);
-    intlResponse.cookies.getAll().forEach((cookie) => {
-      redirectResponse.cookies.set(cookie.name, cookie.value);
+    intlResponse.cookies.getAll().forEach(({ name, value, ...options }) => {
+      redirectResponse.cookies.set(name, value, options);
     });
     return redirectResponse;
   }

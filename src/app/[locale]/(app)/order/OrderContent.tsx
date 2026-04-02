@@ -7,18 +7,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useRouter } from "@/i18n/navigation";
 import { createOrderAction, getLastOrderAction } from "@/modules/orders/actions";
 import { createCheckoutSessionAction } from "@/modules/payments/actions";
-import { getSignedUploadUrl, saveDocumentRecord } from "@/modules/documents/actions";
 import { personalInfoSchema } from "@/lib/validators/order";
 import { COUNTRIES } from "@/lib/countries";
 import type { PersonalInfoInput } from "@/lib/validators/order";
-import { Upload, CheckCircle, User, FileText, Save } from "lucide-react";
+import { User, FileText, Save, ClipboardList } from "lucide-react";
 
 type Step = 1 | 2 | 3;
 
 interface OrderState {
   personalInfo: Partial<PersonalInfoInput>;
   serviceTier: "essential" | "standard" | "premium";
-  files: { passport: File | null; address: File | null };
 }
 
 const initialForm = {
@@ -29,32 +27,8 @@ const initialForm = {
   address: "",
 };
 
-const STEP_ICONS = [User, Upload, FileText];
+const STEP_ICONS = [User, ClipboardList, FileText];
 
-async function uploadDocument(
-  file: File,
-  orderId: string,
-  documentType: "passport" | "proof_of_address"
-): Promise<void> {
-  const urlResult = await getSignedUploadUrl(orderId, file.name, file.type, file.size);
-  if (!urlResult.success) throw new Error(urlResult.error);
-
-  const res = await fetch(urlResult.data.signedUrl, {
-    method: "PUT",
-    body: file,
-    headers: { "Content-Type": file.type },
-  });
-  if (!res.ok) throw new Error("Upload failed");
-
-  const saveResult = await saveDocumentRecord({
-    orderId,
-    documentType,
-    fileName: file.name,
-    storagePath: urlResult.data.storagePath,
-    mimeType: file.type,
-  });
-  if (!saveResult.success) throw new Error(saveResult.error);
-}
 
 export default function OrderContent({ userId }: { userId: string }) {
   const DRAFT_KEY = `nif_order_draft_${userId}`;
@@ -67,8 +41,7 @@ export default function OrderContent({ userId }: { userId: string }) {
   const [serviceTier, setServiceTier] = useState<OrderState["serviceTier"]>(
     (searchParams.get("tier") as OrderState["serviceTier"]) ?? "essential"
   );
-  const [files, setFiles] = useState<OrderState["files"]>({ passport: null, address: null });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [draftSaved, setDraftSaved] = useState(false);
 
@@ -153,9 +126,6 @@ export default function OrderContent({ userId }: { userId: string }) {
       }
       const { orderId } = orderResult.data;
 
-      if (files.passport) await uploadDocument(files.passport, orderId, "passport");
-      if (files.address) await uploadDocument(files.address, orderId, "proof_of_address");
-
       clearDraft();
       await createCheckoutSessionAction(orderId, locale);
     } catch (err) {
@@ -231,6 +201,30 @@ export default function OrderContent({ userId }: { userId: string }) {
         <AnimatePresence mode="wait">
           {step === 1 && (
             <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
+              {/* What you'll need — sets expectations before the user fills out the form */}
+              <div
+                className="rounded-xl px-4 py-3 mb-4 space-y-2"
+                style={{ background: "rgba(0,102,0,0.06)", border: "1px solid rgba(0,102,0,0.15)" }}
+              >
+                <p className="text-xs font-semibold" style={{ color: "var(--color-brand-green)" }}>
+                  Before you begin — have these ready
+                </p>
+                <ul className="space-y-1">
+                  {[
+                    "Valid passport or national ID",
+                    "Proof of address — utility bill or bank statement (max 6 months old)",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-xs" style={{ color: "var(--color-ink-muted)" }}>
+                      <span style={{ color: "var(--color-brand-green)", marginTop: 1 }}>✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs" style={{ color: "var(--color-ink-subtle)" }}>
+                  You will upload these documents after payment.
+                </p>
+              </div>
+
               <form onSubmit={handleStep1Submit} className="card p-8 space-y-5">
 
                 {/* Full name */}
@@ -317,21 +311,37 @@ export default function OrderContent({ userId }: { userId: string }) {
           {step === 2 && (
             <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
               <form onSubmit={handleStep2Submit} className="card p-8 space-y-6">
-                <DocumentUploadSlot
-                  label="Passport / National ID"
-                  hint="PDF, JPG or PNG — max 10MB"
-                  file={files.passport}
-                  onFileSelect={(file) => setFiles((f) => ({ ...f, passport: file }))}
-                />
-                <DocumentUploadSlot
-                  label="Proof of Address"
-                  hint="Utility bill or bank statement — max 3 months old"
-                  file={files.address}
-                  onFileSelect={(file) => setFiles((f) => ({ ...f, address: file }))}
-                />
-                <p className="text-xs text-center" style={{ color: "var(--color-ink-subtle)" }}>
-                  Documents are optional here — you can upload them after payment too.
-                </p>
+                {/* Document reminder — upload happens after payment in the dashboard */}
+                <div
+                  className="rounded-xl p-5 space-y-3"
+                  style={{ background: "rgba(0,102,0,0.04)", border: "1px solid rgba(0,102,0,0.15)" }}
+                >
+                  <p className="text-sm font-semibold" style={{ color: "var(--color-ink)" }}>
+                    Documents
+                  </p>
+                  <ul className="space-y-2">
+                    {[
+                      { label: "Passport / National ID", hint: "PDF, JPG or PNG — max 10MB" },
+                      { label: "Proof of Address", hint: "Utility bill or bank statement — max 6 months old" },
+                    ].map((doc) => (
+                      <li key={doc.label} className="flex items-start gap-2">
+                        <span className="text-sm mt-0.5" style={{ color: "var(--color-brand-green)" }}>✓</span>
+                        <div>
+                          <p className="text-sm font-medium" style={{ color: "var(--color-ink)" }}>{doc.label}</p>
+                          <p className="text-xs" style={{ color: "var(--color-ink-muted)" }}>{doc.hint}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <p
+                    className="text-xs rounded-lg px-3 py-2"
+                    style={{ background: "rgba(0,102,0,0.08)", color: "var(--color-brand-green)" }}
+                  >
+                    You will upload these securely on the next screen, after payment.
+                    Our system will automatically verify them for you.
+                  </p>
+                </div>
+
                 <div className="flex gap-3">
                   <button type="button" onClick={() => setStep(1)} className="btn btn-secondary flex-1">{t("back")}</button>
                   <button type="submit" className="btn btn-primary flex-1">{t("next")}</button>
@@ -425,52 +435,3 @@ export default function OrderContent({ userId }: { userId: string }) {
   );
 }
 
-interface DocumentUploadSlotProps {
-  label: string;
-  hint: string;
-  file: File | null;
-  onFileSelect: (file: File) => void;
-}
-
-function DocumentUploadSlot({ label, hint, file, onFileSelect }: DocumentUploadSlotProps) {
-  return (
-    <div>
-      <label className="label">{label}</label>
-      <div
-        className="rounded-xl border-2 border-dashed p-6 text-center transition-all"
-        style={{
-          borderColor: file ? "var(--color-brand-green)" : "var(--color-border)",
-          background: file ? "rgba(0,102,0,0.04)" : "var(--color-surface-elevated)",
-        }}
-      >
-        {file ? (
-          <div className="flex flex-col items-center gap-1" style={{ color: "var(--color-brand-green)" }}>
-            <CheckCircle size={18} />
-            <span className="text-sm font-medium">{file.name}</span>
-            <span className="text-xs" style={{ color: "var(--color-ink-muted)" }}>
-              {(file.size / 1024 / 1024).toFixed(2)} MB
-            </span>
-          </div>
-        ) : (
-          <>
-            <Upload size={24} className="mx-auto mb-2" style={{ color: "var(--color-ink-subtle)" }} />
-            <p className="text-sm font-medium mb-1" style={{ color: "var(--color-ink)" }}>Drop file here or</p>
-            <label className="cursor-pointer text-sm font-semibold" style={{ color: "var(--color-brand-green)" }}>
-              Browse
-              <input
-                type="file"
-                accept=".pdf,.jpg,.jpeg,.png"
-                className="sr-only"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) onFileSelect(f);
-                }}
-              />
-            </label>
-            <p className="text-xs mt-2" style={{ color: "var(--color-ink-subtle)" }}>{hint}</p>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}

@@ -22,6 +22,14 @@ export const env = createEnv({
     RESEND_API_KEY: z.string().startsWith("re_"),
     RESEND_FROM_EMAIL: z.string(),
     RESEND_FROM_NAME: z.string().default("GetNIFPortugal"),
+    /**
+     * Google Gemini API key for AI document review.
+     * Get one free at https://aistudio.google.com/app/apikey
+     * WHY optional()? So the app still starts in CI/preview environments
+     * that don't have the key set. The AI service checks for its presence
+     * before calling Gemini and marks the review as "error" if it's missing.
+     */
+    GOOGLE_GENERATIVE_API_KEY: z.string().optional(),
   },
 
   /**
@@ -51,6 +59,7 @@ export const env = createEnv({
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
     RESEND_FROM_NAME: process.env.RESEND_FROM_NAME,
+    GOOGLE_GENERATIVE_API_KEY: process.env.GOOGLE_GENERATIVE_API_KEY,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:

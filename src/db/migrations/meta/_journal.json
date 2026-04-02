@@ -15,6 +15,13 @@
       "when": 1774355378492,
       "tag": "0001_third_mesmero",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1774950345519,
+      "tag": "0002_fuzzy_black_panther",
+      "breakpoints": true
     }
   ]
 }
