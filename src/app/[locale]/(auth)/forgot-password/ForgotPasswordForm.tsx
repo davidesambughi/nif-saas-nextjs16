@@ -102,15 +102,17 @@ export default function ForgotPasswordForm() {
           </form>
         )}
 
-        <p className="text-center text-sm mt-6" style={{ color: "var(--color-ink-muted)" }}>
-          <Link
-            href="/login"
-            className="font-semibold"
-            style={{ color: "var(--color-brand-green)" }}
-          >
-            {t("backToLogin")}
-          </Link>
-        </p>
+        {!sent && (
+          <p className="text-center text-sm mt-6" style={{ color: "var(--color-ink-muted)" }}>
+            <Link
+              href="/login"
+              className="font-semibold"
+              style={{ color: "var(--color-brand-green)" }}
+            >
+              {t("backToLogin")}
+            </Link>
+          </p>
+        )}
       </div>
     </div>
   );

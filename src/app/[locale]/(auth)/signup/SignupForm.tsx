@@ -61,14 +61,36 @@ export default function SignupForm() {
             {t("checkEmail")}
           </h2>
           <p className="text-sm" style={{ color: "var(--color-ink-muted)" }}>
-            {t("checkEmailDesc")}
+            We sent a confirmation link to{" "}
+            <span className="font-semibold" style={{ color: "var(--color-ink)" }}>
+              {email}
+            </span>
+            . Click it to activate your account.
           </p>
-          <p className="text-xs mt-4" style={{ color: "var(--color-ink-subtle)" }}>
-            Already have an account?{" "}
-            <Link href="/login" className="font-semibold" style={{ color: "var(--color-brand-green)" }}>
-              Sign in instead
-            </Link>
-          </p>
+          <div
+            className="mt-5 rounded-lg px-4 py-3 text-xs space-y-2 text-left"
+            style={{
+              background: "var(--color-surface-elevated)",
+              border: "1px solid var(--color-border)",
+              color: "var(--color-ink-muted)",
+            }}
+          >
+            <p className="font-semibold" style={{ color: "var(--color-ink)" }}>
+              Didn't receive anything?
+            </p>
+            <p>
+              If <span className="font-medium">{email}</span> is already registered,{" "}
+              <Link href="/login" className="font-semibold" style={{ color: "var(--color-brand-green)" }}>
+                sign in instead
+              </Link>{" "}
+              or{" "}
+              <Link href="/forgot-password" className="font-semibold" style={{ color: "var(--color-brand-green)" }}>
+                reset your password
+              </Link>
+              .
+            </p>
+            <p>Otherwise, check your spam folder.</p>
+          </div>
         </div>
       </div>
     );

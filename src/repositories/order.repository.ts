@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { orders, statusUpdates, users } from "@/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, ne, desc, and } from "drizzle-orm";
 import type { NewOrder, Order, OrderStatus } from "@/db/schema";
 
 export type OrderWithUserEmail = Order & { userEmail: string };
@@ -27,7 +27,7 @@ export async function getOrdersByUserId(userId: string): Promise<Order[]> {
   return db
     .select()
     .from(orders)
-    .where(eq(orders.userId, userId))
+    .where(and(eq(orders.userId, userId), ne(orders.status, "pending_payment")))
     .orderBy(desc(orders.createdAt));
 }
 

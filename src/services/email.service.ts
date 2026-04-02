@@ -2,9 +2,11 @@ import { resend } from "@/lib/resend";
 import { env } from "@/lib/env";
 import OrderConfirmationEmail from "../../emails/OrderConfirmation";
 import NIFIssuedEmail from "../../emails/NIFIssued";
+import NIFProcessingEmail from "../../emails/NIFProcessing";
 import PaymentFailedEmail from "../../emails/PaymentFailed";
 import DocumentsRequiredEmail from "../../emails/DocumentsRequired";
 import DocumentsUnderReviewEmail from "../../emails/DocumentsUnderReview";
+import OrderCancelledEmail from "../../emails/OrderCancelled";
 
 /**
  * Email service — pure send functions wrapping Resend.
@@ -100,6 +102,46 @@ export async function sendDocumentsUnderReview({
     to,
     subject: "✅ Documents received — your NIF application is under review",
     react: DocumentsUnderReviewEmail({ customerName, orderId, locale, serviceTier }),
+  });
+}
+
+export async function sendNIFProcessing({
+  to,
+  customerName,
+  orderId,
+  locale = "en",
+  serviceTier,
+}: {
+  to: string;
+  customerName: string;
+  orderId: string;
+  locale?: string;
+  serviceTier: "essential" | "standard" | "premium";
+}): Promise<void> {
+  await resend.emails.send({
+    from: `${env.RESEND_FROM_NAME} <${env.RESEND_FROM_EMAIL}>`,
+    to,
+    subject: "📋 Your NIF application has been submitted to Finanças",
+    react: NIFProcessingEmail({ customerName, orderId, locale, serviceTier }),
+  });
+}
+
+export async function sendOrderCancelled({
+  to,
+  customerName,
+  orderId,
+  locale = "en",
+}: {
+  to: string;
+  customerName: string;
+  orderId: string;
+  locale?: string;
+}): Promise<void> {
+  await resend.emails.send({
+    from: `${env.RESEND_FROM_NAME} <${env.RESEND_FROM_EMAIL}>`,
+    to,
+    subject: "Your NIF application has been cancelled",
+    react: OrderCancelledEmail({ customerName, orderId, locale }),
   });
 }
 

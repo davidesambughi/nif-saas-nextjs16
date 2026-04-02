@@ -5,9 +5,9 @@ import { useRouter } from "@/i18n/navigation";
 import { adminUpdateOrderStatusAction } from "@/modules/admin/actions";
 import type { OrderStatus } from "@/db/schema";
 
+// pending_payment and payment_received are set automatically by the Stripe webhook.
+// Admins only act on orders after payment — exclude those two from the selector.
 const ALL_STATUSES: OrderStatus[] = [
-  "pending_payment",
-  "payment_received",
   "documents_required",
   "documents_under_review",
   "nif_processing",

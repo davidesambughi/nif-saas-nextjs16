@@ -2,6 +2,7 @@ import { Link } from "@/i18n/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getUserOrdersAction } from "@/modules/orders/actions";
 import RealtimeDashboard from "@/modules/orders/components/RealtimeDashboard";
+import ChangePasswordForm from "@/modules/auth/components/ChangePasswordForm";
 
 /**
  * Dashboard — Server Component.
@@ -85,6 +86,18 @@ export default async function DashboardPage({
         ) : (
           <RealtimeDashboard initialOrders={orders} locale={locale} />
         )}
+        {/* Account section */}
+        <div className="mt-12">
+          <h2 className="text-base font-semibold mb-4" style={{ color: "var(--color-ink)" }}>
+            Account
+          </h2>
+          <div className="card p-6 max-w-sm">
+            <p className="text-sm font-medium mb-4" style={{ color: "var(--color-ink)" }}>
+              Change password
+            </p>
+            <ChangePasswordForm />
+          </div>
+        </div>
       </div>
     </div>
   );

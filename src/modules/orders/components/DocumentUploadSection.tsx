@@ -75,7 +75,9 @@ export default function DocumentUploadSection({
 
   const anyFlagged =
     slots.passport.phase === "flagged" ||
-    slots.proof_of_address.phase === "flagged" ||
+    slots.proof_of_address.phase === "flagged";
+
+  const anyError =
     slots.passport.phase === "error" ||
     slots.proof_of_address.phase === "error";
 
@@ -225,7 +227,7 @@ export default function DocumentUploadSection({
           />
         ))}
 
-        {/* Warning banner — shown when AI flagged something, before the user submits */}
+        {/* Warning banner — AI flagged something suspicious */}
         {anyFlagged && bothDone && (
           <div
             className="flex items-start gap-2 rounded-lg px-3 py-2.5 text-xs"
@@ -239,6 +241,24 @@ export default function DocumentUploadSection({
             <span>
               Our system flagged one or more documents. You can still submit —
               a human reviewer will verify everything before your NIF is processed.
+            </span>
+          </div>
+        )}
+
+        {/* Info banner — AI unavailable, human will review */}
+        {anyError && !anyFlagged && bothDone && (
+          <div
+            className="flex items-start gap-2 rounded-lg px-3 py-2.5 text-xs"
+            style={{
+              background: "var(--color-surface-elevated)",
+              border: "1px solid var(--color-border)",
+              color: "var(--color-ink-muted)",
+            }}
+          >
+            <AlertCircle size={13} className="mt-0.5 shrink-0" />
+            <span>
+              Automatic verification is temporarily unavailable. Your documents
+              will be reviewed manually — no action needed on your end.
             </span>
           </div>
         )}
@@ -272,6 +292,7 @@ export default function DocumentUploadSection({
           ) : (
             "Submit Documents →"
           )}
+
         </button>
       </form>
     </div>
@@ -311,16 +332,12 @@ function UploadSlot({
               ? "var(--color-brand-green)"
               : state.phase === "flagged"
               ? "#d97706"
-              : state.phase === "error"
-              ? "#dc2626"
               : "var(--color-border)",
           background:
             state.phase === "approved"
               ? "rgba(0,102,0,0.04)"
               : state.phase === "flagged"
               ? "rgba(180,83,9,0.04)"
-              : state.phase === "error"
-              ? "rgba(220,38,38,0.04)"
               : "var(--color-surface-elevated)",
           opacity: disabled && !isActive ? 0.7 : 1,
         }}
@@ -436,7 +453,7 @@ function UploadSlot({
             <div className="flex items-center gap-2">
               <AlertCircle
                 size={13}
-                style={{ color: "#dc2626", flexShrink: 0 }}
+                style={{ color: "var(--color-ink-subtle)", flexShrink: 0 }}
               />
               <span
                 className="text-xs font-medium truncate"
@@ -446,7 +463,7 @@ function UploadSlot({
               </span>
               <label
                 className="ml-auto shrink-0 text-xs cursor-pointer"
-                style={{ color: "#dc2626", textDecoration: "underline" }}
+                style={{ color: "var(--color-ink-muted)", textDecoration: "underline" }}
               >
                 Change file
                 <input
@@ -462,7 +479,7 @@ function UploadSlot({
               </label>
             </div>
             {state.issues.length > 0 && (
-              <p className="text-xs pl-5" style={{ color: "#dc2626" }}>
+              <p className="text-xs pl-5" style={{ color: "var(--color-ink-muted)" }}>
                 {state.issues[0]}
               </p>
             )}

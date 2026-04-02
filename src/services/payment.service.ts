@@ -17,6 +17,7 @@ import {
   sendPaymentFailed,
   sendDocumentsRequired,
   sendDocumentsUnderReview,
+  sendOrderCancelled,
 } from "@/services/email.service";
 
 // =============================================================================
@@ -590,4 +591,19 @@ async function processRefund(charge: Stripe.Charge): Promise<void> {
   console.info(
     `[Payment] Order ${order.id} → cancelled ✓ (full refund, charge ${charge.id})`
   );
+
+  // Send cancellation email — non-fatal so a Resend outage doesn't block the webhook
+  try {
+    const user = await getUserById(order.userId);
+    if (user?.email) {
+      await sendOrderCancelled({
+        to: user.email,
+        customerName: order.fullName,
+        orderId: order.id,
+        locale: order.locale,
+      });
+    }
+  } catch (err) {
+    console.error("[Payment] Failed to send cancellation email:", err);
+  }
 }

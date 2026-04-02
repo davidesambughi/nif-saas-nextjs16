@@ -12,7 +12,7 @@ import {
   type OrderWithUserEmail,
 } from "@/repositories/order.repository";
 import { getDocumentsByOrderId } from "@/repositories/document.repository";
-import { sendNIFIssued } from "@/services/email.service";
+import { sendNIFIssued, sendNIFProcessing } from "@/services/email.service";
 import type { ActionResult } from "@/types/api.types";
 import type { OrderStatus, OrderDocument } from "@/db/schema";
 
@@ -119,7 +119,7 @@ export async function adminUpdateOrderStatusAction(
 
   await updateOrderStatus(orderId, newStatus, note || `Status updated by admin`, true);
 
-  // Send NIF issued email — non-fatal so a Resend outage doesn't block the admin action
+  // Send status-specific emails — non-fatal so a Resend outage doesn't block the admin action
   if (newStatus === "nif_issued" && nifNumber) {
     try {
       await sendNIFIssued({
@@ -131,6 +131,20 @@ export async function adminUpdateOrderStatusAction(
       });
     } catch (err) {
       console.error("[Admin] Failed to send nif_issued email:", err);
+    }
+  }
+
+  if (newStatus === "nif_processing") {
+    try {
+      await sendNIFProcessing({
+        to: order.userEmail,
+        customerName: order.fullName,
+        orderId: order.id,
+        locale: order.locale,
+        serviceTier: order.serviceTier,
+      });
+    } catch (err) {
+      console.error("[Admin] Failed to send nif_processing email:", err);
     }
   }
 

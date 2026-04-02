@@ -204,10 +204,10 @@ const [errors, setErrors] = useState<Record<string, string>>({});
               {/* What you'll need — sets expectations before the user fills out the form */}
               <div
                 className="rounded-xl px-4 py-3 mb-4 space-y-2"
-                style={{ background: "rgba(0,102,0,0.06)", border: "1px solid rgba(0,102,0,0.15)" }}
+                style={{ background: "var(--color-surface-elevated)", border: "1px solid var(--color-border)" }}
               >
-                <p className="text-xs font-semibold" style={{ color: "var(--color-brand-green)" }}>
-                  Before you begin — have these ready
+                <p className="text-xs font-semibold" style={{ color: "var(--color-ink)" }}>
+                  You will need to upload these after payment
                 </p>
                 <ul className="space-y-1">
                   {[
@@ -215,14 +215,11 @@ const [errors, setErrors] = useState<Record<string, string>>({});
                     "Proof of address — utility bill or bank statement (max 6 months old)",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-2 text-xs" style={{ color: "var(--color-ink-muted)" }}>
-                      <span style={{ color: "var(--color-brand-green)", marginTop: 1 }}>✓</span>
+                      <span style={{ color: "var(--color-ink-subtle)", marginTop: 1 }}>·</span>
                       {item}
                     </li>
                   ))}
                 </ul>
-                <p className="text-xs" style={{ color: "var(--color-ink-subtle)" }}>
-                  You will upload these documents after payment.
-                </p>
               </div>
 
               <form onSubmit={handleStep1Submit} className="card p-8 space-y-5">
@@ -238,6 +235,9 @@ const [errors, setErrors] = useState<Record<string, string>>({});
                     onChange={(e) => handleFormChange("fullName", e.target.value)}
                     placeholder="As it appears on your passport"
                   />
+                  <p className="text-xs mt-1" style={{ color: "var(--color-ink-subtle)" }}>
+                    Must match your passport exactly — including accents and middle names.
+                  </p>
                   {errors.fullName && <p className="error-text">{errors.fullName}</p>}
                 </div>
 
@@ -314,10 +314,10 @@ const [errors, setErrors] = useState<Record<string, string>>({});
                 {/* Document reminder — upload happens after payment in the dashboard */}
                 <div
                   className="rounded-xl p-5 space-y-3"
-                  style={{ background: "rgba(0,102,0,0.04)", border: "1px solid rgba(0,102,0,0.15)" }}
+                  style={{ background: "var(--color-surface-elevated)", border: "1px solid var(--color-border)" }}
                 >
                   <p className="text-sm font-semibold" style={{ color: "var(--color-ink)" }}>
-                    Documents
+                    Documents required after payment
                   </p>
                   <ul className="space-y-2">
                     {[
@@ -325,7 +325,7 @@ const [errors, setErrors] = useState<Record<string, string>>({});
                       { label: "Proof of Address", hint: "Utility bill or bank statement — max 6 months old" },
                     ].map((doc) => (
                       <li key={doc.label} className="flex items-start gap-2">
-                        <span className="text-sm mt-0.5" style={{ color: "var(--color-brand-green)" }}>✓</span>
+                        <span className="text-sm mt-0.5" style={{ color: "var(--color-ink-subtle)" }}>·</span>
                         <div>
                           <p className="text-sm font-medium" style={{ color: "var(--color-ink)" }}>{doc.label}</p>
                           <p className="text-xs" style={{ color: "var(--color-ink-muted)" }}>{doc.hint}</p>
@@ -333,12 +333,8 @@ const [errors, setErrors] = useState<Record<string, string>>({});
                       </li>
                     ))}
                   </ul>
-                  <p
-                    className="text-xs rounded-lg px-3 py-2"
-                    style={{ background: "rgba(0,102,0,0.08)", color: "var(--color-brand-green)" }}
-                  >
-                    You will upload these securely on the next screen, after payment.
-                    Our system will automatically verify them for you.
+                  <p className="text-xs" style={{ color: "var(--color-ink-muted)" }}>
+                    You will upload these securely in your dashboard after payment. Our system will automatically verify them.
                   </p>
                 </div>
 
@@ -368,14 +364,20 @@ const [errors, setErrors] = useState<Record<string, string>>({});
                       </div>
                     ))}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setStep(1)}
-                    className="text-xs mt-2"
-                    style={{ color: "var(--color-brand-green)" }}
-                  >
-                    Edit information
-                  </button>
+                  <div className="flex items-start justify-between mt-2">
+                    <p className="text-xs max-w-xs" style={{ color: "var(--color-ink-subtle)" }}>
+                      <span style={{ color: "#b45309" }}>⚠ </span>
+                      This name will be filed with the Portuguese tax authority. Verify it matches your passport before paying.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setStep(1)}
+                      className="text-xs shrink-0 ml-4"
+                      style={{ color: "var(--color-brand-green)" }}
+                    >
+                      Edit information
+                    </button>
+                  </div>
                 </div>
 
                 {/* Service tier selector */}
