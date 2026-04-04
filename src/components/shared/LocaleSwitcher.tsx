@@ -25,31 +25,26 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
   const handleSwitch = (code: string) => {
     setIsOpen(false);
     router.replace(pathname, { locale: code });
-    router.refresh(); // force server re-render so Server Components pick up the new locale
+    router.refresh();
   };
 
-  const textColor = dark ? "#9ca3af" : "var(--color-ink-muted)";
-  const bgColor = dark
-    ? "rgba(255,255,255,0.06)"
-    : "var(--color-surface-elevated)";
-  const borderColor = dark ? "rgba(255,255,255,0.1)" : "var(--color-border)";
-  const hoverBg = dark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.04)";
+  const borderColor = dark ? "var(--color-white-alpha-8)" : "var(--color-border)";
 
   return (
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 h-9 px-2.5 rounded-lg transition-colors"
-        style={{
-          color: textColor,
-          background: bgColor,
-          border: `1px solid ${borderColor}`,
-        }}
+        className={`flex items-center gap-1.5 h-9 px-2.5 rounded-lg transition-colors border ${
+          dark
+            ? "text-[#9ca3af] bg-white/[0.06] border-white/10"
+            : "text-ink-muted bg-surface-elevated border-border"
+        }`}
         aria-expanded={isOpen}
         aria-label="Switch language"
+        style={{ borderColor }}
       >
-        <Globe size={16} style={{ color: "#38bdf8", flexShrink: 0 }} />
-        <span style={{ fontSize: "0.8rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+        <Globe size={16} className="text-green shrink-0" />
+        <span className="text-[0.8rem] font-semibold uppercase tracking-[0.04em]">
           {locale}
         </span>
       </button>
@@ -63,7 +58,7 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
             transition={{ duration: 0.15 }}
             className="absolute right-0 top-full mt-2 min-w-[140px] overflow-hidden rounded-xl z-50"
             style={{
-              background: dark ? "#1a2e1a" : "var(--color-surface-elevated)",
+              background: dark ? "var(--color-surface-dark)" : "var(--color-surface-elevated)",
               border: `1px solid ${borderColor}`,
               boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
             }}
@@ -72,19 +67,17 @@ export default function LocaleSwitcher({ dark = false }: LocaleSwitcherProps) {
               <button
                 key={l.code}
                 onClick={() => handleSwitch(l.code)}
-                className="flex w-full items-center px-4 py-2.5 text-sm transition-colors text-left"
-                style={{
-                  color: l.code === locale
-                    ? dark ? "#ffffff" : "var(--color-brand-green)"
-                    : textColor,
-                  fontWeight: l.code === locale ? "600" : "400",
-                }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLElement).style.background = hoverBg)
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.background = "transparent")
-                }
+                className={`flex w-full items-center px-4 py-2.5 text-sm transition-colors text-left ${
+                  dark ? "hover:bg-white/10" : "hover:bg-black/[0.04]"
+                } ${
+                  l.code === locale
+                    ? dark
+                      ? "text-white font-semibold"
+                      : "text-green font-semibold"
+                    : dark
+                    ? "text-[#9ca3af]"
+                    : "text-ink-muted"
+                }`}
               >
                 {l.label}
               </button>

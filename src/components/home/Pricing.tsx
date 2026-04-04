@@ -38,17 +38,9 @@ const PLANS: PlanConfig[] = [
   },
 ];
 
-// Entry rotation: left tilts left, right tilts right, centre stays flat
 const ENTRY_ROTATIONS = [-2, 0, 2] as const;
 
-type FeatureKey =
-  | "feature1"
-  | "feature2"
-  | "feature3"
-  | "feature4"
-  | "feature5"
-  | "feature6";
-
+type FeatureKey = "feature1" | "feature2" | "feature3" | "feature4" | "feature5" | "feature6";
 type PlanKey = "essential" | "standard" | "premium";
 
 export default function Pricing() {
@@ -60,29 +52,15 @@ export default function Pricing() {
   return (
     <section
       id="pricing"
-      className="section-pad"
-      style={{ background: "var(--color-surface)" }}
+      className="section-pad bg-surface"
     >
       <div className="container-site">
         <div className="text-center mb-14">
-          <p
-            className="text-xs font-bold uppercase tracking-widest mb-3"
-            style={{ color: "var(--color-green)" }}
-          >
+          <p className="text-xs font-bold uppercase tracking-widest mb-3 text-green">
             {t("eyebrow")}
           </p>
-          <h2
-            className="text-heading-xl mb-4"
-            style={{ color: "var(--color-ink)" }}
-          >
-            {t("title")}
-          </h2>
-          <p
-            className="text-base max-w-md mx-auto"
-            style={{ color: "var(--color-ink-muted)" }}
-          >
-            {t("subtitle")}
-          </p>
+          <h2 className="text-heading-xl mb-4 text-ink">{t("title")}</h2>
+          <p className="text-base max-w-md mx-auto text-ink-muted">{t("subtitle")}</p>
         </div>
 
         <div
@@ -94,12 +72,10 @@ export default function Pricing() {
             const isSelected = selected === key;
             const entryRotation = ENTRY_ROTATIONS[planIndex] ?? 0;
 
-            const accentColor = isPremium
-              ? "var(--color-gold)"
-              : "var(--color-green)";
+            const accentColor = isPremium ? "var(--color-gold)" : "var(--color-green)";
             const accentShadow = isPremium
-              ? "oklch(64% 0.12 75 / 0.22)"
-              : "oklch(42% 0.12 152 / 0.18)";
+              ? "var(--color-gold-alpha-22)"
+              : "var(--color-green-alpha-18)";
 
             const borderStyle = featured
               ? "none"
@@ -111,8 +87,8 @@ export default function Pricing() {
 
             const shadowStyle = featured
               ? isSelected
-                ? "0 24px 72px oklch(42% 0.12 152 / 0.40), 0 4px 16px oklch(42% 0.12 152 / 0.25), 0 0 0 3px oklch(42% 0.12 152 / 0.25)"
-                : "0 20px 60px oklch(42% 0.12 152 / 0.30), 0 4px 16px oklch(42% 0.12 152 / 0.20)"
+                ? "0 24px 72px var(--color-green-alpha-40), 0 4px 16px var(--color-green-alpha-25), 0 0 0 3px var(--color-green-alpha-25)"
+                : "0 20px 60px var(--color-green-alpha-30), 0 4px 16px var(--color-green-alpha-20)"
               : isSelected
               ? `0 12px 40px ${accentShadow}, 0 2px 8px rgba(0,0,0,0.06)`
               : "0 2px 8px rgba(0,0,0,0.04)";
@@ -121,19 +97,18 @@ export default function Pricing() {
               ? "var(--color-green)"
               : isSelected
               ? isPremium
-                ? "oklch(98% 0.012 75)"
-                : "oklch(98.5% 0.012 152)"
+                ? "var(--color-surface-tinted-gold)"
+                : "var(--color-surface-tinted-green)"
               : "var(--color-surface-2)";
 
             const badgeBg = featured
               ? "rgba(255,255,255,0.18)"
               : isPremium
-              ? "oklch(64% 0.12 75 / 0.12)"
-              : "oklch(42% 0.12 152 / 0.1)";
+              ? "var(--color-gold-alpha-12)"
+              : "var(--color-green-alpha-10)";
             const badgeColor = featured ? "#ffffff" : accentColor;
 
             return (
-              /* Entry animation wrapper */
               <m.div
                 key={key}
                 className="relative"
@@ -148,11 +123,8 @@ export default function Pricing() {
                 {/* Most Popular badge */}
                 {featured && (
                   <div
-                    className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold whitespace-nowrap"
-                    style={{
-                      background: "var(--color-gold)",
-                      color: "oklch(15% 0 0)",
-                    }}
+                    className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold whitespace-nowrap bg-gold"
+                    style={{ color: "oklch(15% 0 0)" }}
                   >
                     <Star size={10} fill="oklch(15% 0 0)" />
                     {t("popular")}
@@ -212,24 +184,15 @@ export default function Pricing() {
 
                   {/* Price */}
                   <p
-                    className="mb-1"
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: "3.25rem",
-                      fontWeight: "800",
-                      lineHeight: 1,
-                      letterSpacing: "-0.03em",
-                      color: featured ? "#ffffff" : "var(--color-ink)",
-                    }}
+                    className="mb-1 font-display text-[3.25rem] font-extrabold leading-none tracking-[-0.03em]"
+                    style={{ color: featured ? "#ffffff" : "var(--color-ink)" }}
                   >
                     {t(`${key}Price` as "essentialPrice")}
                   </p>
                   <p
                     className="text-sm mb-8"
                     style={{
-                      color: featured
-                        ? "rgba(255,255,255,0.65)"
-                        : "var(--color-ink-muted)",
+                      color: featured ? "rgba(255,255,255,0.65)" : "var(--color-ink-muted)",
                     }}
                   >
                     {t(`${key}Duration` as "essentialDuration")}
@@ -243,16 +206,12 @@ export default function Pricing() {
                           size={16}
                           className="shrink-0 mt-0.5"
                           style={{
-                            color: featured
-                              ? "var(--color-gold-light)"
-                              : "var(--color-green)",
+                            color: featured ? "var(--color-gold-light)" : "var(--color-green)",
                           }}
                         />
                         <span
                           style={{
-                            color: featured
-                              ? "rgba(255,255,255,0.9)"
-                              : "var(--color-ink)",
+                            color: featured ? "rgba(255,255,255,0.9)" : "var(--color-ink)",
                           }}
                         >
                           {t(f as FeatureKey)}
@@ -267,16 +226,12 @@ export default function Pricing() {
                           size={16}
                           className="shrink-0 mt-0.5"
                           style={{
-                            color: featured
-                              ? "rgba(255,255,255,0.25)"
-                              : "var(--color-ink-subtle)",
+                            color: featured ? "rgba(255,255,255,0.25)" : "var(--color-ink-subtle)",
                           }}
                         />
                         <span
                           style={{
-                            color: featured
-                              ? "rgba(255,255,255,0.35)"
-                              : "var(--color-ink-subtle)",
+                            color: featured ? "rgba(255,255,255,0.35)" : "var(--color-ink-subtle)",
                           }}
                         >
                           {t(f as FeatureKey)}
@@ -311,12 +266,8 @@ export default function Pricing() {
                       className="btn btn-secondary w-full mt-2 text-center"
                       onClick={(e) => e.stopPropagation()}
                       style={{
-                        borderColor: isPremium
-                          ? "var(--color-gold)"
-                          : "var(--color-green)",
-                        color: isPremium
-                          ? "var(--color-gold)"
-                          : "var(--color-green)",
+                        borderColor: isPremium ? "var(--color-gold)" : "var(--color-green)",
+                        color: isPremium ? "var(--color-gold)" : "var(--color-green)",
                       }}
                     >
                       {t("cta")}

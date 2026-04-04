@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
+import { Fraunces, Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -8,10 +8,16 @@ const fraunces = Fraunces({
   variable: "--font-fraunces",
 });
 
-const jakartaSans = Plus_Jakarta_Sans({
+const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-jakarta",
+  variable: "--font-instrument",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains",
 });
 
 export const metadata: Metadata = {
@@ -36,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${jakartaSans.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${instrumentSans.variable} ${jetbrainsMono.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );

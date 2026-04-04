@@ -48,22 +48,13 @@ export default function ComplianceRoadmap() {
       <div className="container-site">
         {/* Header */}
         <div className="text-center mb-16">
-          <p
-            className="text-xs font-bold uppercase tracking-widest mb-3"
-            style={{ color: "var(--color-green)" }}
-          >
+          <p className="text-xs font-bold uppercase tracking-widest mb-3 text-green">
             {t("eyebrow")}
           </p>
-          <h2
-            className="text-heading-xl mb-4"
-            style={{ color: "var(--color-ink)" }}
-          >
+          <h2 className="text-heading-xl mb-4 text-ink">
             {t("title")}
           </h2>
-          <p
-            className="text-lg max-w-2xl mx-auto leading-relaxed"
-            style={{ color: "var(--color-ink-muted)" }}
-          >
+          <p className="text-lg max-w-2xl mx-auto leading-relaxed text-ink-muted">
             {t("subtitle")}
           </p>
         </div>
@@ -98,7 +89,7 @@ export default function ComplianceRoadmap() {
                       ? {
                           background: "var(--color-green)",
                           color: "white",
-                          boxShadow: "0 0 0 4px oklch(42% 0.12 152 / 0.12)",
+                          boxShadow: "0 0 0 4px var(--color-green-alpha-12)",
                         }
                       : {
                           background: "var(--color-surface)",
@@ -113,19 +104,16 @@ export default function ComplianceRoadmap() {
                 {/* Content */}
                 <div className="flex-1 pt-2.5">
                   <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                    <h3
-                      className="text-base font-semibold"
-                      style={{ color: "var(--color-ink)" }}
-                    >
+                    <h3 className="text-base font-semibold text-ink">
                       {step.title}
                     </h3>
                     {"badge" in step && step.badge && (
                       <span
                         className="rounded-full px-2.5 py-0.5 text-xs font-bold"
                         style={{
-                          background: "oklch(42% 0.12 152 / 0.1)",
+                          background: "var(--color-green-alpha-10)",
                           color: "var(--color-green)",
-                          border: "1px solid oklch(42% 0.12 152 / 0.2)",
+                          border: "1px solid var(--color-green-alpha-20)",
                         }}
                       >
                         {step.badge}
@@ -133,10 +121,7 @@ export default function ComplianceRoadmap() {
                     )}
                   </div>
 
-                  <p
-                    className="text-sm leading-relaxed mb-2"
-                    style={{ color: "var(--color-ink-muted)" }}
-                  >
+                  <p className="text-sm leading-relaxed mb-2 text-ink-muted">
                     {step.desc}
                   </p>
 
@@ -144,9 +129,9 @@ export default function ComplianceRoadmap() {
                     <div
                       className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold"
                       style={{
-                        background: "oklch(75% 0.15 75 / 0.1)",
+                        background: "var(--color-gold-warm-alpha-10)",
                         color: "var(--color-gold)",
-                        border: "1px solid oklch(75% 0.15 75 / 0.2)",
+                        border: "1px solid var(--color-gold-warm-alpha-20)",
                       }}
                     >
                       <AlertTriangle size={12} />

@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { m, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import LocaleSwitcher from "@/components/shared/LocaleSwitcher";
+import { AZULEJO_SVG_GREEN } from "@/lib/constants/assets";
 
 export default function Navbar() {
   const t = useTranslations("nav");
@@ -35,9 +36,7 @@ export default function Navbar() {
     <header
       className="fixed inset-x-0 top-0 z-50 transition-all duration-300"
       style={{
-        background: isScrolled
-          ? "oklch(98.5% 0.008 90 / 0.94)"
-          : "transparent",
+        background: isScrolled ? "var(--color-surface-frosted)" : "transparent",
         backdropFilter: isScrolled ? "blur(16px)" : "none",
         borderBottom: isScrolled ? "1px solid var(--color-border)" : "none",
         boxShadow: isScrolled ? "0 1px 12px rgba(0,0,0,0.06)" : "none",
@@ -45,10 +44,9 @@ export default function Navbar() {
     >
       {/* Scroll progress bar */}
       <div
-        className="absolute top-0 left-0 h-[2.5px] transition-all duration-75"
+        className="absolute top-0 left-0 h-[2.5px] transition-all duration-75 bg-green"
         style={{
           width: `${scrollProgress}%`,
-          background: "var(--color-green)",
           opacity: scrollProgress > 1 ? 1 : 0,
         }}
       />
@@ -57,20 +55,15 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 font-bold text-xl tracking-tight"
-          style={{ color: "var(--color-green)", fontFamily: "var(--font-display)" }}
+          className="flex items-center gap-2 font-bold text-xl tracking-tight font-display text-green"
         >
           <span
-            className="relative flex h-9 w-9 items-center justify-center rounded-lg text-white text-xs font-bold"
-            style={{ background: "var(--color-green)", fontFamily: "var(--font-sans)" }}
+            className="relative flex h-9 w-9 items-center justify-center rounded-lg text-white text-xs font-bold font-sans bg-green"
           >
             NIF
             <span
-              className="absolute bottom-0 right-0 w-2.5 h-2.5 pointer-events-none"
-              style={{
-                background: "var(--color-terracotta)",
-                borderRadius: "50% 0 0 0",
-              }}
+              className="absolute bottom-0 right-0 w-2.5 h-2.5 pointer-events-none bg-amber"
+              style={{ borderRadius: "50% 0 0 0" }}
             />
           </span>
           <span className="hidden sm:block">GetNIFPortugal</span>
@@ -82,16 +75,7 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium transition-colors"
-              style={{ color: "var(--color-ink-muted)" }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLElement).style.color =
-                  "var(--color-green)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLElement).style.color =
-                  "var(--color-ink-muted)")
-              }
+              className="text-sm font-medium transition-colors text-ink-muted hover:text-green"
             >
               {link.label}
             </Link>
@@ -111,10 +95,9 @@ export default function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden p-2 rounded-lg"
+          className="md:hidden p-2 rounded-lg text-ink"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           aria-label="Toggle menu"
-          style={{ color: "var(--color-ink)" }}
         >
           {isMobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -136,8 +119,7 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMobileOpen(false)}
-                  className="text-sm font-medium py-2 px-3 rounded-lg transition-colors"
-                  style={{ color: "var(--color-ink)" }}
+                  className="text-sm font-medium py-2 px-3 rounded-lg transition-colors text-ink hover:text-green"
                 >
                   {link.label}
                 </Link>

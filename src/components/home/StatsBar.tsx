@@ -33,11 +33,7 @@ export default async function StatsBar() {
           {STATS.map(({ to, suffix, decimals, separator, duration, labelKey }) => (
             <div key={labelKey} className="py-5 px-6 text-center">
               <p
-                className="text-2xl font-black leading-none mb-1"
-                style={{
-                  color: "var(--color-green)",
-                  fontFamily: "var(--font-display)",
-                }}
+                className="text-2xl font-black font-display leading-none mb-1 text-green"
               >
                 <CountUp
                   to={to}

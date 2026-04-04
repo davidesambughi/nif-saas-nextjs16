@@ -19,8 +19,7 @@ export default function CTABanner() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.5 }}
-          className="relative overflow-hidden rounded-2xl px-8 py-14 text-center text-white"
-          style={{ background: "var(--color-brand-green)" }}
+          className="relative overflow-hidden rounded-2xl px-8 py-14 text-center text-white bg-green"
         >
           {/* Azulejo tile pattern */}
           <div
@@ -37,26 +36,29 @@ export default function CTABanner() {
           <div
             className="pointer-events-none absolute inset-0 opacity-10"
             style={{
-              backgroundImage: "radial-gradient(circle at 20% 20%, #ffffff 0%, transparent 50%), radial-gradient(circle at 80% 80%, var(--color-brand-gold) 0%, transparent 50%)",
+              backgroundImage:
+                "radial-gradient(circle at 20% 20%, var(--color-surface-elevated) 0%, transparent 50%), radial-gradient(circle at 80% 80%, var(--color-gold) 0%, transparent 50%)",
             }}
           />
 
           <h2 className="text-heading-xl mb-4 relative z-10">{t("title")}</h2>
-          <p className="text-lg mb-8 relative z-10" style={{ color: "rgba(255,255,255,0.8)" }}>
+          <p
+            className="text-lg mb-8 relative z-10"
+            style={{ color: "var(--color-white-alpha-80)" }}
+          >
             {t("subtitle")}
           </p>
           <Link
             href="/login?redirectTo=/order"
             id="cta-banner-button"
-            className="btn btn-lg relative z-10 inline-flex"
-            style={{ background: "#ffffff", color: "var(--color-brand-green)", fontWeight: 700 }}
+            className="btn btn-lg relative z-10 inline-flex bg-surface-elevated text-green font-bold"
           >
             {t("button")}
             <ArrowRight size={18} />
           </Link>
           <p
             className="relative z-10 text-xs mt-5"
-            style={{ color: "rgba(255,255,255,0.5)" }}
+            style={{ color: "var(--color-white-alpha-50)" }}
           >
             {t("microcopy")}
           </p>

@@ -11,22 +11,18 @@ export default function Footer() {
     <footer
       className="border-t"
       style={{
-        background: "#0f1f0f",
-        borderColor: "rgba(255,255,255,0.08)",
-        color: "#9ca3af",
+        background: "var(--color-ink-deep)",
+        borderColor: "var(--color-white-alpha-8)",
+        color: "var(--color-surface-dark-muted)",
       }}
     >
       <div className="container-full py-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <div
-              className="flex items-center gap-2 font-bold text-xl mb-4"
-              style={{ color: "#ffffff" }}
-            >
+            <div className="flex items-center gap-2 font-bold text-xl mb-4 text-white">
               <span
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-white text-sm font-bold"
-                style={{ background: "var(--color-brand-green)" }}
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-white text-sm font-bold bg-green"
               >
                 NIF
               </span>
@@ -40,10 +36,7 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h4
-              className="text-sm font-semibold mb-4"
-              style={{ color: "#ffffff" }}
-            >
+            <h4 className="text-sm font-semibold mb-4 text-white">
               {t("legal")}
             </h4>
             <ul className="space-y-2">
@@ -68,10 +61,7 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <h4
-              className="text-sm font-semibold mb-4"
-              style={{ color: "#ffffff" }}
-            >
+            <h4 className="text-sm font-semibold mb-4 text-white">
               {t("company")}
             </h4>
             <ul className="space-y-2">
@@ -105,13 +95,12 @@ export default function Footer() {
 
         <div
           className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+          style={{ borderTop: "1px solid var(--color-white-alpha-8)" }}
         >
           <p className="text-xs">{t("copyright")}</p>
           <div className="flex items-center gap-2">
             <span
-              className="inline-flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white"
-              style={{ background: "var(--color-brand-green)" }}
+              className="inline-flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white bg-green"
               aria-label="Portugal flag color"
             >
               🇵🇹
@@ -121,7 +110,28 @@ export default function Footer() {
             </span>
           </div>
         </div>
+
+        {/* Legal disclaimer */}
+        <div
+          className="mt-6 pt-6 text-center"
+          style={{ borderTop: "1px solid var(--color-white-alpha-8)" }}
+        >
+          <p
+            className="text-[0.7rem] leading-relaxed max-w-3xl mx-auto"
+            style={{ color: "oklch(50% 0.02 154)" }}
+          >
+            <strong className="font-semibold" style={{ color: "oklch(60% 0.02 154)" }}>
+              Disclaimer:
+            </strong>{" "}
+            GetNIFPortugal is an independent administrative assistance service and is not a law firm,
+            tax advisory firm, or licensed fiscal advisor. We help individuals navigate the NIF
+            registration process and act as a registered fiscal representative for administrative
+            purposes only. Nothing on this website constitutes legal, tax, or financial advice.
+            For advice specific to your personal situation, please consult a qualified professional.
+          </p>
+        </div>
       </div>
     </footer>
+
   );
 }

@@ -2,37 +2,43 @@
 
 @theme {
   /* ── OKLCH brand tokens ─────────────────────────────────── */
-  --color-green: oklch(42% 0.12 152);
-  --color-green-light: oklch(52% 0.12 152);
-  --color-green-dark: oklch(32% 0.10 152);
-  --color-gold: oklch(64% 0.12 75);
-  --color-gold-light: oklch(78% 0.10 75);
-  --color-terracotta: oklch(54% 0.14 42);
-  --color-forest: oklch(19% 0.05 152);
+  --color-green: oklch(0.434 0.0898 164.69);
+  --color-green-dark: oklch(0.3204 0.0637 167.07);
+  --color-green-mid: oklch(0.5617 0.1176 163.97);
+  --color-green-light: oklch(0.9435 0.0245 170.96);
+  --color-gold: oklch(0.6069 0.1122 76.44);
+  --color-gold-light: oklch(0.9669 0.0272 83.54);
+  --color-amber: oklch(0.6658 0.1574 58.32);
+  --color-amber-light: oklch(0.9619 0.058 95.62);
+  --color-red: oklch(0.551 0.1719 24.78);
+  --color-red-light: oklch(0.9356 0.0309 17.72);
+  --color-blue: oklch(0.4844 0.1341 254);
+  --color-blue-light: oklch(0.9319 0.0316 255.59);
 
-  /* ── Legacy aliases (keep for existing components) ─────── */
-  --color-brand-green: oklch(42% 0.12 152);
-  --color-brand-green-light: oklch(52% 0.12 152);
-  --color-brand-green-dark: oklch(32% 0.10 152);
-  --color-brand-gold: oklch(64% 0.12 75);
-  --color-brand-gold-light: oklch(78% 0.10 75);
 
   /* ── Surface ──────────────────────────────────────────────  */
-  --color-surface: oklch(99% 0.005 152);
-  --color-surface-2: oklch(97% 0.005 152);
+  --color-bg: oklch(0.9555 0.0099 87.47);
+  --color-surface: oklch(0.9907 0.0054 95.1);
+  --color-surface-2: oklch(0.9341 0.0112 89.73);
+  --color-surface-3: oklch(0.9043 0.0129 86.83);
   --color-surface-elevated: oklch(100% 0 0);
 
   /* ── Ink ────────────────────────────────────────────────── */
-  --color-ink: oklch(12% 0.015 152);
-  --color-ink-muted: oklch(45% 0.015 152);
-  --color-ink-subtle: oklch(65% 0.01 152);
+  --color-ink: oklch(0.2034 0.0235 154.62);
+  --color-ink-2: oklch(0.3848 0.0394 153.88);
+  --color-ink-3: oklch(0.5913 0.0232 156.44);
+  --color-ink-4: oklch(0.7582 0.0228 153.99);
+  --color-ink-muted: var(--color-ink-3);
+  --color-ink-subtle: var(--color-ink-4);
 
   /* ── Border ─────────────────────────────────────────────── */
-  --color-border: oklch(92% 0.01 152);
+  --color-border: oklch(0.8829 0.013 86.84);
+  --color-border-2: oklch(0.8332 0.0144 88.7);
 
   /* ── Typography ─────────────────────────────────────────── */
   --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* ── Radii ──────────────────────────────────────────────── */
   --radius-sm: 0.5rem;
@@ -40,6 +46,57 @@
   --radius-lg: 1.25rem;
   --radius-xl: 2rem;
   --radius-2xl: 3rem;
+
+  /* ── Alpha tints — green (overlays, badges, shadows) ────── */
+  --color-green-alpha-6:  oklch(42% 0.12 152 / 0.06);
+  --color-green-alpha-7:  oklch(42% 0.12 152 / 0.07);
+  --color-green-alpha-8:  oklch(42% 0.12 152 / 0.08);
+  --color-green-alpha-10: oklch(42% 0.12 152 / 0.10);
+  --color-green-alpha-12: oklch(42% 0.12 152 / 0.12);
+  --color-green-alpha-15: oklch(42% 0.12 152 / 0.15);
+  --color-green-alpha-18: oklch(42% 0.12 152 / 0.18);
+  --color-green-alpha-20: oklch(42% 0.12 152 / 0.20);
+  --color-green-alpha-25: oklch(42% 0.12 152 / 0.25);
+  --color-green-alpha-30: oklch(42% 0.12 152 / 0.30);
+  --color-green-alpha-35: oklch(42% 0.12 152 / 0.35);
+  --color-green-alpha-40: oklch(42% 0.12 152 / 0.40);
+  --color-green-alpha-45: oklch(42% 0.12 152 / 0.45);
+
+  /* ── Alpha tints — gold ──────────────────────────────────── */
+  --color-gold-alpha-5:       oklch(64% 0.12 75 / 0.05);
+  --color-gold-alpha-10:      oklch(64% 0.12 75 / 0.10);
+  --color-gold-alpha-12:      oklch(64% 0.12 75 / 0.12);
+  --color-gold-alpha-22:      oklch(64% 0.12 75 / 0.22);
+  --color-gold-warm-alpha-10: oklch(75% 0.15 75 / 0.10);
+  --color-gold-warm-alpha-20: oklch(75% 0.15 75 / 0.20);
+
+  /* ── Dark surfaces (Footer bg, TrustSignals cards) ───────── */
+  --color-ink-deep:            oklch(10% 0.035 154);
+  --color-surface-dark:        oklch(24% 0.045 152);
+  --color-surface-dark-border: oklch(29% 0.04 152);
+  --color-surface-dark-muted:  oklch(70% 0.04 152);
+  --color-surface-dark-text:   oklch(88% 0.02 152);
+
+  /* ── Frosted glass & tinted surfaces ────────────────────── */
+  --color-surface-frosted:      oklch(98.5% 0.008 90 / 0.94);
+  --color-surface-tinted-green: oklch(98.5% 0.012 152);
+  --color-surface-tinted-gold:  oklch(98% 0.012 75);
+
+  /* ── White alpha utilities ───────────────────────────────── */
+  --color-white-alpha-8:  oklch(100% 0 0 / 0.08);
+  --color-white-alpha-50: oklch(100% 0 0 / 0.50);
+  --color-white-alpha-60: oklch(100% 0 0 / 0.60);
+  --color-white-alpha-80: oklch(100% 0 0 / 0.80);
+  --color-white-alpha-85: oklch(100% 0 0 / 0.85);
+
+  /* ── Black alpha (shadows, hover overlays) ────────────────── */
+  --color-black-alpha-4:  oklch(0% 0 0 / 0.04);
+  --color-black-alpha-6:  oklch(0% 0 0 / 0.06);
+  --color-black-alpha-12: oklch(0% 0 0 / 0.12);
+  --color-black-alpha-18: oklch(0% 0 0 / 0.18);
+
+  /* ── Contextual surface ───────────────────────────────── */
+  --color-surface-ivory-hover: oklch(97% 0.01 90);
 }
 
 /* ============================================================
@@ -57,7 +114,7 @@ html {
 }
 
 body {
-  background-color: var(--color-surface);
+  background-color: var(--color-bg);
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -153,7 +210,7 @@ body {
     135deg,
     var(--color-green) 0%,
     var(--color-green-light) 60%,
-    oklch(48% 0.13 152) 100%
+    var(--color-green-mid) 100%
   );
 }
 
@@ -172,13 +229,13 @@ body {
    Glass Card
    ============================================================ */
 .glass-card {
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--color-white-alpha-85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--color-white-alpha-60);
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.06),
-    0 1px 4px rgba(0, 0, 0, 0.04);
+    0 4px 24px var(--color-black-alpha-6),
+    0 1px 4px var(--color-black-alpha-4);
 }
 
 /* ============================================================
@@ -214,15 +271,15 @@ body {
 
 .btn-primary {
   background: var(--color-green);
-  color: #ffffff;
-  box-shadow: 0 4px 14px oklch(42% 0.12 152 / 0.35);
+  color: var(--color-surface-elevated);
+  box-shadow: 0 4px 14px var(--color-green-alpha-35);
   padding: 0.875rem 1.75rem;
   font-size: 1rem;
 }
 
 .btn-primary:hover {
   background: var(--color-green-light);
-  box-shadow: 0 6px 20px oklch(42% 0.12 152 / 0.45);
+  box-shadow: 0 6px 20px var(--color-green-alpha-45);
   transform: translateY(-1px);
 }
 
@@ -235,21 +292,21 @@ body {
 }
 
 .btn-secondary:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--color-black-alpha-4);
   border-color: var(--color-ink-muted);
 }
 
 .btn-ivory {
-  background: #ffffff;
+  background: var(--color-surface-elevated);
   color: var(--color-green);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 14px var(--color-black-alpha-12);
   padding: 0.875rem 1.75rem;
   font-size: 1rem;
 }
 
 .btn-ivory:hover {
-  background: oklch(97% 0.01 90);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  background: var(--color-surface-ivory-hover);
+  box-shadow: 0 6px 20px var(--color-black-alpha-18);
   transform: translateY(-1px);
 }
 
@@ -280,11 +337,11 @@ body {
 
 .input:focus {
   border-color: var(--color-green);
-  box-shadow: 0 0 0 3px oklch(42% 0.12 152 / 0.1);
+  box-shadow: 0 0 0 3px var(--color-green-alpha-10);
 }
 
 .input.error {
-  border-color: #dc2626;
+  border-color: var(--color-red);
 }
 
 .label {
@@ -296,7 +353,7 @@ body {
 }
 
 .error-text {
-  color: #dc2626;
+  color: var(--color-red);
   font-size: 0.8125rem;
   margin-top: 0.25rem;
 }
@@ -308,7 +365,7 @@ body {
   background: var(--color-surface-elevated);
   border-radius: var(--radius-xl);
   border: 1px solid var(--color-border);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px var(--color-black-alpha-4);
 }
 
 /* ============================================================
@@ -326,28 +383,33 @@ body {
 }
 
 .badge-green {
-  background: #dcfce7;
-  color: #166534;
+  background: oklch(96% 0.048 153);
+  color: oklch(37% 0.095 154);
 }
 
 .badge-amber {
-  background: #fef3c7;
-  color: #92400e;
+  background: oklch(97% 0.060 98);
+  color: oklch(47% 0.132 55);
 }
 
 .badge-blue {
-  background: #dbeafe;
-  color: #1e40af;
+  background: oklch(93% 0.033 254);
+  color: oklch(40% 0.156 264);
 }
 
 .badge-gray {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: oklch(97% 0.003 265);
+  color: oklch(48% 0.012 265);
 }
 
 .badge-red {
-  background: #fee2e2;
-  color: #991b1b;
+  background: oklch(94% 0.037 15);
+  color: oklch(38% 0.133 22);
+}
+
+.badge-purple {
+  background: oklch(96% 0.040 297);
+  color: oklch(43% 0.215 295);
 }
 
 /* ============================================================

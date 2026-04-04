@@ -11,6 +11,10 @@ const STEPS = [
   { Icon: Mail, key: "step3" },
 ] as const;
 
+type StepKey = (typeof STEPS)[number]["key"];
+type StepTitleKey = `${StepKey}Title`;
+type StepDescKey = `${StepKey}Desc`;
+
 // Entry rotation per card: -4° | 0° | +4°
 const ENTRY_ROTATIONS = [-4, 0, 4] as const;
 
@@ -46,22 +50,13 @@ export default function HowItWorks() {
     >
       <div className="container-site">
         <div className="text-center mb-14">
-          <p
-            className="text-xs font-bold uppercase tracking-widest mb-3"
-            style={{ color: "var(--color-green)" }}
-          >
+          <p className="text-xs font-bold uppercase tracking-widest mb-3 text-green">
             {t("eyebrow")}
           </p>
-          <h2
-            className="text-heading-xl mb-4"
-            style={{ color: "var(--color-ink)" }}
-          >
+          <h2 className="text-heading-xl mb-4 text-ink">
             {t("title")}
           </h2>
-          <p
-            className="text-base max-w-xl mx-auto"
-            style={{ color: "var(--color-ink-muted)" }}
-          >
+          <p className="text-base max-w-xl mx-auto text-ink-muted">
             {t("subtitle")}
           </p>
         </div>
@@ -82,19 +77,15 @@ export default function HowItWorks() {
             >
               {/* Large decorative number */}
               <div
-                className="pointer-events-none select-none absolute -right-2 -top-4 text-8xl font-black leading-none"
-                style={{
-                  color: "oklch(42% 0.12 152 / 0.06)",
-                  fontFamily: "var(--font-display)",
-                }}
+                className="pointer-events-none select-none absolute -right-2 -top-4 text-8xl font-black font-display leading-none"
+                style={{ color: "var(--color-green-alpha-6)" }}
               >
                 {String(index + 1).padStart(2, "0")}
               </div>
 
               {/* Step circle */}
               <div
-                className="mb-5 flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white"
-                style={{ background: "var(--color-green)" }}
+                className="mb-5 flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white bg-green"
               >
                 {index + 1}
               </div>
@@ -102,25 +93,16 @@ export default function HowItWorks() {
               {/* Icon */}
               <div
                 className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl"
-                style={{ background: "oklch(42% 0.12 152 / 0.08)" }}
+                style={{ background: "var(--color-green-alpha-8)" }}
               >
-                <Icon size={22} style={{ color: "var(--color-green)" }} />
+                <Icon size={22} className="text-green" />
               </div>
 
-              <h3
-                className="text-lg font-semibold mb-3"
-                style={{
-                  color: "var(--color-ink)",
-                  fontFamily: "var(--font-display)",
-                }}
-              >
-                {t(`${key}Title` as "step1Title")}
+              <h3 className="text-lg font-semibold font-display mb-3 text-ink">
+                {t(`${key}Title` as StepTitleKey)}
               </h3>
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: "var(--color-ink-muted)" }}
-              >
-                {t(`${key}Desc` as "step1Desc")}
+              <p className="text-sm leading-relaxed text-ink-muted">
+                {t(`${key}Desc` as StepDescKey)}
               </p>
 
               {/* Dashed connector (not last card) */}
@@ -128,7 +110,7 @@ export default function HowItWorks() {
                 <div
                   className="hidden md:block absolute top-10 left-full w-6 z-10 pointer-events-none"
                   style={{
-                    borderTop: "2px dashed oklch(42% 0.12 152 / 0.2)",
+                    borderTop: "2px dashed var(--color-green-alpha-20)",
                     transform: "translateX(-50%)",
                   }}
                 />

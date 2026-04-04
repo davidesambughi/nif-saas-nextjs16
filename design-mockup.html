@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GetNIFPortugal — Design Mockup v2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Emerald — darker, more saturated blue-green */
+      --green:        #056044; /* oklch(0.434 0.0898 164.69) */
+      --green-dark:   #033d2c; /* oklch(0.3204 0.0637 167.07) */
+      --green-mid:    #0a8a62; /* oklch(0.5617 0.1176 163.97) */
+      --green-light:  #ddf2ea; /* oklch(0.9435 0.0245 170.96) */
+      --green-glow:   rgba(5, 96, 68, 0.10);
+
+      /* Surfaces — warm parchment */
+      --bg:           #f3f0e9; /* oklch(0.9555 0.0099 87.47) */
+      --surface:      #fdfcf8; /* oklch(0.9907 0.0054 95.1) */
+      --surface-2:    #ece9e1; /* oklch(0.9341 0.0112 89.73) */
+      --surface-3:    #e3dfd6; /* oklch(0.9043 0.0129 86.83)) */
+
+      /* Accents */
+      --gold:         #a87826; /* oklch(0.6069 0.1122 76.44) */
+      --gold-light:   #fdf3e0; /* oklch(0.9669 0.0272 83.54) */
+      --amber:        #d97706; /* oklch(0.6658 0.1574 58.32) */   
+      --amber-light:  #fef3c7; /* oklch(0.9619 0.058 95.62) */
+      --red:          #c23b3b; /* oklch(0.551 0.1719 24.78) */
+      --red-light:    #fee2e2; /* oklch(0.9356 0.0309 17.72) */
+      --blue:         #1c5fa8; /* oklch(0.4844 0.1341 254) */
+      --blue-light:   #dbeafe; /* oklch(0.9319 0.0316 255.59) */
+
+      /* Ink */
+      --ink:          #0e1a12; /* oklch(0.2034 0.0235 154.62) */
+      --ink-2:        #334a3a; /* oklch(0.3848 0.0394 153.88) */
+      --ink-3:        #738278; /* oklch(0.5913 0.0232 156.44) */
+      --ink-4:        #a6b5aa; /* oklch(0.7582 0.0228 153.99) */
+
+      /* Border */
+      --border:       #dcd8cf; /* oklch(0.8829 0.013 86.84)  */
+      --border-2:     #ccc8be; /* oklch(0.8332 0.0144 88.7) */
+
+      /* Typography */
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body:    'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+
+      /* Radii */
+      --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 20px; --r-pill: 999px;
+
+      /* Shadows */
+      --shadow-sm:   0 1px 2px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.05);
+      --shadow-md:   0 1px 4px rgba(0,0,0,0.05), 0 6px 20px rgba(0,0,0,0.07);
+      --shadow-hover:0 2px 8px rgba(0,0,0,0.06), 0 12px 28px rgba(0,0,0,0.09);
+      --shadow-btn:  0 2px 8px rgba(5,96,68,0.30);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 14.5px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Section labels ── */
+    .section-label {
+      background: var(--surface-2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 9px 28px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .section-label-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0;
+    }
+    .section-label-text {
+      font-family: var(--font-mono);
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-3);
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: var(--font-body); font-weight: 600;
+      border-radius: var(--r-md); border: none;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.16s; white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--green); color: white;
+      padding: 8px 18px; font-size: 13.5px;
+      box-shadow: var(--shadow-btn);
+    }
+    .btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(5,96,68,0.38); }
+    .btn-secondary {
+      background: var(--surface); color: var(--ink-2);
+      padding: 7px 15px; font-size: 13px;
+      border: 1.5px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--border-2); background: var(--surface-2); }
+    .btn-ghost {
+      background: transparent; color: var(--ink-2);
+      padding: 7px 13px; font-size: 13px;
+    }
+    .btn-ghost:hover { background: var(--surface-2); }
+    .btn-sm { font-size: 12.5px; padding: 6px 13px; }
+    .btn-xs { font-size: 11.5px; padding: 5px 11px; border-radius: var(--r-sm); }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px; border-radius: var(--r-pill);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .badge-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .badge-green  { background: #d0fadf; color: #14532d; }
+    .badge-green  .badge-dot { background: #16a34a; }
+    .badge-amber  { background: var(--amber-light); color: #92400e; }
+    .badge-amber  .badge-dot { background: var(--amber); }
+    .badge-blue   { background: var(--blue-light); color: #1e3a6a; }
+    .badge-blue   .badge-dot { background: var(--blue); }
+    .badge-red    { background: var(--red-light); color: #7f1d1d; }
+    .badge-red    .badge-dot { background: var(--red); }
+    .badge-gray   { background: var(--surface-2); color: var(--ink-2); }
+    .badge-gray   .badge-dot { background: var(--ink-4); }
+
+    /* ════════════════════════════════════════
+       MARKETING NAV
+    ════════════════════════════════════════ */
+    .nav {
+      background: rgba(243,240,233,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      height: 58px;
+      display: flex; align-items: center;
+      padding: 0 32px; gap: 0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 9px;
+      text-decoration: none; margin-right: auto;
+      font-family: var(--font-display); font-weight: 600;
+      font-size: 16px; letter-spacing: -0.025em; color: var(--green);
+    }
+    .nav-logo-mark {
+      width: 30px; height: 30px; background: var(--green);
+      border-radius: var(--r-md);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-family: var(--font-body);
+      font-size: 9.5px; font-weight: 700; letter-spacing: 0.05em;
+      position: relative; overflow: hidden;
+    }
+    .nav-logo-mark::after {
+      content: ''; position: absolute; bottom: 0; right: 0;
+      width: 9px; height: 9px;
+      background: #c06020; border-radius: 50% 0 0 0;
+    }
+    .nav-links { display: flex; gap: 2px; margin-right: 18px; }
+    .nav-link {
+      font-size: 13px; font-weight: 500; color: var(--ink-2);
+      text-decoration: none; padding: 6px 11px;
+      border-radius: var(--r-sm); transition: all 0.14s;
+    }
+    .nav-link:hover { color: var(--green); background: var(--green-light); }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    .locale-btn {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 500; color: var(--ink-3);
+      padding: 5px 10px; border-radius: var(--r-pill);
+      border: 1px solid var(--border); cursor: pointer;
+      background: transparent; transition: all 0.14s;
+    }
+    .locale-btn:hover { border-color: var(--border-2); color: var(--ink-2); }
+
+    /* ════════════════════════════════════════
+       HERO
+    ════════════════════════════════════════ */
+    .hero {
+      max-width: 680px; margin: 0 auto;
+      padding: 60px 24px 68px; text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--green); background: var(--green-light);
+      border: 1px solid rgba(5,96,68,0.2);
+      padding: 5px 13px; border-radius: var(--r-pill); margin-bottom: 22px;
+    }
+    .hero-title {
+      font-family: var(--font-display); font-size: clamp(34px,5.5vw,54px);
+      font-weight: 600; color: var(--ink);
+      letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 16px;
+    }
+    .hero-title em { color: var(--green); font-style: italic; }
+    .hero-sub {
+      font-size: 15.5px; color: var(--ink-3); line-height: 1.65;
+      max-width: 400px; margin: 0 auto 28px;
+    }
+    .hero-cta { display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .btn-cta {
+      font-family: var(--font-body); font-size: 14px; font-weight: 600;
+      color: white; background: var(--green);
+      padding: 13px 26px; border: none; border-radius: var(--r-lg);
+      cursor: pointer; letter-spacing: -0.01em;
+      box-shadow: 0 3px 14px rgba(5,96,68,0.32), 0 1px 3px rgba(0,0,0,0.1);
+      transition: all 0.18s; text-decoration: none;
+    }
+    .btn-cta:hover { background: var(--green-dark); box-shadow: 0 6px 22px rgba(5,96,68,0.42); transform: translateY(-1.5px); }
+    .btn-cta-outline {
+      font-family: var(--font-body); font-size: 13.5px; font-weight: 500;
+      color: var(--ink-2); background: transparent;
+      padding: 13px 20px; border: 1.5px solid var(--border-2);
+      border-radius: var(--r-lg); cursor: pointer; transition: all 0.14s; text-decoration: none;
+    }
+    .btn-cta-outline:hover { border-color: var(--ink-3); color: var(--ink); }
+    .trust {
+      border-top: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .trust-item { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; color: var(--ink-3); }
+
+    /* ════════════════════════════════════════
+       APP HEADER
+    ════════════════════════════════════════ */
+    .app-nav {
+      background: rgba(243,240,233,0.94);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      height: 54px;
+      display: flex; align-items: center;
+      padding: 0 28px;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .app-nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; font-family: var(--font-display);
+      font-weight: 600; font-size: 15px; color: var(--green); letter-spacing: -0.025em;
+    }
+    .app-nav-sep { width: 1px; height: 16px; background: var(--border-2); margin: 0 14px; }
+    .app-nav-page { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+    .app-nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .new-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: var(--font-body); font-size: 12.5px; font-weight: 600;
+      color: var(--green); background: var(--green-light);
+      border: 1px solid rgba(5,96,68,0.20); padding: 6px 13px;
+      border-radius: var(--r-md); cursor: pointer; transition: all 0.14s; text-decoration: none;
+    }
+    .new-btn:hover { background: #c8ead8; border-color: rgba(5,96,68,0.30); }
+    .avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--green); color: white;
+      font-size: 11px; font-weight: 700; font-family: var(--font-body);
+      display: flex; align-items: center; justify-content: center;
+      letter-spacing: 0.02em; cursor: pointer;
+      border: 2px solid rgba(255,255,255,0.5);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.14);
+    }
+
+    /* ════════════════════════════════════════
+       DASHBOARD — COMPACT
+    ════════════════════════════════════════ */
+    .dashboard {
+      max-width: 680px; margin: 0 auto;
+      padding: 36px 24px 80px;
+    }
+
+    /* ─ Page title row ─ */
+    .dash-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .dash-title {
+      font-family: var(--font-display);
+      font-size: 24px; font-weight: 600; color: var(--ink);
+      letter-spacing: -0.03em; line-height: 1.15;
+    }
+    .dash-subtitle { font-size: 13px; color: var(--ink-3); margin-top: 2px; }
+
+    /* ─ Summary strip ─ */
+    .summary-strip {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 10px; margin-bottom: 24px;
+    }
+    .summary-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .summary-value {
+      font-family: var(--font-display);
+      font-size: 26px; font-weight: 600; color: var(--ink);
+      letter-spacing: -0.03em; line-height: 1;
+    }
+    .summary-label { font-size: 11.5px; color: var(--ink-3); margin-top: 4px; font-weight: 500; }
+
+    /* ─ Orders list label ─ */
+    .list-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.09em;
+      text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px;
+    }
+
+    /* ─ Order row card ─ */
+    .order-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 10px;
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: default;
+    }
+    .order-row:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-1.5px);
+    }
+
+    /* Left accent strip */
+    .order-row-inner {
+      display: flex; align-items: stretch;
+    }
+    .order-accent {
+      width: 4px; flex-shrink: 0; border-radius: var(--r-xl) 0 0 var(--r-xl);
+    }
+    .accent-amber  { background: var(--amber); }
+    .accent-blue   { background: var(--blue); }
+    .accent-green  { background: #16a34a; }
+    .accent-red    { background: var(--red); }
+    .accent-gray   { background: var(--ink-4); }
+
+    .order-body {
+      flex: 1; padding: 16px 18px 16px 16px;
+    }
+
+    /* Top row: name + badge */
+    .order-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 12px;
+      margin-bottom: 6px;
+    }
+    .order-name {
+      font-family: var(--font-display);
+      font-size: 16px; font-weight: 600; color: var(--ink);
+      letter-spacing: -0.025em; line-height: 1.2;
+    }
+
+    /* Meta row: id, tier, date */
+    .order-meta {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11.5px; color: var(--ink-4); margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .order-meta-sep { color: var(--border-2); }
+    .order-id {
+      font-family: var(--font-mono); font-size: 10.5px;
+      font-weight: 600; color: var(--ink-4); letter-spacing: 0.05em;
+    }
+    .tier-tag {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--gold);
+      background: var(--gold-light); border: 1px solid #e9c97a;
+      padding: 1px 6px; border-radius: var(--r-sm);
+    }
+
+    /* Progress bar */
+    .progress-bar-wrap {
+      margin-bottom: 10px;
+    }
+    .progress-bar-track {
+      height: 3px; background: var(--surface-2);
+      border-radius: var(--r-pill); overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; border-radius: var(--r-pill);
+      transition: width 0.4s ease;
+    }
+    .fill-amber { background: var(--amber); }
+    .fill-blue  { background: var(--blue); }
+    .fill-green { background: #16a34a; }
+    .fill-red   { background: var(--red); }
+
+    .progress-steps {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 5px;
+    }
+    .progress-step-label {
+      font-size: 10px; font-weight: 500; color: var(--ink-4);
+      flex: 1; text-align: center;
+    }
+    .progress-step-label.active { color: var(--ink-2); font-weight: 600; }
+    .progress-step-label.done   { color: var(--ink-4); }
+    .progress-step-label:first-child { text-align: left; }
+    .progress-step-label:last-child  { text-align: right; }
+
+    /* Action row */
+    .order-action {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .order-action-msg {
+      font-size: 12px; color: var(--ink-3); display: flex; align-items: center; gap: 5px;
+    }
+    .action-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-family: var(--font-body); font-size: 12px; font-weight: 600;
+      padding: 6px 13px; border-radius: var(--r-md); border: none;
+      cursor: pointer; transition: all 0.15s; text-decoration: none;
+      white-space: nowrap;
+    }
+    .action-btn-primary {
+      background: var(--green); color: white;
+      box-shadow: 0 1px 6px rgba(5,96,68,0.24);
+    }
+    .action-btn-primary:hover { background: var(--green-dark); }
+    .action-btn-ghost {
+      background: var(--surface-2); color: var(--ink-2);
+      border: 1px solid var(--border);
+    }
+    .action-btn-ghost:hover { background: var(--surface-3); }
+
+    /* NIF number chip — for completed orders */
+    .nif-chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--green-dark), var(--green));
+      border-radius: var(--r-md); padding: 8px 14px;
+    }
+    .nif-chip-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.09em;
+      text-transform: uppercase; color: rgba(255,255,255,0.6);
+    }
+    .nif-chip-number {
+      font-family: var(--font-mono); font-size: 17px; font-weight: 600;
+      color: white; letter-spacing: 0.08em;
+    }
+
+    /* ─ Account section ─ */
+    .account-section { margin-top: 36px; }
+    .section-heading {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.09em;
+      text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px;
+    }
+    .account-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-xl); box-shadow: var(--shadow-sm);
+      padding: 20px;
+    }
+    .account-card-title {
+      font-size: 13.5px; font-weight: 600; color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-label { font-size: 11.5px; font-weight: 600; color: var(--ink-2); letter-spacing: 0.01em; }
+    .form-input {
+      padding: 9px 12px; border-radius: var(--r-md);
+      border: 1.5px solid var(--border); background: var(--surface);
+      font-family: var(--font-body); font-size: 13.5px; color: var(--ink);
+      outline: none; transition: all 0.14s;
+    }
+    .form-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(5,96,68,0.08); }
+
+    /* ════════════════════════════════════════
+       TOKENS PANEL
+    ════════════════════════════════════════ */
+    .tokens {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 44px 40px 60px;
+    }
+    .tokens-headline {
+      font-family: var(--font-display);
+      font-size: 21px; font-weight: 600; color: var(--ink);
+      letter-spacing: -0.03em; margin-bottom: 30px;
+    }
+    .tokens-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(190px,1fr)); gap: 28px; }
+    .tg-title { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px; }
+    .swatch { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; }
+    .swatch-chip { width: 26px; height: 26px; border-radius: var(--r-sm); border: 1px solid rgba(0,0,0,0.07); flex-shrink: 0; }
+    .swatch-name { font-size: 11.5px; font-weight: 600; color: var(--ink-2); }
+    .swatch-val  { font-family: var(--font-mono); font-size: 10px; color: var(--ink-4); }
+
+    .type-section { margin-top: 36px; border-top: 1px solid var(--border); padding-top: 30px; }
+    .t-display {
+      font-family: var(--font-display); font-size: 46px; font-weight: 600;
+      color: var(--ink); letter-spacing: -0.04em; line-height: 1.04; margin-bottom: 3px;
+    }
+    .t-display em { color: var(--green); font-style: italic; }
+    .t-h1 { font-family: var(--font-display); font-size: 26px; font-weight: 600; color: var(--ink); letter-spacing: -0.03em; margin-bottom: 3px; }
+    .t-body { font-family: var(--font-body); font-size: 14.5px; color: var(--ink-2); line-height: 1.65; max-width: 500px; margin-bottom: 3px; }
+    .t-label { font-family: var(--font-body); font-size: 10.5px; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-3); }
+    .t-mono  { font-family: var(--font-mono); font-size: 20px; font-weight: 600; color: var(--green); letter-spacing: 0.08em; }
+    .t-pair  { font-size: 11px; color: var(--ink-4); margin-top: 2px; margin-bottom: 22px; }
+
+    .component-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
+
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     01 — MARKETING NAV + HERO
+══════════════════════════════════════════ -->
+<div class="section-label">
+  <div class="section-label-dot"></div>
+  <span class="section-label-text">01 — Marketing / Unauthenticated</span>
+</div>
+
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">NIF</div>
+    GetNIFPortugal
+  </a>
+  <div class="nav-links">
+    <a href="#" class="nav-link">How It Works</a>
+    <a href="#" class="nav-link">Pricing</a>
+    <a href="#" class="nav-link">EU Citizens Guide</a>
+  </div>
+  <div class="nav-actions">
+    <button class="locale-btn">🇬🇧 EN ▾</button>
+    <a href="#" class="btn btn-ghost btn-sm">Sign in</a>
+    <a href="#" class="btn btn-primary btn-sm">Get My NIF →</a>
+  </div>
+</nav>
+
+<div style="background:var(--bg); border-bottom:1px solid var(--border);">
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 3.5v2.3L7 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      Fast · Reliable · 100% Remote
+    </div>
+    <h1 class="hero-title">Your Portuguese NIF,<br>without leaving <em>home.</em></h1>
+    <p class="hero-sub">Licensed fiscal representatives handle your application. Starting from €79, delivered in 7 days.</p>
+    <div class="hero-cta">
+      <a href="#" class="btn-cta">Start My Application →</a>
+      <a href="#" class="btn-cta-outline">See how it works</a>
+    </div>
+  </div>
+  <div class="trust">
+    <div class="trust-item">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round"><path d="M6.5 1.5L2 3.8v3.2c0 2.4 2 4.2 4.5 4.6 2.5-.4 4.5-2.2 4.5-4.6V3.8L6.5 1.5z"/></svg>
+      GDPR compliant
+    </div>
+    <div class="trust-item">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="5"/><path d="M4 6.5l2 2 3-3"/></svg>
+      Licensed fiscal reps
+    </div>
+    <div class="trust-item">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="5"/><path d="M6.5 3v3.5l2 1.5"/></svg>
+      7-day delivery
+    </div>
+    <div class="trust-item">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-linecap="round"><path d="M1.5 9.5l2-4 2.5 3L9 4l2.5 5.5"/></svg>
+      500+ NIFs issued
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     02 — APP HEADER + COMPACT DASHBOARD
+══════════════════════════════════════════ -->
+<div class="section-label" style="margin-top:2px;">
+  <div class="section-label-dot"></div>
+  <span class="section-label-text">02 — Dashboard (authenticated, compact)</span>
+</div>
+
+<header class="app-nav">
+  <a href="#" class="app-nav-logo">
+    <div class="nav-logo-mark" style="width:27px;height:27px;font-size:9px;">NIF</div>
+    GetNIFPortugal
+  </a>
+  <div class="app-nav-sep"></div>
+  <span class="app-nav-page">My Applications</span>
+  <div class="app-nav-right">
+    <a href="#" class="new-btn">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1.5v7M1.5 5h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      New Application
+    </a>
+    <div class="avatar">DS</div>
+  </div>
+</header>
+
+<div class="dashboard">
+
+  <!-- Page heading -->
+  <div class="dash-header">
+    <div>
+      <div class="dash-title">My Applications</div>
+      <div class="dash-subtitle">Track your NIF requests in real time</div>
+    </div>
+  </div>
+
+  <!-- Summary strip -->
+  <div class="summary-strip">
+    <div class="summary-card">
+      <div class="summary-value">3</div>
+      <div class="summary-label">Total applications</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-value" style="color:var(--amber);">1</div>
+      <div class="summary-label">Action required</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-value" style="color:#16a34a;">1</div>
+      <div class="summary-label">NIF issued</div>
+    </div>
+  </div>
+
+  <div class="list-label">Applications</div>
+
+  <!-- ─ Order 1: Documents Required ─ -->
+  <div class="order-row">
+    <div class="order-row-inner">
+      <div class="order-accent accent-amber"></div>
+      <div class="order-body">
+        <div class="order-top">
+          <div>
+            <div class="order-name">Davide Sambughi</div>
+            <div class="order-meta">
+              <span class="order-id">#A3F2D1B0</span>
+              <span class="order-meta-sep">·</span>
+              <span class="tier-tag">Standard</span>
+              <span class="order-meta-sep">·</span>
+              <span>28 Mar 2026</span>
+            </div>
+          </div>
+          <span class="badge badge-amber">
+            <span class="badge-dot"></span>
+            Docs Required
+          </span>
+        </div>
+
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill fill-amber" style="width:28%;"></div>
+          </div>
+          <div class="progress-steps">
+            <span class="progress-step-label done">Payment</span>
+            <span class="progress-step-label active">Upload</span>
+            <span class="progress-step-label">Review</span>
+            <span class="progress-step-label">Processing</span>
+            <span class="progress-step-label">NIF Issued</span>
+          </div>
+        </div>
+
+        <div class="order-action">
+          <span class="order-action-msg">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="5"/><path d="M6.5 4v3M6.5 9h.01"/></svg>
+            Passport missing · 5 days left
+          </span>
+          <a href="#" class="action-btn action-btn-primary">Upload Documents →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─ Order 2: NIF Processing ─ -->
+  <div class="order-row">
+    <div class="order-row-inner">
+      <div class="order-accent accent-blue"></div>
+      <div class="order-body">
+        <div class="order-top">
+          <div>
+            <div class="order-name">Davide Sambughi</div>
+            <div class="order-meta">
+              <span class="order-id">#9C4E81A2</span>
+              <span class="order-meta-sep">·</span>
+              <span class="tier-tag" style="color:#a87826;">Premium</span>
+              <span class="order-meta-sep">·</span>
+              <span>15 Feb 2026</span>
+            </div>
+          </div>
+          <span class="badge badge-blue">
+            <span class="badge-dot"></span>
+            Processing
+          </span>
+        </div>
+
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill fill-blue" style="width:75%;"></div>
+          </div>
+          <div class="progress-steps">
+            <span class="progress-step-label done">Payment</span>
+            <span class="progress-step-label done">Upload</span>
+            <span class="progress-step-label done">Review</span>
+            <span class="progress-step-label active">Processing</span>
+            <span class="progress-step-label">NIF Issued</span>
+          </div>
+        </div>
+
+        <div class="order-action">
+          <span class="order-action-msg" style="color:var(--ink-3);">
+            Submitted to Finanças on 18 Feb · ~48h express delivery
+          </span>
+          <a href="#" class="action-btn action-btn-ghost">View details</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─ Order 3: NIF Issued ─ -->
+  <div class="order-row">
+    <div class="order-row-inner">
+      <div class="order-accent accent-green"></div>
+      <div class="order-body">
+        <div class="order-top">
+          <div>
+            <div class="order-name">Davide Sambughi</div>
+            <div class="order-meta">
+              <span class="order-id">#7F1A22DC</span>
+              <span class="order-meta-sep">·</span>
+              <span class="tier-tag">Essential</span>
+              <span class="order-meta-sep">·</span>
+              <span>3 Jan 2026</span>
+            </div>
+          </div>
+          <span class="badge badge-green">
+            <span class="badge-dot"></span>
+            NIF Issued
+          </span>
+        </div>
+
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill fill-green" style="width:100%;"></div>
+          </div>
+          <div class="progress-steps">
+            <span class="progress-step-label done">Payment</span>
+            <span class="progress-step-label done">Upload</span>
+            <span class="progress-step-label done">Review</span>
+            <span class="progress-step-label done">Processing</span>
+            <span class="progress-step-label done" style="color:#16a34a;font-weight:600;">NIF Issued</span>
+          </div>
+        </div>
+
+        <div class="order-action">
+          <div class="nif-chip">
+            <span class="nif-chip-label">NIF</span>
+            <span class="nif-chip-number">247 831 905</span>
+          </div>
+          <a href="#" class="action-btn action-btn-ghost">Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account section -->
+  <div class="account-section">
+    <div class="section-heading">Account</div>
+    <div class="account-card">
+      <div class="account-card-title">Change password</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">New password</label>
+          <input type="password" class="form-input" placeholder="Min. 8 characters" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm password</label>
+          <input type="password" class="form-input" placeholder="Repeat password" />
+        </div>
+      </div>
+      <button class="btn btn-secondary" style="font-size:12.5px;padding:7px 15px;">Update password</button>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     03 — TOKENS + TYPOGRAPHY
+══════════════════════════════════════════ -->
+<div class="section-label">
+  <div class="section-label-dot"></div>
+  <span class="section-label-text">03 — Design Tokens &amp; Typography</span>
+</div>
+
+<div class="tokens">
+  <div class="tokens-headline">Design system — <em style="font-style:italic;color:var(--green);">Atlantic Modern v2</em></div>
+
+  <div class="tokens-grid">
+    <div>
+      <div class="tg-title">Emerald greens</div>
+      <div class="swatch"><div class="swatch-chip" style="background:#033d2c;"></div><div><div class="swatch-name">green-dark</div><div class="swatch-val">#033d2c</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#056044;"></div><div><div class="swatch-name">green ← primary</div><div class="swatch-val">#056044</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#0a8a62;"></div><div><div class="swatch-name">green-mid</div><div class="swatch-val">#0a8a62</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#ddf2ea;"></div><div><div class="swatch-name">green-light</div><div class="swatch-val">#ddf2ea</div></div></div>
+    </div>
+    <div>
+      <div class="tg-title">Surfaces</div>
+      <div class="swatch"><div class="swatch-chip" style="background:#f3f0e9;"></div><div><div class="swatch-name">bg</div><div class="swatch-val">#f3f0e9 — page</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#fdfcf8;"></div><div><div class="swatch-name">surface</div><div class="swatch-val">#fdfcf8 — cards</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#ece9e1;"></div><div><div class="swatch-name">surface-2</div><div class="swatch-val">#ece9e1</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#dcd8cf;"></div><div><div class="swatch-name">border</div><div class="swatch-val">#dcd8cf</div></div></div>
+    </div>
+    <div>
+      <div class="tg-title">Ink</div>
+      <div class="swatch"><div class="swatch-chip" style="background:#0e1a12;"></div><div><div class="swatch-name">ink</div><div class="swatch-val">#0e1a12</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#334a3a;"></div><div><div class="swatch-name">ink-2</div><div class="swatch-val">#334a3a</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#738278;"></div><div><div class="swatch-name">ink-3</div><div class="swatch-val">#738278</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#a6b5aa;"></div><div><div class="swatch-name">ink-4</div><div class="swatch-val">#a6b5aa</div></div></div>
+    </div>
+    <div>
+      <div class="tg-title">Status accents</div>
+      <div class="swatch"><div class="swatch-chip" style="background:#d97706;"></div><div><div class="swatch-name">amber</div><div class="swatch-val">action required</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#1c5fa8;"></div><div><div class="swatch-name">blue</div><div class="swatch-val">in progress</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#16a34a;"></div><div><div class="swatch-name">success</div><div class="swatch-val">nif issued</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#c23b3b;"></div><div><div class="swatch-name">red</div><div class="swatch-val">cancelled/error</div></div></div>
+    </div>
+  </div>
+
+  <div class="type-section">
+    <div class="t-display">Get your NIF<br><em>from anywhere.</em></div>
+    <div class="t-pair">Fraunces · 600 · display headings · opsz 9–144</div>
+
+    <div class="t-h1">Welcome back, Davide</div>
+    <div class="t-pair">Fraunces · 600 · page titles</div>
+
+    <div class="t-body">Your application has been submitted to Finanças and is being processed. We'll notify you by email as soon as your NIF number is ready.</div>
+    <div class="t-pair">Instrument Sans · 400 · body — replaces Plus Jakarta Sans</div>
+
+    <div class="t-label">Documents Required · Step 2 of 5 · Order Status</div>
+    <div class="t-pair">Instrument Sans · 700 · uppercase labels</div>
+
+    <div class="t-mono">247 831 905</div>
+    <div class="t-pair">JetBrains Mono · 600 · NIF numbers, order IDs</div>
+
+    <div class="component-row">
+      <a href="#" class="btn btn-primary">Get My NIF →</a>
+      <a href="#" class="btn btn-secondary">How it works</a>
+      <a href="#" class="btn btn-ghost">Sign in</a>
+      <span class="badge badge-green"><span class="badge-dot"></span>NIF Issued</span>
+      <span class="badge badge-blue"><span class="badge-dot"></span>NIF Processing</span>
+      <span class="badge badge-amber"><span class="badge-dot"></span>Action Required</span>
+      <span class="badge badge-red"><span class="badge-dot"></span>Cancelled</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

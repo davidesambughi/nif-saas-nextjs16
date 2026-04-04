@@ -5,8 +5,12 @@ import { m, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Star } from "lucide-react";
 import CountUp from "@/components/shared/CountUp";
+import { AZULEJO_SVG_WHITE } from "@/lib/constants/assets";
 
-const REVIEWS = [1, 2, 3] as const;
+// Typed key arrays — no unsafe casts needed
+const REVIEW_KEYS = ["review1", "review2", "review3"] as const;
+type ReviewKey = (typeof REVIEW_KEYS)[number];
+type ReviewAuthorKey = `${ReviewKey}Author`;
 
 interface StatItem {
   to: number;
@@ -23,9 +27,6 @@ const STATS: StatItem[] = [
   { to: 3, accent: "yr", label: "In Business", duration: 0.8 },
 ];
 
-const AZULEJO_SVG =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 2L58 30L30 58L2 30Z' fill='none' stroke='%23ffffff' stroke-width='1.2'/%3E%3Cpath d='M30 18L42 30L30 42L18 30Z' fill='none' stroke='%23ffffff' stroke-width='0.8'/%3E%3C/svg%3E";
-
 export default function TrustSignals() {
   const t = useTranslations("trust");
   const ref = useRef<HTMLDivElement>(null);
@@ -34,13 +35,13 @@ export default function TrustSignals() {
   return (
     <section
       className="section-pad relative overflow-hidden"
-      style={{ background: "var(--color-forest)" }}
+      style={{ background: "var(--color-ink)" }}
     >
       {/* Azulejo pattern */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage: `url("${AZULEJO_SVG}")`,
+          backgroundImage: `url("${AZULEJO_SVG_WHITE}")`,
           backgroundRepeat: "repeat",
           opacity: 0.04,
         }}
@@ -56,8 +57,7 @@ export default function TrustSignals() {
             transition={{ duration: 0.55 }}
           >
             <p
-              className="text-xs font-bold uppercase tracking-widest mb-6"
-              style={{ color: "var(--color-gold)" }}
+              className="text-xs font-bold uppercase tracking-widest mb-6 text-gold"
             >
               {t("eyebrow")}
             </p>
@@ -65,19 +65,13 @@ export default function TrustSignals() {
             <div className="grid grid-cols-2 gap-8">
               {STATS.map(({ to, suffix, accent, label, duration }) => (
                 <div key={label}>
-                  <p
-                    className="text-4xl font-black leading-none mb-1.5"
-                    style={{
-                      color: "#ffffff",
-                      fontFamily: "var(--font-display)",
-                    }}
-                  >
+                  <p className="text-4xl font-black font-display leading-none mb-1.5 text-surface-elevated">
                     <CountUp to={to} suffix={suffix ?? ""} duration={duration} />
-                    <span style={{ color: "var(--color-gold)" }}>{accent}</span>
+                    <span className="text-gold">{accent}</span>
                   </p>
                   <p
                     className="text-xs uppercase tracking-wider"
-                    style={{ color: "oklch(70% 0.04 152)" }}
+                    style={{ color: "var(--color-surface-dark-muted)" }}
                   >
                     {label}
                   </p>
@@ -86,26 +80,25 @@ export default function TrustSignals() {
             </div>
 
             <h2
-              className="text-heading-xl mt-12 mb-3"
-              style={{ color: "#ffffff" }}
+              className="text-heading-xl mt-12 mb-3 text-surface-elevated"
             >
               {t("title")}
             </h2>
-            <p style={{ color: "oklch(68% 0.04 152)" }}>{t("subtitle")}</p>
+            <p style={{ color: "var(--color-surface-dark-muted)" }}>{t("subtitle")}</p>
           </m.div>
 
           {/* RIGHT: reviews */}
           <div className="space-y-4">
-            {REVIEWS.map((n, i) => (
+            {REVIEW_KEYS.map((key, i) => (
               <m.div
-                key={n}
+                key={key}
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: i * 0.12, duration: 0.45 }}
                 className="rounded-2xl p-6"
                 style={{
-                  background: "oklch(24% 0.045 152)",
-                  border: "1px solid oklch(29% 0.04 152)",
+                  background: "var(--color-surface-dark)",
+                  border: "1px solid var(--color-surface-dark-border)",
                 }}
               >
                 <div className="flex gap-1 mb-4">
@@ -114,21 +107,18 @@ export default function TrustSignals() {
                       key={s}
                       size={13}
                       fill="var(--color-gold)"
-                      style={{ color: "var(--color-gold)" }}
+                      className="text-gold"
                     />
                   ))}
                 </div>
                 <p
                   className="text-sm leading-relaxed mb-4 italic"
-                  style={{ color: "oklch(88% 0.02 152)" }}
+                  style={{ color: "var(--color-surface-dark-text)" }}
                 >
-                  &ldquo;{t(`review${n}` as "review1")}&rdquo;
+                  &ldquo;{t(key)}&rdquo;
                 </p>
-                <p
-                  className="text-xs font-semibold"
-                  style={{ color: "var(--color-gold)" }}
-                >
-                  — {t(`review${n}Author` as "review1Author")}
+                <p className="text-xs font-semibold text-gold">
+                  — {t(`${key}Author` as ReviewAuthorKey)}
                 </p>
               </m.div>
             ))}

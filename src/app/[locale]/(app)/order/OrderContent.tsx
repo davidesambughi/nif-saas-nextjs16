@@ -30,8 +30,10 @@ const initialForm = {
 const STEP_ICONS = [User, ClipboardList, FileText];
 
 
+const DRAFT_KEY_PREFIX = "nif_order_draft_";
+
 export default function OrderContent({ userId }: { userId: string }) {
-  const DRAFT_KEY = `nif_order_draft_${userId}`;
+  const DRAFT_KEY = `${DRAFT_KEY_PREFIX}${userId}`;
   const t = useTranslations("order");
   const locale = useLocale();
   const searchParams = useSearchParams();
@@ -153,7 +155,7 @@ const [errors, setErrors] = useState<Record<string, string>>({});
         {draftSaved && (
           <div
             className="flex items-center gap-2 rounded-lg px-4 py-2 mb-6 text-sm"
-            style={{ background: "rgba(0,102,0,0.08)", color: "var(--color-brand-green)" }}
+            style={{ background: "var(--color-green-alpha-8)", color: "var(--color-green)" }}
           >
             <Save size={14} />
             Draft restored — your previous progress has been loaded.
@@ -174,7 +176,7 @@ const [errors, setErrors] = useState<Record<string, string>>({});
                   <div
                     className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold transition-all duration-300"
                     style={{
-                      background: isDone || isActive ? "var(--color-brand-green)" : "var(--color-border)",
+                      background: isDone || isActive ? "var(--color-green)" : "var(--color-border)",
                       color: isDone || isActive ? "#ffffff" : "var(--color-ink-muted)",
                     }}
                   >
@@ -182,7 +184,7 @@ const [errors, setErrors] = useState<Record<string, string>>({});
                   </div>
                   <span
                     className="text-xs font-medium text-center hidden sm:block"
-                    style={{ color: isActive ? "var(--color-brand-green)" : "var(--color-ink-muted)" }}
+                    style={{ color: isActive ? "var(--color-green)" : "var(--color-ink-muted)" }}
                   >
                     {label}
                   </span>
@@ -190,7 +192,7 @@ const [errors, setErrors] = useState<Record<string, string>>({});
                 {i < 2 && (
                   <div
                     className="flex-1 h-px mx-2 mt-px transition-all duration-500"
-                    style={{ background: step > stepNum ? "var(--color-brand-green)" : "var(--color-border)" }}
+                    style={{ background: step > stepNum ? "var(--color-green)" : "var(--color-border)" }}
                   />
                 )}
               </div>
@@ -373,7 +375,7 @@ const [errors, setErrors] = useState<Record<string, string>>({});
                       type="button"
                       onClick={() => setStep(1)}
                       className="text-xs shrink-0 ml-4"
-                      style={{ color: "var(--color-brand-green)" }}
+                      style={{ color: "var(--color-green)" }}
                     >
                       Edit information
                     </button>
@@ -397,13 +399,13 @@ const [errors, setErrors] = useState<Record<string, string>>({});
                           onClick={() => setServiceTier(tier)}
                           className="rounded-xl p-4 text-left border-2 transition-all"
                           style={{
-                            borderColor: serviceTier === tier ? "var(--color-brand-green)" : "var(--color-border)",
-                            background: serviceTier === tier ? "rgba(0,102,0,0.05)" : "var(--color-surface-elevated)",
+                            borderColor: serviceTier === tier ? "var(--color-green)" : "var(--color-border)",
+                            background: serviceTier === tier ? "var(--color-green-alpha-6)" : "var(--color-surface-elevated)",
                           }}
                         >
                           <div className="flex justify-between items-center">
                             <p className="font-semibold capitalize" style={{ color: "var(--color-ink)" }}>{tier}</p>
-                            <p className="font-bold" style={{ color: "var(--color-brand-green)" }}>{info.price}</p>
+                            <p className="font-bold" style={{ color: "var(--color-green)" }}>{info.price}</p>
                           </div>
                           <p className="text-xs mt-1" style={{ color: "var(--color-ink-muted)" }}>{info.desc}</p>
                         </button>

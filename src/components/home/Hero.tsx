@@ -4,23 +4,20 @@ import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { m } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-
-const AZULEJO_SVG =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 2L58 30L30 58L2 30Z' fill='none' stroke='%232d6a4f' stroke-width='1.2'/%3E%3Cpath d='M30 18L42 30L30 42L18 30Z' fill='none' stroke='%232d6a4f' stroke-width='0.8'/%3E%3C/svg%3E";
+import { AZULEJO_SVG_GREEN } from "@/lib/constants/assets";
 
 export default function Hero() {
   const t = useTranslations("hero");
 
   return (
     <section
-      className="relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-28"
-      style={{ background: "var(--color-surface)" }}
+      className="relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-28 bg-surface"
     >
       {/* Azulejo tile pattern */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage: `url("${AZULEJO_SVG}")`,
+          backgroundImage: `url("${AZULEJO_SVG_GREEN}")`,
           backgroundRepeat: "repeat",
           opacity: 0.14,
         }}
@@ -31,13 +28,13 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 70% 60% at 5% 0%, oklch(42% 0.12 152 / 0.06) 0%, transparent 65%), " +
-            "radial-gradient(ellipse 50% 40% at 95% 100%, oklch(64% 0.12 75 / 0.05) 0%, transparent 60%)",
+            `radial-gradient(ellipse 70% 60% at 5% 0%, var(--color-green-alpha-6) 0%, transparent 65%), ` +
+            `radial-gradient(ellipse 50% 40% at 95% 100%, var(--color-gold-alpha-5) 0%, transparent 60%)`,
         }}
       />
 
       <div className="container-site relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-12 lg:gap-16 items-center min-h-[calc(100vh-8rem)] lg:min-h-0">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-12 lg:gap-16 items-start min-h-[calc(100vh-8rem)] lg:min-h-0">
 
           {/* ── LEFT: Content ── */}
           <div>
@@ -46,11 +43,10 @@ export default function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium"
+              className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-green-dark"
               style={{
-                background: "oklch(42% 0.12 152 / 0.08)",
-                color: "var(--color-green-dark)",
-                border: "1px solid oklch(42% 0.12 152 / 0.15)",
+                background: "var(--color-green-alpha-8)",
+                border: "1px solid var(--color-green-alpha-15)",
               }}
             >
               {t("badge")}
@@ -61,8 +57,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.08 }}
-              className="text-display mb-6"
-              style={{ color: "var(--color-ink)" }}
+              className="text-display mb-6 text-ink"
             >
               {t("headline")}
               <br />
@@ -74,25 +69,23 @@ export default function Hero() {
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.15 }}
-              className="text-lg leading-relaxed mb-4 max-w-lg"
-              style={{ color: "var(--color-ink-muted)" }}
+              className="text-lg leading-relaxed mb-4 max-w-lg text-ink-muted"
             >
               {t("subheadline")}
             </m.p>
 
-            {/* Prerequisite note — GEO anchor: NIF is required before CRUE/NISS/IFICI */}
+            {/* Prerequisite note */}
             <m.div
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, delay: 0.19 }}
-              className="mb-10 inline-flex items-center gap-2 text-sm rounded-lg px-3 py-2 max-w-lg"
+              className="mb-10 inline-flex items-center gap-2 text-sm rounded-lg px-3 py-2 max-w-lg text-ink-muted"
               style={{
-                background: "oklch(42% 0.12 152 / 0.06)",
-                border: "1px solid oklch(42% 0.12 152 / 0.15)",
-                color: "var(--color-ink-muted)",
+                background: "var(--color-green-alpha-6)",
+                border: "1px solid var(--color-green-alpha-15)",
               }}
             >
-              <span style={{ color: "var(--color-green)", fontWeight: 700 }}>→</span>
+              <span className="text-green font-bold">→</span>
               {t("prerequisiteNote")}
             </m.div>
 
@@ -132,10 +125,7 @@ export default function Hero() {
               <span className="text-xl leading-none">🇩🇪</span>
               <span className="text-xl leading-none">🇫🇷</span>
               <span className="text-xl leading-none">🇯🇵</span>
-              <span
-                className="text-sm ml-1"
-                style={{ color: "var(--color-ink-muted)" }}
-              >
+              <span className="text-sm ml-1 text-ink-muted">
                 {t("flagsText")}
               </span>
             </m.div>
@@ -146,68 +136,50 @@ export default function Hero() {
             initial={{ opacity: 0, x: 28 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.65, delay: 0.25 }}
-            className="hidden lg:block"
+            className="hidden lg:block lg:mt-14"
           >
             <m.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-              className="rounded-2xl p-7"
+              className="rounded-2xl p-7 bg-surface-elevated"
               style={{
-                background: "var(--color-surface-elevated)",
                 border: "1px solid var(--color-border)",
                 boxShadow:
-                  "0 24px 64px oklch(42% 0.12 152 / 0.12), 0 4px 16px oklch(42% 0.12 152 / 0.07)",
+                  "0 24px 64px var(--color-green-alpha-12), 0 4px 16px var(--color-green-alpha-7)",
               }}
             >
-              {/* Card header — with divider line */}
+              {/* Card header */}
               <div
                 className="flex items-center justify-between pb-4 mb-2"
                 style={{ borderBottom: "1px solid var(--color-border)" }}
               >
-                <p
-                  className="text-sm font-bold"
-                  style={{ color: "var(--color-ink)" }}
-                >
-                  Your NIF Application
-                </p>
+                <p className="text-sm font-bold text-ink">Your NIF Application</p>
                 <span
-                  className="rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wide"
-                  style={{
-                    background: "oklch(42% 0.12 152 / 0.1)",
-                    color: "var(--color-green)",
-                  }}
+                  className="rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-green"
+                  style={{ background: "var(--color-green-alpha-10)" }}
                 >
                   In Progress
                 </span>
               </div>
 
-              {/* Steps — 3-col: circle | content | status */}
+              {/* Steps */}
               <div>
                 {/* Step 1 — done */}
                 <div className="relative flex items-start gap-3 py-3.5">
-                  {/* vertical connector to next step */}
                   <span
                     className="pointer-events-none absolute"
                     style={{
-                      left: 17,
-                      top: 44,
-                      width: 1,
-                      height: "calc(100% - 10px)",
+                      left: 17, top: 44, width: 1, height: "calc(100% - 10px)",
                       background: "linear-gradient(to bottom, var(--color-green), transparent)",
                       opacity: 0.3,
                     }}
                   />
-                  <span
-                    className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
-                    style={{ background: "var(--color-green)" }}
-                  >
-                    ✓
-                  </span>
+                  <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold text-white bg-green">✓</span>
                   <div className="flex-1 pt-0.5">
-                    <p className="text-sm font-semibold" style={{ color: "var(--color-ink)" }}>Payment Received</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--color-ink-muted)" }}>€129 · Standard Plan</p>
+                    <p className="text-sm font-semibold text-ink">Payment Received</p>
+                    <p className="text-xs mt-0.5 text-ink-muted">€129 · Standard Plan</p>
                   </div>
-                  <span className="text-xs font-semibold pt-0.5" style={{ color: "var(--color-green)" }}>Done</span>
+                  <span className="text-xs font-semibold pt-0.5 text-green">Done</span>
                 </div>
 
                 {/* Step 2 — active */}
@@ -215,29 +187,23 @@ export default function Hero() {
                   <span
                     className="pointer-events-none absolute"
                     style={{
-                      left: 17,
-                      top: 44,
-                      width: 1,
-                      height: "calc(100% - 10px)",
+                      left: 17, top: 44, width: 1, height: "calc(100% - 10px)",
                       background: "linear-gradient(to bottom, var(--color-green), transparent)",
                       opacity: 0.3,
                     }}
                   />
                   <span
-                    className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold"
+                    className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold text-green"
                     style={{
-                      background: "oklch(42% 0.12 152 / 0.12)",
-                      color: "var(--color-green)",
+                      background: "var(--color-green-alpha-12)",
                       border: "1.5px solid var(--color-green)",
                     }}
-                  >
-                    2
-                  </span>
+                  >2</span>
                   <div className="flex-1 pt-0.5">
-                    <p className="text-sm font-semibold" style={{ color: "var(--color-ink)" }}>Documents Under Review</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--color-ink-muted)" }}>Passport · Proof of address</p>
+                    <p className="text-sm font-semibold text-ink">Documents Under Review</p>
+                    <p className="text-xs mt-0.5 text-ink-muted">Passport · Proof of address</p>
                   </div>
-                  <span className="text-xs font-semibold pt-0.5" style={{ color: "var(--color-gold)" }}>Reviewing…</span>
+                  <span className="text-xs font-semibold pt-0.5 text-gold">Reviewing…</span>
                 </div>
 
                 {/* Step 3 — done */}
@@ -245,57 +211,39 @@ export default function Hero() {
                   <span
                     className="pointer-events-none absolute"
                     style={{
-                      left: 17,
-                      top: 44,
-                      width: 1,
-                      height: "calc(100% - 10px)",
+                      left: 17, top: 44, width: 1, height: "calc(100% - 10px)",
                       background: "linear-gradient(to bottom, var(--color-green), transparent)",
                       opacity: 0.3,
                     }}
                   />
-                  <span
-                    className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
-                    style={{ background: "var(--color-green)" }}
-                  >
-                    ✓
-                  </span>
+                  <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold text-white bg-green">✓</span>
                   <div className="flex-1 pt-0.5">
-                    <p className="text-sm font-semibold" style={{ color: "var(--color-ink)" }}>Submitted to Finanças</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--color-ink-muted)" }}>By licensed fiscal rep</p>
+                    <p className="text-sm font-semibold text-ink">Submitted to Finanças</p>
+                    <p className="text-xs mt-0.5 text-ink-muted">By licensed fiscal rep</p>
                   </div>
-                  <span className="text-xs font-semibold pt-0.5" style={{ color: "var(--color-green)" }}>Done</span>
+                  <span className="text-xs font-semibold pt-0.5 text-green">Done</span>
                 </div>
 
-                {/* Step 4 — pending (no connector after last step) */}
+                {/* Step 4 — pending */}
                 <div className="relative flex items-start gap-3 py-3.5">
                   <span
-                    className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold"
-                    style={{
-                      background: "var(--color-border)",
-                      color: "var(--color-ink-subtle)",
-                    }}
-                  >
-                    4
-                  </span>
+                    className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full text-sm font-bold bg-border text-ink-subtle"
+                  >4</span>
                   <div className="flex-1 pt-0.5">
-                    <p className="text-sm font-semibold" style={{ color: "var(--color-ink-muted)" }}>NIF Issued</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--color-ink-subtle)" }}>Delivered by email + dashboard</p>
+                    <p className="text-sm font-semibold text-ink-muted">NIF Issued</p>
+                    <p className="text-xs mt-0.5 text-ink-subtle">Delivered by email + dashboard</p>
                   </div>
-                  <span className="text-xs pt-0.5" style={{ color: "var(--color-ink-subtle)" }}>Est. 3 days</span>
+                  <span className="text-xs pt-0.5 text-ink-subtle">Est. 3 days</span>
                 </div>
               </div>
 
-              {/* Footer — border-top separator */}
+              {/* Footer */}
               <div
                 className="flex items-center justify-between pt-5 mt-1"
                 style={{ borderTop: "1px solid var(--color-border)" }}
               >
-                <span className="text-xs" style={{ color: "var(--color-ink-muted)" }}>
-                  🔒 256-bit encrypted
-                </span>
-                <span className="text-xs font-semibold" style={{ color: "var(--color-green)" }}>
-                  4.9★ rated service
-                </span>
+                <span className="text-xs text-ink-muted">🔒 256-bit encrypted</span>
+                <span className="text-xs font-semibold text-green">4.9★ rated service</span>
               </div>
             </m.div>
           </m.div>

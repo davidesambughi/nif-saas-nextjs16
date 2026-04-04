@@ -115,7 +115,7 @@ function AdminOrderRow({
       </td>
       <td className="px-4 py-3">
         <Link
-          href={`/admin/orders/${order.id}` as any}
+          href={`/admin/orders/${order.id}` as string}
           locale={locale}
           className="btn btn-sm"
           style={{ fontSize: "0.75rem", padding: "0.25rem 0.75rem" }}
@@ -127,41 +127,43 @@ function AdminOrderRow({
   );
 }
 
-const STATUS_STYLES: Record<OrderStatus, { bg: string; text: string; label: string }> = {
-  pending_payment:        { bg: "#f1f5f9", text: "#64748b", label: "Pending Payment" },
-  payment_received:       { bg: "#dbeafe", text: "#1d4ed8", label: "Payment Received" },
-  documents_required:     { bg: "#fef3c7", text: "#b45309", label: "Docs Required" },
-  documents_under_review: { bg: "#fde68a", text: "#92400e", label: "Under Review" },
-  nif_processing:         { bg: "#ede9fe", text: "#6d28d9", label: "NIF Processing" },
-  nif_issued:             { bg: "#d1fae5", text: "#065f46", label: "NIF Issued ✓" },
-  cancelled:              { bg: "#fee2e2", text: "#991b1b", label: "Cancelled" },
+const STATUS_CLASS: Record<OrderStatus, string> = {
+  pending_payment:        "badge badge-gray",
+  payment_received:       "badge badge-blue",
+  documents_required:     "badge badge-amber",
+  documents_under_review: "badge badge-amber",
+  nif_processing:         "badge badge-purple",
+  nif_issued:             "badge badge-green",
+  cancelled:              "badge badge-red",
+};
+
+const STATUS_LABEL: Record<OrderStatus, string> = {
+  pending_payment:        "Pending Payment",
+  payment_received:       "Payment Received",
+  documents_required:     "Docs Required",
+  documents_under_review: "Under Review",
+  nif_processing:         "NIF Processing",
+  nif_issued:             "NIF Issued ✓",
+  cancelled:              "Cancelled",
 };
 
 function StatusBadge({ status }: { status: OrderStatus }) {
-  const s = STATUS_STYLES[status];
   return (
-    <span
-      className="inline-block rounded-full px-2 py-0.5 text-xs font-semibold"
-      style={{ background: s.bg, color: s.text }}
-    >
-      {s.label}
+    <span className={STATUS_CLASS[status]}>
+      {STATUS_LABEL[status]}
     </span>
   );
 }
 
-const TIER_STYLES: Record<string, { bg: string; text: string }> = {
-  essential: { bg: "#f1f5f9", text: "#334155" },
-  standard:  { bg: "#dbeafe", text: "#1e40af" },
-  premium:   { bg: "#fef3c7", text: "#92400e" },
+const TIER_CLASS: Record<string, string> = {
+  essential: "badge badge-gray",
+  standard:  "badge badge-blue",
+  premium:   "badge badge-amber",
 };
 
 function TierBadge({ tier }: { tier: string }) {
-  const s = TIER_STYLES[tier] ?? { bg: "#f1f5f9", text: "#334155" };
   return (
-    <span
-      className="inline-block rounded-full px-2 py-0.5 text-xs font-semibold capitalize"
-      style={{ background: s.bg, color: s.text }}
-    >
+    <span className={`${TIER_CLASS[tier] ?? "badge badge-gray"} capitalize`}>
       {tier}
     </span>
   );
