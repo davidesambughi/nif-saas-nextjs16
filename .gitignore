@@ -43,3 +43,6 @@ next-env.d.ts
 
 # private docs
 /docs/
+
+# submodule 
+.claude/worktrees/
