@@ -38,6 +38,13 @@ export async function updateOrderStatus(
   isAdminAction = false
 ): Promise<void> {
   await db.transaction(async (tx) => {
+    // Fetch userId so status_updates.user_id can be populated.
+    // Required for Supabase Realtime RLS (direct column policy, no subquery).
+    const [order] = await tx
+      .select({ userId: orders.userId })
+      .from(orders)
+      .where(eq(orders.id, orderId));
+
     // Update the order's current status
     await tx
       .update(orders)
@@ -47,6 +54,7 @@ export async function updateOrderStatus(
     // Append an immutable audit log entry (drives Realtime subscription)
     await tx.insert(statusUpdates).values({
       orderId,
+      userId: order?.userId,
       status,
       note,
       isAdminAction,

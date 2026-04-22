@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm run dev          # Start dev server (Turbopack)
 npm run build        # Production build
+npm run start        # Start production server (after build)
 npm run type-check   # TypeScript check (tsc --noEmit)
 npm run lint         # ESLint via next lint
 
@@ -48,7 +49,8 @@ Pages/Components  →  Modules (Server Actions)  →  Repositories (Drizzle)  �
 - **`src/repositories/`** — All Drizzle queries. Never imported by components directly. Key files: `order.repository.ts`, `document.repository.ts`, `user.repository.ts`, `webhook-events.repository.ts`.
 - **`src/services/`** — Pure business logic with no Next.js imports (payment.service, email.service). Callable from Server Actions and the Stripe webhook handler.
 - **`src/lib/`** — Singleton SDK clients (`stripe.ts`, `resend.ts`, `supabase/server.ts`, `supabase/client.ts`) and type-safe env validation (`env.ts` via @t3-oss/env-nextjs).
-- **`src/components/`** — Shared, non-feature-specific components. Organized as `home/` (homepage sections), `layout/` (Navbar, Footer, AppHeader), `shared/` (LocaleSwitcher, MotionProvider, CountUp). Feature-specific components (e.g. `RealtimeDashboard`, `DocumentUploadSection`) live in their module folder instead.
+- **`src/components/`** — Shared, non-feature-specific components. Organized as `home/` (homepage sections), `layout/` (Navbar, Footer, AppHeader), `shared/` (LocaleSwitcher, MotionProvider, CountUp). Feature-specific components (e.g. `RealtimeDashboard`, `DocumentUploadSection`) live in their module folder instead (`src/modules/{feature}/components/`).
+- **`src/lib/constants/`** — Shared constants (e.g. `assets.ts` for SVG data URIs used across multiple components).
 
 ### Database (Drizzle ORM + Supabase PostgreSQL)
 
@@ -64,7 +66,7 @@ Schema is in `src/db/schema/`. Key tables:
 
 All user-facing routes are under `src/app/[locale]/` with three route groups:
 
-- `(marketing)` — public homepage and SEO content pages (e.g. `/guide/eu-citizen-portugal-checklist`)
+- `(marketing)` — public homepage and SEO content pages (e.g. `/guide/eu-citizen-portugal-checklist`). Also contains `/design-preview` — a dev-only visual sandbox, not a real production page.
 - `(auth)` — `/login`, `/signup`, `/forgot-password`, `/reset-password`
 - `(app)` — protected: `/dashboard`, `/order`, `/admin`, `/admin/orders/[orderId]`
 
@@ -115,7 +117,7 @@ Uploaded via signed URLs (Supabase Storage).
 After each upload, the client calls `analyzeUploadedDocumentAction(docId, orderId)` which runs `src/services/document-ai.service.ts`:
 1. Generates a 120-second signed URL via the admin Supabase client (bypasses RLS)
 2. Downloads the file bytes server-side (Gemini cannot reach private Supabase URLs)
-3. Calls `gemini-2.0-flash` via `@ai-sdk/google` with `Output.object()` for structured JSON
+3. Calls `gemini-2.5-flash` via `@ai-sdk/google` with `Output.object()` for structured JSON
 4. Returns `{ status: "approved" | "flagged" | "error", notes: string }` — notes is a JSON string
 5. Result is saved to `order_documents.aiReviewStatus` / `aiReviewNotes`
 
@@ -135,7 +137,7 @@ Never throw to the client from a Server Action — always return `ActionResult`.
 
 ### Email templates
 
-`emails/` contains React Email components rendered and sent via Resend from `src/services/email.service.ts`:
+`emails/` (project root, not inside `src/`) contains React Email components rendered and sent via Resend from `src/services/email.service.ts`:
 
 | Template | Trigger |
 |----------|---------|
@@ -143,9 +145,34 @@ Never throw to the client from a Server Action — always return `ActionResult`.
 | `DocumentsRequired.tsx` | Docs missing after payment — includes deadline + list of missing docs |
 | `DocumentsUnderReview.tsx` | All docs already present at checkout |
 | `NIFIssued.tsx` | NIF number ready (admin action) |
+| `NIFProcessing.tsx` | Admin transitions order to `nif_processing` — confirms submission to Finanças with delivery estimate |
+| `OrderCancelled.tsx` | `charge.refunded` webhook — confirms cancellation and refund |
 | `PaymentFailed.tsx` | `payment_intent.payment_failed` webhook |
 
 All templates accept a `locale` prop (passed from `order.locale`) to construct locale-correct dashboard deep-links.
+
+**i18n translation strings** live in `messages/` at project root (`messages/en.json`, `messages/pt.json`, `messages/fr.json`) — also not inside `src/`.
+
+## Coding conventions
+
+### Environment variables
+Always access env vars through `env` from `@/lib/env.ts` — not `process.env` directly:
+```ts
+import { env } from "@/lib/env.ts";
+const key = env.STRIPE_SECRET_KEY; // typed, validated at build time
+```
+**Exception:** `proxy.ts` cannot import from `src/` (it runs before the app bundle), so it uses `process.env` with `!` assertions directly.
+
+### Supabase clients
+- **Server Components, Server Actions, Route Handlers:** `createClient()` from `@/lib/supabase/server`
+- **Client Components:** `createBrowserClient()` from `@/lib/supabase/client`
+- **Admin operations (bypasses RLS):** use the admin client from `@/lib/supabase/server` with `SUPABASE_SECRET_KEY`
+
+### Server Actions
+`'use server'` goes at the **top of the file**, not per-function. Every actions file begins with this directive.
+
+### Schema changes
+After modifying any file in `src/db/schema/`, always run `npm run db:generate` to create a migration, then `npm run db:migrate` to apply it. Never edit migration files manually. `db:push` is for throwaway dev environments only — it skips the migration file entirely.
 
 ## Environment variables
 

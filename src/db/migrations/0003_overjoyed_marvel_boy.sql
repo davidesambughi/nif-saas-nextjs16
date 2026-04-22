@@ -1,0 +1,2 @@
+ALTER TABLE "status_updates" ADD COLUMN "user_id" uuid;--> statement-breakpoint
+ALTER TABLE "status_updates" ADD CONSTRAINT "status_updates_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
