@@ -2,7 +2,6 @@
 
 A production SaaS that lets non-residents obtain a Portuguese tax ID (NIF) remotely. Customers submit their details, pay, upload documents, and receive their NIF — all without visiting Portugal.
 
-**Live:** [getnifportugal.com](https://getnifportugal.com)
 
 ---
 
@@ -106,18 +105,53 @@ cancelled  (charge.refunded webhook, or admin action)
 
 ## Local development
 
+### Prerequisites
+
+- Node.js 20+
+- A [Supabase](https://supabase.com) project
+- A [Stripe](https://stripe.com) test account
+- A [Resend](https://resend.com) account
+- *(Optional)* A [Google AI Studio](https://aistudio.google.com/app/apikey) key for AI document review
+
+### Setup
+
 ```bash
-# Install dependencies
+# 1. Install dependencies
 npm install
 
-# Copy env template and fill in values
-cp .env.local.example .env.local
+# 2. Create env file and fill in values (see table below)
+cp .env.local.example .env.local   # or create manually
 
-# Apply database migrations
+# 3. Apply database migrations
 npm run db:migrate
 
-# Start dev server (Turbopack)
+# 4. Start dev server (Turbopack)
 npm run dev
+```
+
+### Supabase trigger (required)
+
+A database trigger must exist to sync Auth signups to `public.users`. Without it, order creation fails with a foreign key error. Run this once in the Supabase SQL editor:
+
+```sql
+create or replace function public.handle_new_user()
+returns trigger as $$
+begin
+  insert into public.users (id, email) values (new.id, new.email);
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+```
+
+### Stripe webhooks (local)
+
+```bash
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+# Copy the printed signing secret → STRIPE_WEBHOOK_SECRET in .env.local
 ```
 
 ```bash
@@ -126,6 +160,31 @@ npm run lint         # ESLint
 npm run db:studio    # Drizzle Studio (database browser)
 npm run db:generate  # Generate migration after schema change
 ```
+
+---
+
+## Environment variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | ✅ | Supabase Session Pooler connection string (port 5432) |
+| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | ✅ | Supabase browser key (`sb_publishable_...`) |
+| `SUPABASE_SECRET_KEY` | ✅ | Supabase service role key — server-only (`sb_secret_...`) |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | ✅ | Stripe publishable key (`pk_...`) |
+| `STRIPE_SECRET_KEY` | ✅ | Stripe secret key (`sk_...`) |
+| `STRIPE_WEBHOOK_SECRET` | ✅ | Stripe webhook signing secret (`whsec_...`) |
+| `STRIPE_PRICE_ID_ESSENTIAL` | ✅ | Stripe Price ID for Essential tier (`price_...`) |
+| `STRIPE_PRICE_ID_STANDARD` | ✅ | Stripe Price ID for Standard tier (`price_...`) |
+| `STRIPE_PRICE_ID_PREMIUM` | ✅ | Stripe Price ID for Premium tier (`price_...`) |
+| `RESEND_API_KEY` | ✅ | Resend API key (`re_...`) |
+| `RESEND_FROM_EMAIL` | ✅ | Sender email address |
+| `RESEND_FROM_NAME` | ✅ | Sender display name |
+| `NEXT_PUBLIC_APP_URL` | ✅ | Base URL for emails and redirects (e.g. `http://localhost:3000`) |
+| `NEXT_PUBLIC_APP_NAME` | ✅ | App display name |
+| `ADMIN_EMAIL` | ✅ | Email that can access `/admin` |
+| `GOOGLE_GENERATIVE_API_KEY` | ➖ | Gemini key for AI document review — omit to skip AI review |
+| `SKIP_ENV_VALIDATION` | ➖ | Set to any value to skip env validation at build time (CI) |
 
 ---
 

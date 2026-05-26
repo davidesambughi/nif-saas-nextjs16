@@ -57,7 +57,7 @@ Pages/Components  →  Modules (Server Actions)  →  Repositories (Drizzle)  �
 Schema is in `src/db/schema/`. Key tables:
 
 - **`orders`** — Core NIF applications. `serviceTier` enum: `essential | standard | premium`. Status enum: `pending_payment → payment_received → documents_required → documents_under_review → nif_processing → nif_issued | cancelled`. Also stores `locale` (persisted at checkout for locale-correct emails/links) and `deadlineAt` (document upload deadline, set for the `documents_required` path only).
-- **`statusUpdates`** — Immutable audit log of status transitions. Supabase Realtime listens to INSERT events on this table to push live updates to the dashboard.
+- **`statusUpdates`** — Immutable audit log of status transitions. Supabase Realtime listens to INSERT events on this table to push live updates to the dashboard. Key columns: `status`, `note` (optional customer-visible message set by admin), `isAdminAction` (boolean), and a denormalized `userId` column — Supabase Realtime RLS cannot evaluate cross-table subqueries, so `userId` must be a direct column to filter events per user.
 - **`orderDocuments`** — Supabase Storage file references (passport, proof_of_address, other). Each row also carries `aiReviewStatus` (`pending | approved | flagged | error`) and `aiReviewNotes` (JSON string of Gemini's findings). Status defaults to `pending` on INSERT; updated async after upload via `analyzeUploadedDocumentAction`.
 - **`users`** — Mirrors `auth.users`; populated by a Supabase trigger on signup.
 - **`processedWebhookEvents`** — Idempotency table. `claimWebhookEvent()` does an atomic `INSERT ... ON CONFLICT DO NOTHING` to guarantee exactly-once processing of Stripe events across concurrent Vercel workers.
@@ -80,12 +80,14 @@ Locales: `en`, `pt`, `fr` (always prefixed in URL). Config: `src/i18n/routing.ts
 
 ### Auth & proxy
 
-`proxy.ts` (Next.js 16 network proxy, replaces `middleware.ts`) — export must be named `proxy`, not `middleware`. Runs on every request:
+`proxy.ts` (project root, not in `src/`) — Next.js 16 network proxy, replaces `middleware.ts`. Export must be named `proxy`, not `middleware`. Cannot use `@/` path aliases; imports from `src/` use relative `./src/` paths. Runs on every request:
 
-1. Refreshes Supabase session cookie (calls `getUser()`, not `getSession()`, to validate server-side)
-2. Guards `/dashboard`, `/order`, and `/admin` — redirects unauthenticated users to `/login`
-3. Redirects authenticated users away from auth pages
-4. Applies next-intl locale routing
+1. Applies next-intl locale routing
+2. Refreshes Supabase session cookie (calls `getUser()`, not `getSession()`, to validate server-side)
+3. Guards `/dashboard`, `/order`, and `/admin` — redirects unauthenticated users to `/login`
+4. Redirects authenticated users away from `/login` and `/signup` only — `/forgot-password` and `/reset-password` stay accessible for all users
+
+When redirecting unauthenticated users to `/login`, the proxy appends `?redirectTo=<original-path>`. `LoginForm` reads this param and redirects back after successful login. `SignupForm` also forwards it via `?redirectTo=` so the flow survives account creation.
 
 ### Payment flow
 
@@ -105,6 +107,10 @@ Locales: `en`, `pt`, `fr` (always prefixed in URL). Config: `src/i18n/routing.ts
 ### Realtime dashboard
 
 Dashboard Server Component fetches initial data via `getUserOrdersAction()`. `RealtimeDashboard` (Client Component) subscribes to Supabase Realtime on `status_updates` INSERT events and merges updates without a page refresh.
+
+**Critical invariant:** `updateOrderStatus()` in `order.repository.ts` runs a single transaction that atomically updates `orders.status` AND inserts into `statusUpdates`. Every status change MUST go through this function — skipping it will update the order without triggering the Realtime subscription.
+
+**Dashboard filter:** `getOrdersByUserId()` excludes `pending_payment` orders (`ne(orders.status, "pending_payment")`). Users never see an order in their dashboard until payment succeeds.
 
 ### Document Uploads & AI Review
 
@@ -153,6 +159,51 @@ All templates accept a `locale` prop (passed from `order.locale`) to construct l
 
 **i18n translation strings** live in `messages/` at project root (`messages/en.json`, `messages/pt.json`, `messages/fr.json`) — also not inside `src/`.
 
+### Order form draft
+
+`OrderContent.tsx` auto-saves form state to `localStorage` under the key `nif_order_draft_{userId}`. On mount, draft takes priority over the last-order pre-fill. The draft is cleared on successful checkout redirect. To reset a stuck draft during development, clear `nif_order_draft_*` from localStorage.
+
+## Styling & Design System
+
+**Tailwind v4** — no `tailwind.config.ts`. All design tokens are defined as an `@theme` block inside `src/app/globals.css` and exposed as CSS custom properties.
+
+### Fonts (loaded via `next/font/google` in root layout)
+- `--font-display` → **Fraunces** (serif, headings)
+- `--font-sans` → **Instrument Sans** (body text)
+- `--font-mono` → **JetBrains Mono**
+
+### Design tokens (OKLCH CSS custom properties)
+All colors follow a semantic naming pattern: `--color-{role}-{variant}`. Key tokens:
+- Brand: `--color-green`, `--color-gold`, `--color-amber`, `--color-red`, `--color-blue`
+- Surfaces: `--color-bg`, `--color-surface`, `--color-surface-elevated`
+- Ink: `--color-ink`, `--color-ink-muted`, `--color-ink-subtle`
+- Alpha tints: `--color-green-alpha-{N}`, `--color-gold-alpha-{N}`, etc.
+- Dark surfaces (footer/trust cards): `--color-surface-dark`, `--color-ink-deep`
+
+Always reference tokens by their CSS variable — never hardcode OKLCH values inline.
+
+### Component utility classes (defined in `globals.css`)
+These classes exist for all shared UI — use them instead of raw Tailwind utilities:
+
+| Class | Purpose |
+|-------|---------|
+| `.btn` | Base button styles |
+| `.btn-primary` / `.btn-secondary` / `.btn-ivory` | Button variants |
+| `.btn-sm` / `.btn-lg` | Button size modifiers |
+| `.input` | Text input (with focus/error states via `.error`) |
+| `.label` | Form label |
+| `.error-text` | Inline validation error |
+| `.card` | Elevated surface card |
+| `.glass-card` | Frosted glass card (backdrop-filter) |
+| `.badge` | Base pill/badge |
+| `.badge-green` / `-amber` / `-blue` / `-gray` / `-red` / `-purple` | Badge color variants |
+| `.container-site` | Max-width 1440px centered layout wrapper |
+| `.container-full` | Full-width with responsive padding |
+| `.section-pad` | Responsive vertical section padding |
+| `.text-display` / `.text-heading-xl` / `.text-heading-lg` | Fluid type scale using Fraunces |
+| `.gradient-brand` / `.text-gradient-brand` | Green brand gradient |
+| `.animate-fade-up` / `.animate-float` | CSS animations |
+
 ## Coding conventions
 
 ### Environment variables
@@ -166,7 +217,7 @@ const key = env.STRIPE_SECRET_KEY; // typed, validated at build time
 ### Supabase clients
 - **Server Components, Server Actions, Route Handlers:** `createClient()` from `@/lib/supabase/server`
 - **Client Components:** `createBrowserClient()` from `@/lib/supabase/client`
-- **Admin operations (bypasses RLS):** use the admin client from `@/lib/supabase/server` with `SUPABASE_SECRET_KEY`
+- **Admin operations (bypasses RLS):** `createAdminClient()` from `@/lib/supabase/server` — uses `SUPABASE_SECRET_KEY`. Required for Storage signed URL generation in admin order detail and AI document review.
 
 ### Server Actions
 `'use server'` goes at the **top of the file**, not per-function. Every actions file begins with this directive.
@@ -193,11 +244,13 @@ After modifying any file in `src/db/schema/`, always run `npm run db:generate` t
 | `NEXT_PUBLIC_APP_NAME` | Display name for UI/emails |
 | `ADMIN_EMAIL` | Email address of the admin user (checked by `requireAdmin()` in admin actions) |
 | `GOOGLE_GENERATIVE_API_KEY` | Google Gemini API key for AI document review (optional — get free at aistudio.google.com) |
+| `SKIP_ENV_VALIDATION` | Set to any truthy value to skip env validation at build time (CI/preview environments) |
 
 ## Configuration & Known Issues
 
+- **Security headers:** `next.config.ts` applies `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, and `Permissions-Policy` to all routes, plus `X-Robots-Tag: noindex` on `/(dashboard|order|admin)/*` and `X-Robots-Tag: index, follow` (with extended AI-crawler directives) on `/(en|pt|fr)/guide/*`. Don't add conflicting `robots` meta tags on those routes.
 - **cacheComponents (disabled):** `nextConfig.cacheComponents` is disabled due to incompatibility with `next-intl`.
-- **API Routes & Proxy:** All routes starting with `/api/` are explicitly excluded from `proxy.ts` matcher to prevent `next-intl` from interfering with technical callbacks (Auth, Stripe, n8n).
+- **API Routes & Proxy:** All routes starting with `/api/` are explicitly excluded from `proxy.ts` matcher to prevent `next-intl` from interfering with technical callbacks (Supabase Auth callback, Stripe webhook).
 - **Stripe Metadata:** Every checkout session MUST include `orderId` in metadata for the webhook to function.
 - **Supabase Users Trigger:** A database trigger MUST exist on `auth.users` to sync new signups to `public.users`. Without this, `createOrderAction` will fail with a foreign key error (23503).
 - **Document Storage:** The bucket name is strictly `documents` (not `order-documents`). Policies must allow `authenticated` users to `INSERT` and `SELECT` their own files.
